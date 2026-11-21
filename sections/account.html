@@ -48,7 +48,9 @@ input[type=email]:focus,select:focus{border-color:var(--gold);outline:0}
 .mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:22px}
 .mgrid div span{display:block;font:800 11px "Archivo",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi);margin-bottom:4px}
 .mgrid div b{font-size:16px}
-.st-active{color:#8ee3ad}.st-past_due{color:#ffd27a}.st-canceled{color:#ff9aa5}
+.st-active{color:#8ee3ad}.st-past_due{color:#ffd27a}.st-canceled,.st-lapsed{color:#ff9aa5}
+.paywarn{margin:0 0 12px;padding:12px 14px;border-radius:14px;background:#fff1cf;border:1.5px solid #e0a400;color:#5c4100;font-size:15px;line-height:1.45}.paywarn .btn{margin-left:6px;vertical-align:middle}
+.paywarn.off{background:#fde8ea;border-color:#d51b2f;color:#7a0f1a}.mbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.mbtns .flagbtn{margin:0;text-decoration:none}
 .mcard .btn{margin-top:20px}
 
 /* promo */
@@ -162,7 +164,7 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
 .dstats{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;font-size:13px;color:#52637a}.dstats b{font:900 22px "Archivo",sans-serif;color:var(--navy)}.dstats i{font-style:normal}
 .dq{flex:1 1 200px;font:15px "Hepta Slab",Georgia,serif;padding:10px 12px;border-radius:12px;border:2px solid #d9d2c3;background:#fffdf8}
 .dsel{width:auto!important;padding:10px 12px!important;font-size:15px!important}
-.st-active-d{color:#1d7a45;font-weight:700}.st-past_due-d{color:#b76e00;font-weight:700}.st-canceled-d{color:#8f1220;font-weight:700}
+.st-active-d{color:#1d7a45;font-weight:700}.st-past_due-d{color:#b76e00;font-weight:700}.st-canceled-d,.st-lapsed-d{color:#8f1220;font-weight:700}
 .brow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 0;border-top:1px solid #eee5d3}.brow:first-child{border-top:0}
 .brow>.minis{min-width:64px}
 .bwho{flex:1 1 220px;display:flex;flex-direction:column;gap:2px}.bwho b{font:900 16px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy)}
@@ -258,7 +260,7 @@ details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;f
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=db370636"></script>
+<script src="../assets/vendor/qrcode.js?v=af26fe01"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -405,7 +407,10 @@ const SB_URL="https://ccfcvzmnaeasfiigtnvz.supabase.co";
 const SB_KEY="sb_publishable_nzBBd1P7v-mVTbbjfd8JSw_i0FXzcZm"; /* public key: the database rules decide what each person can see */
 const JOIN_BONUS={cutoff:Date.parse("2027-01-01T05:00:00Z"),patriot:2,embajador:4};
 const TIER={young:"Young Leader",member:"Member",patriot:"Patriot",embajador:"Ambassador",corporate:"Corporate Sponsor"};
-const STATUS={active:"Active",past_due:"Payment due",canceled:"Canceled"};
+const STATUS={active:"Active",past_due:"Payment due",canceled:"Canceled",lapsed:"Lapsed"};
+const BILL={month:"Monthly",quarter:"Quarterly",semiannual:"Every 6 months",year:"Annual"};
+const PORTAL="https://billing.stripe.com/p/login/test_aFacN5bkpcSn0ZC4Rl7N600"; /* Stripe billing page (TEST MODE): swap for the live link when you go live */
+const portalUrl=()=>PORTAL+"?prefilled_email="+encodeURIComponent(data.email);
 const SKEY="lrc_session";
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -810,8 +815,11 @@ function render(){
       <span class="tier${m.tier==="embajador"&&m.status==="active"?" gold-x":""}">${m.tier==="embajador"&&m.status==="active"?"★ ":""}${esc(TIER[m.tier]||m.tier)}</span></div>
       <div class="mgrid"><div><span>Status</span><b class="st-${esc(m.status)}">${esc(STATUS[m.status]||m.status)}</b></div>
       <div><span>Member since</span><b>${esc(fmtDate(m.joined_at))}</b></div>
-      ${m.renews_at?`<div><span>Renews</span><b>${esc(fmtDate(m.renews_at))}</b></div>`:""}</div>
-      ${flagLine()}${perkLevel()?`<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button>`:""}${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Renew membership</a>`:""}</div>`;
+      ${m.billing_interval?`<div><span>Billing</span><b>${esc(BILL[m.billing_interval]||m.billing_interval)}</b></div>`:""}
+      ${m.renews_at?`<div><span>${m.status==="active"?"Next payment":"Paid through"}</span><b>${esc(fmtDate(m.renews_at))}</b></div>`:""}</div>
+      ${flagLine()}<div class="mbtns">${perkLevel()?`<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button>`:""}${m.stripe_customer||m.billing_interval?`<a class="flagbtn" href="${esc(portalUrl())}" target="_blank" rel="noopener">Manage billing</a>`:""}</div>${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Rejoin the club</a>`:""}</div>`;
+    if(m.status==="active"&&m.grace_until){$("mcard").insertAdjacentHTML("afterbegin",`<div class="paywarn" role="alert"><b>Your last payment didn't go through.</b> <span>Update your card by</span> ${esc(fmtDate(m.grace_until))} <span>to keep your member benefits.</span> <a class="btn sm gold" href="${esc(portalUrl())}" target="_blank" rel="noopener">Update card</a></div>`);}
+    else if(m.status==="lapsed"||m.status==="canceled"){$("mcard").insertAdjacentHTML("afterbegin",`<div class="paywarn off" role="status"><b>Your membership has lapsed.</b> <span>Member benefits are paused until you rejoin. Your profile, tickets you bought and event history stay here.</span></div>`);}
   }else{
     $("mcard").innerHTML=`<div class="mcard${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(name||"Welcome")}</div><div class="memail">${esc(d.email)}</div></div><span class="tier none">Not a member yet</span></div>
       <p style="margin:18px 0 0;line-height:1.55;opacity:.9">We didn't find a membership for this email. If you joined with a different email, sign in with that one.</p>
@@ -824,7 +832,7 @@ function render(){
   const star=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#d6a844" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z"/></svg>`;
   if(grant&&grant.promo==="sponsor-gala-2027")promo=`<div class="promo">${star}<div><b class="t">Sponsor gala tickets</b><p><span>Your sponsorship includes</span> <b>${grant.tickets}</b> <span>gala tickets. They are in My Tickets below.</span></p></div></div>`;
   else if(grant)promo=`<div class="promo">${star}<div><b class="t">Gala bonus unlocked</b><p><span>Your free gala tickets:</span> <b>${grant.tickets}</b>. <span>They are in My Tickets below.</span></p></div></div>`;
-  else if(before&&!d.exec&&(!m||(m.tier!=="embajador"&&m.tier!=="corporate")))promo=`<div class="promo">${star}<div><b class="t">Gala bonus</b><p>Join or upgrade before December 31: Patriot members get 2 free gala tickets and Ambassador members get 4.</p>
+  else if(before&&!d.exec&&(!m||(m.tier!=="embajador"&&m.tier!=="corporate")))promo=`<div class="promo">${star}<div><b class="t">Gala promotion</b><p>Join or upgrade on an annual plan before December 31: Patriot members get 2 free Inaugural Gala seats and Ambassador members get 4. One-time promotion; monthly, quarterly and 6-month plans don't include gala seats.</p>
     <a class="btn sm" style="margin-top:10px" href="../join/" target="_top">See memberships</a></div></div>`;
   $("promo").innerHTML=promo;
   /* tickets */
@@ -1374,5 +1382,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=db370636"></script><script src="../assets/i18n.js?v=db370636"></script>
+</script><script src="../assets/i18n-es.js?v=af26fe01"></script><script src="../assets/i18n.js?v=af26fe01"></script>
 </body></html>

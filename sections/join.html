@@ -61,6 +61,17 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
 .tier:has(input:checked) .chk::after{content:"";width:7px;height:12px;border:solid var(--deep);border-width:0 3px 3px 0;transform:translateY(-1px) rotate(45deg)}
 .tier h3{margin:0;padding-right:28px;font-family:"Archivo",sans-serif;font-weight:900;font-stretch:80%;text-transform:uppercase;letter-spacing:.04em;font-size:22px;color:var(--navy)}
 .tier .tag{margin:2px 0 12px;font-style:italic;font-size:13.5px;color:#b0402f}
+.seg{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0 auto 16px;padding:5px;border-radius:999px;background:#eef1f6;width:max-content;max-width:100%}
+.seg button{all:unset;cursor:pointer;padding:9px 14px;border-radius:999px;font:800 12px "Archivo",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#33465c}
+.seg button i{font-style:normal;font-size:10px;color:#a0721e;margin-left:2px;white-space:nowrap}
+.seg button[aria-checked="true"]{background:var(--navy,#0b2a4a);color:#fff}.seg button[aria-checked="true"] i{color:#f5d066}
+.seg button:focus-visible{outline:2px solid #c8952f;outline-offset:2px}
+.seg.dark{background:rgba(255,255,255,.08);margin:0 0 14px;display:grid;grid-template-columns:1fr 1fr;border-radius:18px;width:auto;max-width:420px}.seg.dark button{text-align:center}.seg.dark button{color:#dfe7f2}.seg.dark button[aria-checked="true"]{background:#f5d066;color:#052a4b}.seg.dark button[aria-checked="true"] i{color:#052a4b}
+.yr{margin:-4px 0 10px;font-size:13px;color:#5a6b80}.yr.lt{color:#c9d6e6;margin-top:-10px}
+.gpromo{margin:0 0 12px;padding:8px 10px;border-radius:10px;background:#fff4d6;border:1px dashed #c8952f;font-size:13px;line-height:1.4;color:#5c4100}.gpromo b{text-transform:uppercase;letter-spacing:.06em;font-size:11px}
+.gpromo.off{background:#f3f5f8;border-color:#c9d2de;color:#5a6b80}
+.spon-perks li.gp.off{opacity:.55;text-decoration:line-through}
+@media (max-width:560px){.seg{width:auto;border-radius:16px;display:grid;grid-template-columns:1fr 1fr}.seg button{text-align:center;padding:9px 8px}.seg button i{display:block;margin:2px 0 0}}
 .price{display:flex;align-items:baseline;gap:4px;white-space:nowrap;font-family:"Archivo",sans-serif;color:var(--ink)}
 .price b{font-weight:900;font-stretch:80%;font-size:clamp(36px,3.6vw,44px);line-height:1}
 .price span{font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#5a6b80}
@@ -193,6 +204,7 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
 
     <div style="height:clamp(18px,2.6vw,26px)"></div>
     <p class="lbl"><i>3</i>Choose your membership</p>
+    <div class="seg" id="perSeg" role="radiogroup" aria-label="How often to pay"></div>
     <fieldset class="tiers" id="tiers"><legend style="position:absolute;left:-9999px">Membership level</legend></fieldset>
 
     <p class="secure" style="justify-content:center;margin-top:16px"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 9V7a5 5 0 0 0-10 0v2H5v13h14V9zm-8 0V7a3 3 0 0 1 6 0v2z"/></svg>Secure checkout by Stripe. Name and card on the next screen.</p>
@@ -205,16 +217,17 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
       <span class="eyebrow">For organizations &amp; businesses</span>
       <h2 id="sponTitle">Corporate Sponsorship</h2>
       <p class="spon-who">Political parties, organizations and businesses that want to stand with New York’s Latino community.</p>
-      <div class="price"><b>$1,000</b><span>12 months</span></div>
+      <div class="seg dark" id="sponSeg" role="radiogroup" aria-label="How often to pay"></div>
+      <div class="price" id="sponPrice"></div><p class="yr lt" id="sponYear"></p>
       <a class="go" id="sponBtn" href="#" target="_top">Become a Sponsor <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 5.3l1.4-1.4L22.7 12l-8.1 8.1-1.4-1.4 5.7-5.7H1.5v-2h17.4z"/></svg></a>
       <a class="spon-see" href="../sponsors/" target="_top">See our sponsors →</a>
       <p class="spon-q">Questions or custom packages? Email <a id="sponMail" href="#" target="_top">contact@latinorepublicans.org</a></p>
     </div>
     <ul class="spon-perks">
-      <li>Your logo and link on our website for 12 months</li>
+      <li>Your logo and link on our website while you sponsor</li>
       <li>Recognition from the podium at club meetings and forums</li>
       <li>Logo on event signage and printed programs</li>
-      <li>Six reserved seats at our Inaugural Gala</li>
+      <li id="sponPromo" class="gp">★ <b>Promotion:</b> six reserved seats at our Inaugural Gala (one-time, annual sponsorships only)</li>
       <li>A sponsor spotlight on our Instagram, X, Facebook and YouTube</li>
       <li>Table or display space at one club event</li>
     </ul>
@@ -232,23 +245,33 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
    same as Stripe so nobody is surprised at checkout.
    ===================================================================== */
 const TIERS = [
-  { id:"young", name:"Young Leader", tag:"The next generation starts here.", price:25,
+  { id:"young", name:"Young Leader", tag:"The next generation starts here.",
+    prices:{year:25,semiannual:14,quarter:7,month:2.5},
     perks:["Ages 18\u201325","Attend member meetings","General member voting rights","Young Leaders mentorship track"],
-    link:"https://buy.stripe.com/test_6oU9AT4W1aKfaAccjN7N601" },
-  { id:"member", name:"Member", tag:"Your seat at the table.", price:50,
+    links:{year:"https://buy.stripe.com/test_6oU9AT4W1aKfaAccjN7N601",semiannual:"https://buy.stripe.com/test_eVq8wPcotbOj9w8cjN7N60f",quarter:"https://buy.stripe.com/test_28EdR9gEJ9Gb5fS5Vp7N60e",month:"https://buy.stripe.com/test_bJeaEX3RX2dJ0ZCdnR7N60d"} },
+  { id:"member", name:"Member", tag:"Your seat at the table.", selected:true,
+    prices:{year:50,semiannual:27,quarter:14,month:5},
     perks:["Support the club","Attend member meetings","General member voting rights"],
-    link:"https://buy.stripe.com/test_eVq28r88d5pV37KdnR7N602", selected:true },
-  { id:"patriot", name:"Patriot", tag:"All in for the club.", price:100,
+    links:{year:"https://buy.stripe.com/test_eVq28r88d5pV37KdnR7N602",semiannual:"https://buy.stripe.com/test_6oU4gz1JPdWraAcdnR7N60i",quarter:"https://buy.stripe.com/test_5kQ5kDdsx9Gb37K3Nh7N60h",month:"https://buy.stripe.com/test_bJedR92NT19F0ZC3Nh7N60g"} },
+  { id:"patriot", name:"Patriot", tag:"All in for the club.", promo:2,
+    prices:{year:100,semiannual:55,quarter:28,month:10},
     perks:["Everything in Member","Free admission to workshops","Discounts on special events","Access to members-only club merch","The club app on your phone","Early access to event sign-ups","Printable membership certificate","Founding Member badge when you join before the Inaugural Gala"],
-    link:"https://buy.stripe.com/test_aFa7sL1JPg4z0ZC6Zt7N603" },
-  { id:"embajador", name:"Ambassador", tag:"Carry the flag.", price:250,
+    links:{year:"https://buy.stripe.com/test_aFa7sL1JPg4z0ZC6Zt7N603",semiannual:"https://buy.stripe.com/test_3cI00jbkpaKf4bOabF7N60l",quarter:"https://buy.stripe.com/test_9B67sLdsxdWr5fS0B57N60k",month:"https://buy.stripe.com/test_fZu7sL2NTf0v5fSgA37N60j"} },
+  { id:"embajador", name:"Ambassador", tag:"Carry the flag.", promo:4,
+    prices:{year:250,semiannual:135,quarter:70,month:25},
     perks:["Everything in Patriot","Preferred seating at events (when applicable)","Gold member card in the club app","Chairman's Insider: monthly behind-the-scenes updates","Your name in our event programs","Official club pin","Yearly roundtable with the board"],
-    link:"https://buy.stripe.com/test_bJedR93RX2dJ37KfvZ7N604" }
+    links:{year:"https://buy.stripe.com/test_bJedR93RX2dJ37KfvZ7N604",semiannual:"https://buy.stripe.com/test_aFa00j749cSn4bOfvZ7N60o",quarter:"https://buy.stripe.com/test_00w00j4W119FbEgabF7N60n",month:"https://buy.stripe.com/test_6oU4gz9ch19FgYA97B7N60m"} }
 ];
-const PERIOD = "/ year";
-/* Corporate Sponsorship (TEST MODE link): swap for the live link when you go live */
-const SPONSOR_LINK = "https://buy.stripe.com/test_fZu6oH1JPdWr7o0bfJ7N60a";            /* shown next to every price */
-const RENEWS = true;                /* true if your Payment Links are yearly subscriptions */
+/* Billing periods. Annual is the best value; Inaugural Gala seats are a one-time PROMOTION that comes with annual plans only. */
+const PERIODS = [
+  {id:"year",label:"Annual",per:"/ year",months:12,best:true},
+  {id:"semiannual",label:"Every 6 months",per:"/ 6 months",months:6},
+  {id:"quarter",label:"Quarterly",per:"/ quarter",months:3},
+  {id:"month",label:"Monthly",per:"/ month",months:1}];
+const PROMO_BY = "December 31";        /* gala promotion: join on an annual plan by this date */
+/* Corporate Sponsorship (TEST MODE links): swap for the live links when you go live */
+const SPONSOR = {prices:{year:2500,semiannual:1350,quarter:700,month:250},
+  links:{year:"https://buy.stripe.com/test_6oUaEXbkp19FeQsfvZ7N60p",semiannual:"https://buy.stripe.com/test_7sYfZhfAF4lRaAcerV7N60q",quarter:"https://buy.stripe.com/test_28EbJ1dsxaKf4bO3Nh7N60r",month:"https://buy.stripe.com/test_aFaaEXdsx7y3aAc1F97N60s"}};
 const CONTACT = "contact@latinorepublicans.org";
 const NOTE = "Dues are not tax deductible as charitable contributions for federal income tax purposes. Paid for by NYC Latino Republican Club Inc.";
 /* ===================================================================== */
@@ -300,18 +323,37 @@ const svg=(n,label)=>flagSVG(FLAGS[n],label||n);
 const ABBR={};NAMES.forEach(n=>{ABBR[n]=n.replace(/[^A-Za-z]/g,'').slice(0,12);});
 
 const tiersEl=document.getElementById('tiers');
-document.getElementById('sponBtn').href=SPONSOR_LINK;
+let per="year",sper="year";
+const money=n=>'$'+(n%1?n.toFixed(2):n.toLocaleString('en-US'));
+const perOf=id=>PERIODS.find(p=>p.id===id);
+const segHTML=(name,cur)=>PERIODS.map(p=>'<button type="button" role="radio" aria-checked="'+(p.id===cur)+'" data-'+name+'="'+p.id+'">'+esc(p.label)+(p.best?' <i>Best value</i>':'')+'</button>').join('');
+function paintSponsor(){const P=perOf(sper),v=SPONSOR.prices[sper];
+  document.getElementById('sponPrice').innerHTML='<b>'+money(v)+'</b><span>'+esc(P.per)+'</span>';
+  document.getElementById('sponYear').textContent=sper==='year'?'Best value':'= '+money(v*12/P.months)+' a year';
+  document.getElementById('sponBtn').href=SPONSOR.links[sper];
+  document.getElementById('sponSeg').innerHTML=segHTML('sper',sper);
+  document.getElementById('sponPromo').classList.toggle('off',sper!=='year');}
+document.getElementById('sponSeg').addEventListener('click',e=>{const b=e.target.closest('[data-sper]');if(!b)return;sper=b.dataset.sper;paintSponsor();});
+paintSponsor();
 {const m=document.getElementById('sponMail');m.href='mailto:'+CONTACT+'?subject='+encodeURIComponent('Corporate Sponsorship');}
-tiersEl.insertAdjacentHTML('beforeend',TIERS.map((t,i)=>
- '<label class="tier"><input type="radio" name="tier" value="'+t.id+'"'+((t.selected||(!TIERS.some(x=>x.selected)&&i===0))?' checked':'')+'><span class="chk" aria-hidden="true"></span>'+
+function paintTiers(){const P=perOf(per),keep=(document.querySelector('input[name=tier]:checked')||{}).value;
+ document.getElementById('perSeg').innerHTML=segHTML('per',per);
+ tiersEl.querySelectorAll('.tier').forEach(x=>x.remove());
+ tiersEl.insertAdjacentHTML('beforeend',TIERS.map((t,i)=>{const v=t.prices[per];
+ return '<label class="tier"><input type="radio" name="tier" value="'+t.id+'"'+((keep?keep===t.id:(t.selected||(!TIERS.some(x=>x.selected)&&i===0)))?' checked':'')+'><span class="chk" aria-hidden="true"></span>'+
  '<h3>'+esc(t.name)+'</h3><p class="tag">'+esc(t.tag)+'</p>'+
- '<div class="price"><b>$'+t.price+'</b><span>'+esc(PERIOD)+'</span></div>'+
+ '<div class="price"><b>'+money(v)+'</b><span>'+esc(P.per)+'</span></div>'+
+ (per==='year'?'':'<p class="yr">= '+money(v*12/P.months)+' <span>a year</span> · <span>annual is</span> '+money(t.prices.year)+'</p>')+
+ (t.promo?(per==='year'?'<p class="gpromo">★ <b>Promotion</b> · <span>'+t.promo+' free Inaugural Gala seats when you join on an annual plan by</span> '+esc(PROMO_BY)+'. <span>One-time offer.</span></p>'
+   :'<p class="gpromo off">★ <span>The Inaugural Gala seat promotion comes with annual plans only.</span></p>'):'')+
  '<ul class="perks">'+t.perks.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>'+
- '<button type="button" class="pay" data-id="'+t.id+'" aria-label="Join as '+esc(t.name)+' for $'+t.price+' a year">Join for $'+t.price+' <span aria-hidden="true">\u2192</span></button></label>').join(''));
+ '<button type="button" class="pay" data-id="'+t.id+'" aria-label="Join as '+esc(t.name)+' for '+money(v)+' '+esc(P.per)+'">Join for '+money(v)+' <span aria-hidden="true">\u2192</span></button></label>';}).join(''));}
+paintTiers();
+document.getElementById('perSeg').addEventListener('click',e=>{const b=e.target.closest('[data-per]');if(!b)return;per=b.dataset.per;paintTiers();});
 tiersEl.addEventListener('click',e=>{const b=e.target.closest('.pay');if(!b)return;e.preventDefault();
   const r=tiersEl.querySelector('input[value="'+b.dataset.id+'"]');r.checked=true;syncTotal();checkout();});
 tiersEl.style.setProperty('--n',TIERS.length);
-document.getElementById('note').textContent=(RENEWS?"Renews yearly. Cancel anytime by emailing "+CONTACT+". ":"")+NOTE;
+document.getElementById('note').textContent="Renews automatically each billing period. Cancel or change your plan anytime from your club profile. If a payment doesn't go through, you have 7 days to update your card before member benefits pause. Inaugural Gala seats are a one-time promotion for annual plans only. "+NOTE;
 
 /* "Where are you representing?" tiles: USA, every flag, Other */
 const slug=n=>n.toLowerCase().replace(/[^a-z]+/g,'-').replace(/^-|-$/g,'');
@@ -428,7 +470,7 @@ function checkout(){
   const first=(!chosen?document.querySelector('.rp'):null)||document.querySelector('.field.bad input,.field.bad select')||(!ok?document.getElementById('agree'):null);
   if(first){first.focus({preventScroll:true});first.scrollIntoView({block:'center',behavior:'smooth'});return;}
   step(3);
-  const t=tier(),soon=document.getElementById('soon');
+  const t=tier(),soon=document.getElementById('soon');t.link=t.links[per];
   if(!t.link){soon.innerHTML='Online dues open soon. To join today, email <a href="mailto:'+CONTACT+'?subject='+encodeURIComponent('Membership: '+t.name)+'" target="_top">'+CONTACT+'</a> and we’ll get you set up.';soon.classList.add('show');return;}
   const code=chosen==='United States'?'USA':chosen==='Other'?'Other-'+(otherCode?otherCode.replace(/[^A-Z]/g,''):'')+'-'+h.replace(/[^A-Za-z]+/g,'').slice(0,24):ABBR[chosen];
   const ref=[t.id,boro,code].join('_');
@@ -451,5 +493,5 @@ function checkout(){
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=db370636"></script><script src="../assets/i18n.js?v=db370636"></script>
+</script><script src="../assets/i18n-es.js?v=af26fe01"></script><script src="../assets/i18n.js?v=af26fe01"></script>
 </body></html>

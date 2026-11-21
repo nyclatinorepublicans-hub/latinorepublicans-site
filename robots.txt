@@ -2,4 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /welcome/
 Disallow: /sponsors/
+Disallow: /account/
+Disallow: /checkin/
 Sitemap: https://www.latinorepublicans.org/sitemap.xml

@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,600..900&display=swap">
+<style>
+:root{--navy:#052a4b;--deep:#021a30;--gold:#d6a844;--gold-hi:#f5d066;--red:#d51b2f;--cream:#fffaf1;--ink:#0d2238}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;max-width:100%;overflow-x:hidden}
+body{background:#f4efe4;color:var(--ink);font-family:"Hepta Slab",Georgia,serif}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{padding:clamp(22px,4vw,48px) clamp(12px,3vw,32px) 56px}.inner{max-width:900px;margin:0 auto}
+h1{margin:0 0 6px;font:900 clamp(34px,6vw,58px) "Archivo",sans-serif;font-stretch:78%;text-transform:uppercase;color:var(--navy);line-height:.95;text-align:center}
+.sub{text-align:center;margin:0 0 22px;color:#3c4d60;font-style:italic}
+h2{font:900 22px "Archivo",sans-serif;font-stretch:82%;text-transform:uppercase;color:var(--navy);margin:0 0 12px}
+.card{background:#fff;border-radius:18px;padding:clamp(16px,3vw,24px);box-shadow:0 10px 30px rgba(5,42,75,.08);margin-bottom:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;cursor:pointer;text-decoration:none;
+  font:800 14px "Archivo",sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:13px 20px;background:var(--red);color:#fff}
+.btn.ghost{background:transparent;color:var(--navy);box-shadow:inset 0 0 0 2px rgba(5,42,75,.25)}
+.btn.navy{background:var(--navy)}.btn.sm{padding:9px 14px;font-size:12px}.btn[disabled]{opacity:.5}
+label{display:block;font:800 12px "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#52637a;margin-bottom:6px}
+input,select{width:100%;font:16px "Hepta Slab",Georgia,serif;padding:12px 13px;border-radius:12px;border:2px solid #d9d2c3;background:#fffdf8;color:var(--ink)}
+input:focus,select:focus{border-color:var(--gold);outline:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}.row>.grow{flex:1 1 220px}
+.cam{position:relative;border-radius:16px;overflow:hidden;background:#000;aspect-ratio:4/3;max-height:60vh;margin:0 auto 12px}
+.cam video{width:100%;height:100%;object-fit:cover;display:block}
+.cam .aim{position:absolute;inset:16%;border:3px solid rgba(245,208,102,.9);border-radius:18px;box-shadow:0 0 0 9999px rgba(0,0,0,.25)}
+.res{border-radius:16px;padding:18px;margin-top:12px;color:#fff;text-align:center}
+.res b{display:block;font:900 clamp(26px,5vw,38px) "Archivo",sans-serif;font-stretch:82%;text-transform:uppercase;letter-spacing:.02em}
+.res span{display:block;margin-top:4px;font-size:16px}
+.res.ok{background:#1d7a45}.res.warn{background:#b76e00}.res.bad{background:#b3121f}
+.stats{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px}
+.stats div{font:800 12px "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#52637a}
+.stats b{display:block;font:900 32px "Archivo",sans-serif;color:var(--navy);letter-spacing:0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:9px 6px;border-top:1px solid #eee5d3;vertical-align:middle}
+th{font:800 11px "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#52637a;border-top:0}
+td.code{font:700 13px ui-monospace,Menlo,monospace;letter-spacing:.1em}
+.in{color:#1d7a45;font-weight:700}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px}
+.msg{padding:12px 14px;border-radius:12px;background:#fde8ea;color:#8f1220;margin-top:10px}
+.em2{display:none;font-size:12px;color:#5b6b7e;word-break:break-all}
+@media (max-width:600px){th:nth-child(2),td:nth-child(2),th:nth-child(3),td:nth-child(3){display:none}.em2{display:block}td.code{font-size:12px}}
+[hidden]{display:none!important}
+@media print{body{background:#fff}.noprint{display:none!important}.card{box-shadow:none;padding:0}.wrap{padding:0}h1{font-size:28px}
+  table{font-size:12px}th,td{padding:6px 4px}td:last-child,th:last-child{width:120px}}
+.printbox{display:none}@media print{.printbox{display:inline-block;width:14px;height:14px;border:1.5px solid #000}}
+</style>
+<script src="../assets/vendor/jsQR.js"></script>
+</head>
+<body>
+<div class="wrap"><div class="inner">
+  <h1>Door Check-In</h1>
+  <p class="sub noprint">For board members at club events. Scan a ticket or search by name.</p>
+
+  <div id="vNo" class="card" hidden>
+    <h2>Board members only</h2>
+    <p id="noTxt">Sign in on My Profile with your board email first.</p>
+    <a class="btn navy" href="../account/" target="_top">Go to My Profile</a>
+  </div>
+
+  <div id="vYes" hidden>
+    <div class="card noprint">
+      <label for="evSel">Event</label>
+      <select id="evSel"></select>
+    </div>
+
+    <div class="card noprint">
+      <h2>Scan Ticket</h2>
+      <div class="cam" id="cam" hidden><video id="vid" playsinline muted></video><div class="aim"></div></div>
+      <div class="row">
+        <button class="btn" id="bCam" type="button">Start camera</button>
+        <form id="fCode" class="row grow" style="flex:1 1 280px" novalidate>
+          <div class="grow"><label for="code">Or type the 8-character code</label><input id="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" placeholder="A1B2C3D4"></div>
+          <button class="btn navy" type="submit">Check in</button>
+        </form>
+      </div>
+      <div id="res" class="res" hidden aria-live="assertive"></div>
+    </div>
+
+    <div class="card">
+      <h2 id="listTitle">Guest List</h2>
+      <div class="stats"><div><b id="sTot">0</b><span>Tickets</span></div><div><b id="sIn">0</b><span>Checked in</span></div><div><b id="sLeft">0</b><span>Not yet</span></div></div>
+      <div class="tools noprint">
+        <div class="grow" style="flex:1 1 220px"><input id="find" type="search" placeholder="Search name or email" aria-label="Search name or email"></div>
+        <button class="btn ghost sm" id="bCsv" type="button">Download CSV</button>
+        <button class="btn ghost sm" id="bPrint" type="button">Print paper list</button>
+        <button class="btn ghost sm" id="bRef" type="button">Refresh</button>
+      </div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Email</th><th>Type</th><th>Code</th><th>Status</th></tr></thead><tbody id="rows"></tbody></table></div>
+    </div>
+  </div>
+  <div id="err" class="msg" hidden></div>
+</div></div>
+
+<script>
+const SB_URL="https://ccfcvzmnaeasfiigtnvz.supabase.co";
+const SB_KEY="sb_publishable_nzBBd1P7v-mVTbbjfd8JSw_i0FXzcZm";
+const SKEY="lrc_session";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const L=()=>window.LRC_LANG==="es"?"es":"en";
+let session=null,me="",events=[],tickets=[],members={};
+try{session=JSON.parse(localStorage.getItem(SKEY)||"null");}catch(e){}
+
+async function token(){
+  if(!session)return null;
+  if(session.expires_at-60<Date.now()/1000){
+    const r=await fetch(SB_URL+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:session.refresh_token})});
+    if(!r.ok)return null;const j=await r.json();
+    session={access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+3600};
+    try{localStorage.setItem(SKEY,JSON.stringify(session));}catch(e){}
+  }
+  return session.access_token;
+}
+async function api(path,opt={}){
+  const t=await token();if(!t)throw new Error("signin");
+  const r=await fetch(SB_URL+path,{...opt,headers:{apikey:SB_KEY,Authorization:"Bearer "+t,"Content-Type":"application/json",...(opt.headers||{})}});
+  const j=await r.json().catch(()=>null);
+  if(!r.ok){const e=new Error((j&&j.error)||"server");e.status=r.status;throw e;}
+  return j;
+}
+const evTitle=ev=>ev?(L()==="es"&&ev.title_es?ev.title_es:ev.title_en):"";
+
+async function loadList(){
+  const id=$("evSel").value;if(!id)return;
+  tickets=await api("/rest/v1/tickets?select=id,token,status,kind,holder_name,owner_email,checked_in_at&event_id=eq."+id+"&status=neq.void&order=owner_email.asc");
+  const ems=[...new Set(tickets.map(t=>t.owner_email))];
+  members={};
+  if(ems.length){const ms=await api("/rest/v1/members?select=email,name,tier&email=in.("+ems.map(e=>'"'+e.replace(/"/g,"")+'"').join(",")+")");ms.forEach(m=>members[m.email]=m);}
+  renderList();
+}
+const nameOf=t=>t.holder_name||(members[t.owner_email]&&members[t.owner_email].name)||"";
+function renderList(){
+  const q=$("find").value.trim().toLowerCase();
+  const ev=events.find(e=>e.id===$("evSel").value);
+  $("listTitle").textContent=evTitle(ev);
+  const inN=tickets.filter(t=>t.status==="used").length;
+  $("sTot").textContent=tickets.length;$("sIn").textContent=inN;$("sLeft").textContent=tickets.length-inN;
+  const list=tickets.filter(t=>!q||(nameOf(t)+" "+t.owner_email).toLowerCase().includes(q))
+    .sort((a,b)=>(nameOf(a)||a.owner_email).localeCompare(nameOf(b)||b.owner_email));
+  $("rows").innerHTML=list.map(t=>`<tr><td>${esc(nameOf(t))}<span class="em2">${esc(t.owner_email)}${t.kind==="comp"?" · ★":""}</span></td><td>${esc(t.owner_email)}</td><td>${t.kind==="comp"?"<span>Complimentary</span>":"<span>Paid</span>"}</td>
+    <td class="code">${esc(t.token.slice(0,8).toUpperCase())}</td>
+    <td>${t.status==="used"?`<span class="in">✓ ${esc(new Date(t.checked_in_at).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"}))}</span>`
+      :`<span class="printbox"></span><button class="btn sm navy noprint" type="button" data-tok="${esc(t.token)}">Check in</button>`}</td></tr>`).join("")
+    ||`<tr><td colspan="5"><span>No tickets yet.</span></td></tr>`;
+}
+
+/* check-in */
+let busy=false,lastCode="",lastAt=0;
+async function checkin(code){
+  if(busy)return;const now=Date.now();if(code===lastCode&&now-lastAt<4000)return;lastCode=code;lastAt=now;busy=true;
+  try{
+    const r=await api("/functions/v1/checkin",{method:"POST",body:JSON.stringify({code,event_id:$("evSel").value})});
+    const t=r.ticket,who=t?(t.holder_name||(members[t.owner_email]&&members[t.owner_email].name)||t.owner_email):"";
+    const map={ok:["ok","Welcome in!"],used:["warn","Already checked in"],wrong_event:["bad","Different event"],void:["bad","Ticket canceled"],notfound:["bad","Ticket not found"],ambiguous:["warn","Type more of the code"]};
+    const [k,msg]=map[r.result]||["bad","Try again"];
+    let extra=who;
+    if(r.result==="used"&&t.checked_in_at)extra+=" · "+new Date(t.checked_in_at).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+    if(r.result==="wrong_event"&&t.events)extra+=" · "+(L()==="es"&&t.events.title_es?t.events.title_es:t.events.title_en);
+    if(r.result==="ok"&&t.kind==="comp")extra+=" · Complimentary";
+    showRes(k,msg,extra);
+    if(navigator.vibrate)navigator.vibrate(k==="ok"?80:[60,60,60]);
+    if(r.result==="ok"){const x=tickets.find(z=>z.token===t.token);if(x){x.status="used";x.checked_in_at=t.checked_in_at;}renderList();}
+  }catch(e){showRes("bad",e.status===403?"Board members only":"No connection. Use the paper list.","");}
+  busy=false;
+}
+function showRes(k,msg,extra){const r=$("res");r.className="res "+k;r.hidden=false;r.innerHTML=`<b>${esc(msg)}</b>${extra?`<span>${esc(extra)}</span>`:""}`;}
+$("fCode").addEventListener("submit",e=>{e.preventDefault();const c=$("code").value.trim();if(c){lastCode="";checkin(c);$("code").value="";}});
+$("rows").addEventListener("click",e=>{const b=e.target.closest("button[data-tok]");if(b){lastCode="";checkin(b.dataset.tok);}});
+$("find").addEventListener("input",renderList);
+$("evSel").addEventListener("change",()=>{$("res").hidden=true;loadList().catch(fail);});
+$("bRef").addEventListener("click",()=>loadList().catch(fail));
+$("bPrint").addEventListener("click",()=>{$("find").value="";renderList();window.print();});
+$("bCsv").addEventListener("click",()=>{
+  const ev=events.find(e=>e.id===$("evSel").value);
+  const rows=[["Name","Email","Membership","Type","Code","Checked in"]].concat(tickets.map(t=>[nameOf(t),t.owner_email,(members[t.owner_email]||{}).tier||"",t.kind,t.token.slice(0,8).toUpperCase(),t.checked_in_at||""]));
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+csv],{type:"text/csv"}));a.download=(ev?ev.slug:"event")+"-guest-list.csv";document.body.appendChild(a);a.click();a.remove();
+});
+
+/* camera scanning */
+let stream=null,raf=0,detector=null;const cv=document.createElement("canvas"),cx=cv.getContext("2d",{willReadFrequently:true});
+$("bCam").addEventListener("click",async()=>{
+  if(stream){stopCam();return;}
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});
+    const v=$("vid");v.srcObject=stream;await v.play();$("cam").hidden=false;$("bCam").textContent=L()==="es"?"Detener cámara":"Stop camera";
+    if("BarcodeDetector" in window){try{detector=new BarcodeDetector({formats:["qr_code"]});}catch(e){detector=null;}}
+    scan();
+  }catch(e){showRes("bad","Camera not available","Allow camera access, or type the code.");stream=null;}
+});
+function stopCam(){cancelAnimationFrame(raf);if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;$("cam").hidden=true;$("bCam").textContent=L()==="es"?"Iniciar cámara":"Start camera";}
+async function scan(){
+  if(!stream)return;const v=$("vid");
+  if(v.readyState>=2){
+    let text=null;
+    try{
+      if(detector){const c=await detector.detect(v);if(c[0])text=c[0].rawValue;}
+      else{const w=v.videoWidth,h=v.videoHeight,s=Math.min(1,640/w);cv.width=w*s;cv.height=h*s;cx.drawImage(v,0,0,cv.width,cv.height);
+        const img=cx.getImageData(0,0,cv.width,cv.height);const q=jsQR(img.data,img.width,img.height,{inversionAttempts:"dontInvert"});if(q)text=q.data;}
+    }catch(e){}
+    if(text&&/lrc:[0-9a-f]{36}/i.test(text))await checkin(text);
+  }
+  raf=requestAnimationFrame(()=>setTimeout(scan,120));
+}
+
+function fail(e){const m=$("err");m.hidden=false;m.textContent=e&&e.message==="signin"?"Please sign in again on My Profile.":"Couldn't load the list. Check your connection and press Refresh.";}
+addEventListener("lrc-lang",()=>{const s=$("evSel").value;fillEvents();$("evSel").value=s;renderList();});
+function fillEvents(){$("evSel").innerHTML=events.map(e=>`<option value="${e.id}">${esc(evTitle(e))}</option>`).join("");}
+
+(async function(){
+  if(!session){$("vNo").hidden=false;return;}
+  try{
+    const u=await api("/auth/v1/user");me=(u.email||"").toLowerCase();
+    const ad=await api("/rest/v1/admins?select=email&email=eq."+encodeURIComponent(me));
+    if(!ad.length){$("vNo").hidden=false;$("noTxt").textContent=(L()==="es"?"Esta cuenta no es de la directiva: ":"This account is not on the board list: ")+me;return;}
+    events=await api("/rest/v1/events?select=*&order=starts_at.asc.nullslast");
+    fillEvents();
+    const gala=events.find(e=>e.is_gala);if(gala)$("evSel").value=gala.id;
+    $("vYes").hidden=false;await loadList();
+  }catch(e){$("vNo").hidden=false;}
+})();
+</script>
+<script>
+/* site helper: links to other parts of the site open in the main window; pop-ups open where the visitor is looking */
+(function(){
+  if(window.parent===window) return;
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href]'); if(!a||e.defaultPrevented) return;
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;
+    var u; try{u=new URL(a.getAttribute('href'),location.href);}catch(err){return;}
+    if(u.origin!==location.origin) return;            /* Stripe, socials, email: leave alone */
+    e.preventDefault(); e.stopPropagation(); parent.postMessage({lrc:'go',href:u.href},'*');
+  },true);
+  addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
+    var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
+})();
+</script><script src="../assets/i18n-es.js"></script><script src="../assets/i18n.js"></script>
+</body></html>

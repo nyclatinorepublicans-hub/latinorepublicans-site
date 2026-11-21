@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,600..900&display=swap">
+<style>
+:root{--navy:#052a4b;--navy2:#0b3d6b;--deep:#021a30;--gold:#d6a844;--gold-hi:#f5d066;--red:#d51b2f;--cream:#fffaf1;--ink:#0d2238;--ok:#1d7a45}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;max-width:100%;overflow-x:hidden}
+body{background:#f4efe4;color:var(--ink);font-family:"Hepta Slab",Georgia,serif}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{padding:clamp(28px,5vw,56px) clamp(14px,4vw,40px) clamp(48px,6vw,72px)}
+.inner{max-width:960px;margin:0 auto}
+.head{text-align:center;margin-bottom:clamp(22px,3.5vw,34px)}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font:800 13px "Archivo",sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#b0402f}
+.eyebrow::before,.eyebrow::after{content:"";width:28px;height:2px;background:var(--gold)}
+h1{margin:10px 0 8px;font-family:"Archivo",sans-serif;font-weight:900;font-stretch:78%;text-transform:uppercase;line-height:.95;font-size:clamp(38px,6.5vw,66px);color:var(--navy)}
+h2{font:900 clamp(22px,3vw,28px) "Archivo",sans-serif;font-stretch:82%;text-transform:uppercase;letter-spacing:.02em;color:var(--navy);margin:0 0 14px}
+.sub{margin:0 auto;max-width:600px;font-style:italic;font-size:clamp(15px,1.8vw,17px);line-height:1.55;color:#3c4d60}
+.card{background:#fff;border-radius:18px;padding:clamp(18px,3vw,28px);box-shadow:0 1px 0 rgba(5,42,75,.06),0 10px 30px rgba(5,42,75,.08);margin-bottom:clamp(16px,2.5vw,24px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;cursor:pointer;text-decoration:none;
+  font:800 14px "Archivo",sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:14px 22px;background:var(--red);color:#fff;box-shadow:0 6px 16px rgba(213,27,47,.25)}
+.btn:hover{filter:brightness(1.07)}.btn[disabled]{opacity:.55;cursor:wait}
+.btn.ghost{background:transparent;color:var(--navy);box-shadow:inset 0 0 0 2px rgba(5,42,75,.25)}
+.btn.gold{background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:var(--deep);box-shadow:0 6px 16px rgba(214,168,68,.35)}
+.btn.sm{padding:10px 16px;font-size:12px}
+label{display:block;font:800 12px "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#52637a;margin-bottom:6px}
+input[type=email],select{width:100%;font:16px "Hepta Slab",Georgia,serif;padding:13px 14px;border-radius:12px;border:2px solid #d9d2c3;background:#fffdf8;color:var(--ink)}
+input[type=email]:focus,select:focus{border-color:var(--gold);outline:0}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}.row>.grow{flex:1 1 240px}
+.msg{margin:14px 0 0;padding:12px 14px;border-radius:12px;font-size:15px;line-height:1.5}
+.msg.ok{background:#e6f4ec;color:#145a33}.msg.err{background:#fde8ea;color:#8f1220}.msg.info{background:#eef3fa;color:#163b63}
+.small{font-size:13px;color:#5b6b7e;line-height:1.5}
+[hidden]{display:none!important}
+
+/* membership card */
+.mcard{position:relative;overflow:hidden;color:#fff;border-radius:20px;padding:clamp(20px,3.5vw,30px);margin-bottom:clamp(16px,2.5vw,24px);
+  background:radial-gradient(120% 140% at 100% 0%,#14558f 0%,var(--navy) 45%,var(--deep) 100%);box-shadow:0 14px 34px rgba(2,26,48,.3)}
+.mcard::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;border:2px solid rgba(245,208,102,.25)}
+.mtop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.mname{font:900 clamp(24px,4vw,34px) "Archivo",sans-serif;font-stretch:82%;text-transform:uppercase;letter-spacing:.02em;line-height:1}
+.memail{font-size:14px;opacity:.8;margin-top:6px;word-break:break-all}
+.tier{display:inline-block;padding:7px 14px;border-radius:999px;font:900 13px "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:var(--deep)}
+.tier.none{background:rgba(255,255,255,.14);color:#fff}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:22px}
+.mgrid div span{display:block;font:800 11px "Archivo",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi);margin-bottom:4px}
+.mgrid div b{font-size:16px}
+.st-active{color:#8ee3ad}.st-past_due{color:#ffd27a}.st-canceled{color:#ff9aa5}
+.mcard .btn{margin-top:20px}
+
+/* promo */
+.promo{display:flex;gap:14px;align-items:flex-start;border-radius:16px;padding:16px 18px;margin-bottom:clamp(16px,2.5vw,24px);
+  background:linear-gradient(135deg,#fff6dc,#ffe9b0);box-shadow:inset 0 0 0 2px #e0b44f;color:#4d3505}
+.promo svg{flex:none;width:30px;height:30px}
+.promo b.t{display:block;font:900 15px "Archivo",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#7a4f00;margin-bottom:2px}
+.promo p{margin:0;font-size:15px;line-height:1.5}
+
+/* tickets */
+.tickets{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.tk{border-radius:16px;background:var(--cream);box-shadow:inset 0 0 0 2px #eadfc8;padding:16px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.tk h3{margin:0 0 4px;font:900 17px "Archivo",sans-serif;font-stretch:88%;text-transform:uppercase;color:var(--navy)}
+.tk .when{font-size:13px;color:#5b6b7e}
+.qr{background:#fff;border-radius:12px;padding:10px;margin:12px 0 8px;border:0;cursor:zoom-in;line-height:0}
+.qr svg{width:170px;height:170px;display:block}
+.code{font:800 15px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.18em;color:var(--navy)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.chip{font:800 11px "Archivo",sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:5px 9px;border-radius:999px;background:#e9eef5;color:#2a4566}
+.chip.comp{background:#fff0c7;color:#7a4f00}.chip.used{background:#e6f4ec;color:#145a33}.chip.void{background:#fde8ea;color:#8f1220}
+.tk.is-used .qr{opacity:.35}
+.empty{padding:18px;border-radius:14px;background:#f8f4ea;color:#5b6b7e;text-align:center;font-size:15px}
+
+/* events */
+.ev{display:flex;gap:14px;justify-content:space-between;align-items:center;flex-wrap:wrap;padding:16px 0;border-top:1px solid #eee5d3}
+.ev:first-of-type{border-top:0;padding-top:4px}
+.ev h3{margin:0 0 3px;font:900 18px "Archivo",sans-serif;font-stretch:88%;text-transform:uppercase;color:var(--navy)}
+.ev .meta{font-size:14px;color:#5b6b7e}.ev .price{font:800 14px "Archivo",sans-serif;color:var(--red);margin-top:4px;letter-spacing:.04em}
+.ev .act{display:flex;gap:8px;align-items:center}
+.ev select{width:auto;padding:10px 12px}
+.ev-note{margin-top:8px}
+
+/* history */
+.hist{list-style:none;margin:0;padding:0}
+.hist li{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #eee5d3;font-size:15px}
+.hist li:first-child{border-top:0}
+.stat{font:900 44px "Archivo",sans-serif;color:var(--navy);line-height:1}
+.statlbl{font:800 12px "Archivo",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#52637a}
+
+.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.who{font-size:14px;color:#52637a}
+
+/* big QR */
+.zoom{position:fixed;inset:0;background:rgba(2,26,48,.86);display:flex;align-items:flex-start;justify-content:center;padding:20px;z-index:50}
+.zoom .box{background:#fff;border-radius:20px;padding:22px;text-align:center;max-width:380px;width:100%}
+.zoom svg{width:100%;height:auto;display:block}
+.zoom h3{margin:0 0 6px;font:900 18px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy)}
+.zoom .btn{margin-top:14px}
+.spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+<script src="../assets/vendor/qrcode.js"></script>
+</head>
+<body>
+<div class="wrap"><div class="inner">
+  <div class="head">
+    <span class="eyebrow">Members</span>
+    <h1>My Profile</h1>
+    <p class="sub">Your membership, your event tickets with QR codes, and the events you have attended.</p>
+  </div>
+
+  <!-- signed out -->
+  <section id="vOut" class="card" hidden>
+    <h2>Sign in</h2>
+    <p class="small">Enter the email you used to join or buy tickets. We will email you a secure sign-in link. No password needed.</p>
+    <form id="fIn" class="row" novalidate>
+      <div class="grow"><label for="em">Email</label><input id="em" type="email" autocomplete="email" required placeholder="you@example.com"></div>
+      <button class="btn" id="bIn" type="submit">Email me a link</button>
+    </form>
+    <div id="inMsg" class="msg" hidden></div>
+    <p class="small" style="margin-top:16px">Not a member yet? <a href="../join/" target="_top">Join the club</a>.</p>
+  </section>
+
+  <div id="vLoad" class="card" style="text-align:center"><span class="spin"></span></div>
+
+  <!-- signed in -->
+  <div id="vIn" hidden>
+    <div class="bar"><span class="who"><span>Signed in as</span> <b id="whoEm"></b></span>
+      <span><a id="adminLink" class="btn gold sm" href="../checkin/" target="_top" hidden>Door check-in</a>
+      <button class="btn ghost sm" id="bOut" type="button">Sign out</button></span></div>
+    <div id="paidMsg" class="msg info" hidden></div>
+    <div id="mcard"></div>
+    <div id="promo"></div>
+    <section class="card" id="tickets"><h2>My Tickets</h2><div id="tkList"></div>
+      <p class="small" style="margin-top:14px">Show the QR code at the door. Screenshots work. If your phone is off, give your name or the 8-character code.</p></section>
+    <section class="card" id="events"><h2>Get Tickets</h2><div id="evList"></div><div id="evMsg" class="msg" hidden></div></section>
+    <section class="card" id="history"><h2>Events Attended</h2><div id="hist"></div></section>
+  </div>
+</div></div>
+<div class="zoom" id="zoom" hidden role="dialog" aria-modal="true" aria-label="Ticket QR code"><div class="box" id="zoomBox"></div></div>
+
+<script>
+/* ===== Club profile: Supabase (database + sign-in) ===== */
+const SB_URL="https://ccfcvzmnaeasfiigtnvz.supabase.co";
+const SB_KEY="sb_publishable_nzBBd1P7v-mVTbbjfd8JSw_i0FXzcZm"; /* public key: the database rules decide what each person can see */
+const JOIN_BONUS={cutoff:Date.parse("2027-01-01T05:00:00Z"),patriot:2,embajador:4};
+const TIER={young:"Young Leader",member:"Member",patriot:"Patriot",embajador:"Ambassador"};
+const STATUS={active:"Active",past_due:"Payment due",canceled:"Canceled"};
+const SKEY="lrc_session";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const L=()=>window.LRC_LANG==="es"?"es":"en";
+const topWin=(()=>{try{return window.top.location.href&&window.top;}catch(e){return window;}})();
+const pageUrl=()=>{const u=new URL(topWin.location.href);u.hash="";u.search="";return u.href;};
+
+let session=null,data=null;
+function save(s){session=s;try{s?localStorage.setItem(SKEY,JSON.stringify(s)):localStorage.removeItem(SKEY);}catch(e){}}
+function load(){try{return JSON.parse(localStorage.getItem(SKEY)||"null");}catch(e){return null;}}
+
+/* 1) coming back from the email link: the sign-in tokens are in the address after # */
+function readLinkTokens(){
+  for(const w of [topWin,window]){
+    let h="";try{h=w.location.hash||"";}catch(e){}
+    if(h.length<2)continue;
+    const p=new URLSearchParams(h.slice(1));
+    if(p.get("access_token")){
+      save({access_token:p.get("access_token"),refresh_token:p.get("refresh_token"),expires_at:Math.floor(Date.now()/1000)+(+p.get("expires_in")||3600)});
+      try{w.history.replaceState(null,"",w.location.pathname+w.location.search);}catch(e){}
+      return null;
+    }
+    if(p.get("error_description")||p.get("error")){
+      try{w.history.replaceState(null,"",w.location.pathname+w.location.search);}catch(e){}
+      return p.get("error_code")==="otp_expired"?"expired":"failed";
+    }
+  }
+  return null;
+}
+async function refresh(){
+  if(!session||!session.refresh_token)return false;
+  const r=await fetch(SB_URL+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:session.refresh_token})});
+  if(!r.ok){save(null);return false;}
+  const j=await r.json();save({access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600)});return true;
+}
+async function token(){
+  if(!session)return null;
+  if(session.expires_at-60<Date.now()/1000&&!(await refresh()))return null;
+  return session.access_token;
+}
+async function api(path,opt={}){
+  const t=await token();if(!t)throw new Error("signin");
+  const r=await fetch(SB_URL+path,{...opt,headers:{apikey:SB_KEY,Authorization:"Bearer "+t,"Content-Type":"application/json",...(opt.headers||{})}});
+  if(r.status===401){save(null);throw new Error("signin");}
+  const j=await r.json().catch(()=>null);
+  if(!r.ok){const e=new Error((j&&(j.error||j.message))||"server");e.body=j;e.status=r.status;throw e;}
+  return j;
+}
+
+/* 2) sign in by email link */
+$("fIn").addEventListener("submit",async e=>{
+  e.preventDefault();const em=$("em").value.trim().toLowerCase(),m=$("inMsg"),b=$("bIn");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){show(m,"err","Please enter a valid email.");return;}
+  b.disabled=true;
+  try{
+    const r=await fetch(SB_URL+"/auth/v1/otp?redirect_to="+encodeURIComponent(pageUrl()),{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({email:em,create_user:true})});
+    if(r.status===429)show(m,"err","Too many tries. Please wait a minute and try again.");
+    else if(!r.ok)show(m,"err","We couldn't send the link. Please try again or email contact@latinorepublicans.org.");
+    else show(m,"ok","Check your email for your sign-in link. It may take a minute; check spam too.");
+  }catch(err){show(m,"err","We couldn't send the link. Please try again or email contact@latinorepublicans.org.");}
+  b.disabled=false;
+});
+function show(el,kind,txt){el.className="msg "+kind;el.hidden=false;el.textContent=txt;}
+$("bOut").addEventListener("click",async()=>{
+  try{const t=session&&session.access_token;if(t)await fetch(SB_URL+"/auth/v1/logout",{method:"POST",headers:{apikey:SB_KEY,Authorization:"Bearer "+t}});}catch(e){}
+  save(null);data=null;view("out");
+});
+function view(v){$("vOut").hidden=v!=="out";$("vIn").hidden=v!=="in";$("vLoad").hidden=v!=="load";}
+
+/* 3) load my profile */
+async function fetchAll(){
+  const user=await api("/auth/v1/user");
+  const email=(user.email||"").toLowerCase();
+  const [members,tickets,events,admins,grants]=await Promise.all([
+    api("/rest/v1/members?select=*&email=eq."+encodeURIComponent(email)),
+    api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents&order=created_at.asc"),
+    api("/rest/v1/events?select=*&order=starts_at.asc.nullslast"),
+    api("/rest/v1/admins?select=email&email=eq."+encodeURIComponent(email)),
+    api("/rest/v1/comp_grants?select=*")
+  ]);
+  data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,grants};
+}
+function fmtDate(iso){if(!iso)return"";return new Date(iso).toLocaleDateString(L()==="es"?"es-US":"en-US",{year:"numeric",month:"long",day:"numeric"});}
+function evWhen(ev){if(!ev)return"";if(ev.starts_at)return new Date(ev.starts_at).toLocaleString(L()==="es"?"es-US":"en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"});
+  return (L()==="es"?ev.date_label_es:ev.date_label_en)||"";}
+const evTitle=ev=>ev?(L()==="es"&&ev.title_es?ev.title_es:ev.title_en):"";
+const money=c=>"$"+(c/100).toFixed(c%100?2:0);
+function qrSvg(text,cell){const q=qrcode(0,"M");q.addData(text);q.make();return q.createSvgTag({cellSize:cell||4,margin:2,scalable:true});}
+
+function render(){
+  if(!data)return;
+  const d=data,m=d.member,es=L()==="es";
+  $("whoEm").textContent=d.email;
+  $("adminLink").hidden=!d.isAdmin;
+  /* membership */
+  const name=m&&m.name||(d.user.user_metadata&&d.user.user_metadata.name)||"";
+  if(m){
+    $("mcard").innerHTML=`<div class="mcard"><div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div></div>
+      <span class="tier">${esc(TIER[m.tier]||m.tier)}</span></div>
+      <div class="mgrid"><div><span>Status</span><b class="st-${esc(m.status)}">${esc(STATUS[m.status]||m.status)}</b></div>
+      <div><span>Member since</span><b>${esc(fmtDate(m.joined_at))}</b></div>
+      ${m.renews_at?`<div><span>Renews</span><b>${esc(fmtDate(m.renews_at))}</b></div>`:""}</div>
+      ${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Renew membership</a>`:""}</div>`;
+  }else{
+    $("mcard").innerHTML=`<div class="mcard"><div class="mtop"><div><div class="mname">${esc(name||"Welcome")}</div><div class="memail">${esc(d.email)}</div></div><span class="tier none">Not a member yet</span></div>
+      <p style="margin:18px 0 0;line-height:1.55;opacity:.9">We didn't find a membership for this email. If you joined with a different email, sign in with that one.</p>
+      <a class="btn gold" href="../join/" target="_top">Join the club</a></div>`;
+  }
+  /* gala bonus */
+  const grant=d.grants.find(g=>g.promo==="gala2027-join-bonus");
+  const before=Date.now()<JOIN_BONUS.cutoff;
+  let promo="";
+  const star=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#d6a844" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z"/></svg>`;
+  if(grant)promo=`<div class="promo">${star}<div><b class="t">Gala bonus unlocked</b><p><span>Your free gala tickets:</span> <b>${grant.tickets}</b>. <span>They are in My Tickets below.</span></p></div></div>`;
+  else if(before&&(!m||m.tier!=="embajador"))promo=`<div class="promo">${star}<div><b class="t">Gala bonus</b><p>Join or upgrade before December 31: Patriot members get 2 free gala tickets and Ambassador members get 4.</p>
+    <a class="btn sm" style="margin-top:10px" href="../join/" target="_top">See memberships</a></div></div>`;
+  $("promo").innerHTML=promo;
+  /* tickets */
+  const byId=Object.fromEntries(d.events.map(e=>[e.id,e]));
+  const live=d.tickets.filter(t=>t.status!=="void");
+  $("tkList").innerHTML=live.length?`<div class="tickets">${live.map((t,i)=>{const ev=byId[t.event_id];const used=t.status==="used";
+      return `<div class="tk${used?" is-used":""}"><h3>${esc(evTitle(ev))}</h3><div class="when">${esc(evWhen(ev))}${ev&&ev.location?" · "+esc(ev.location):""}</div>
+      <button class="qr" type="button" data-i="${d.tickets.indexOf(t)}" aria-label="Enlarge QR code">${qrSvg("lrc:"+t.token)}</button>
+      <div class="code">${esc(t.token.slice(0,8).toUpperCase())}</div>
+      <div class="chips">${t.kind==="comp"?'<span class="chip comp">Complimentary</span>':(t.price_cents?'<span class="chip">Paid</span>':'<span class="chip">Reserved</span>')}
+      ${used?'<span class="chip used">Checked in</span>':'<span class="chip">Valid</span>'}</div></div>`;}).join("")}</div>`
+    :`<div class="empty">No tickets yet. Get tickets below.</div>`;
+  /* events */
+  const isMem=m&&m.status==="active";
+  const open=d.events.filter(e=>e.sales_open);
+  $("evList").innerHTML=open.length?open.map(ev=>{const p=isMem?ev.price_member_cents:ev.price_guest_cents;const mine=live.filter(t=>t.event_id===ev.id).length;
+    const opts=[1,2,3,4].map(n=>`<option value="${n}">${n}</option>`).join("");
+    return `<div class="ev"><div><h3>${esc(evTitle(ev))}</h3><div class="meta">${esc(evWhen(ev))}${ev.location?" · "+esc(ev.location):""}</div>
+      <div class="price">${p?`${money(p)} ${isMem?"<span>member price</span>":(ev.price_member_cents<ev.price_guest_cents?`<span>· members</span> ${money(ev.price_member_cents)}`:"")}`:"<span>Free</span>"}</div>
+      ${mine?`<div class="small"><span>You have</span> ${mine} <span>${mine===1?"ticket":"tickets"}</span></div>`:""}</div>
+      <div class="act">${p?"":`<select id="q-${ev.id}" aria-label="Quantity">${opts}</select>`}
+      <button class="btn sm" type="button" data-ev="${ev.id}">${p?"Buy tickets":"Reserve"}</button></div></div>`;}).join("")
+    :`<div class="empty">No events open right now.</div>`;
+  /* history */
+  const att=d.tickets.filter(t=>t.status==="used").sort((a,b)=>(b.checked_in_at||"").localeCompare(a.checked_in_at||""));
+  const seen=new Set();const rows=att.filter(t=>!seen.has(t.event_id)&&seen.add(t.event_id));
+  $("hist").innerHTML=`<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:12px"><span class="stat">${rows.length}</span><span class="statlbl">${rows.length===1?"Event attended":"Events attended"}</span></div>`+
+    (rows.length?`<ul class="hist">${rows.map(t=>`<li><span>${esc(evTitle(byId[t.event_id]))}</span><span class="small">${esc(fmtDate(t.checked_in_at))}</span></li>`).join("")}</ul>`
+    :`<div class="empty">Your check-ins at club events will show here.</div>`);
+}
+
+/* buy or reserve */
+$("evList").addEventListener("click",async e=>{
+  const b=e.target.closest("button[data-ev]");if(!b)return;
+  const id=b.dataset.ev,sel=document.getElementById("q-"+id),qty=sel?+sel.value:1,m=$("evMsg");
+  b.disabled=true;m.hidden=true;
+  try{
+    const r=await api("/functions/v1/buy-ticket",{method:"POST",body:JSON.stringify({event_id:id,qty,return_url:pageUrl(),lang:L()})});
+    if(r.url){topWin.location.href=r.url;return;}
+    if(r.free){show(m,"ok",r.issued===1?"Reserved! Your ticket is in My Tickets.":"Reserved! Your tickets are in My Tickets.");await reload();jump("tickets");}
+  }catch(err){
+    const c=err.body&&err.body.error;
+    show(m,"err",c==="soldout"?"Sorry, this event is full.":c==="limit"?"You already have the most free tickets allowed for this event (4).":c==="closed"?"Tickets for this event are closed.":c==="signin"||err.message==="signin"?"Please sign in again.":"Something went wrong. Please try again.");
+    if(err.message==="signin")view("out");
+  }
+  b.disabled=false;
+});
+/* big QR for the door */
+$("tkList").addEventListener("click",e=>{
+  const b=e.target.closest(".qr");if(!b)return;const t=data.tickets[+b.dataset.i];const ev=data.events.find(x=>x.id===t.event_id);
+  $("zoomBox").innerHTML=`<h3>${esc(evTitle(ev))}</h3>${qrSvg("lrc:"+t.token,8)}<div class="code" style="margin-top:8px">${esc(t.token.slice(0,8).toUpperCase())}</div><button class="btn" type="button" id="zClose">Close</button>`;
+  const z=$("zoom");z.hidden=false;const V=window.__LRCV;if(V)z.querySelector(".box").style.marginTop=(V.top+10)+"px";
+  $("zClose").focus();
+});
+$("zoom").addEventListener("click",e=>{if(e.target.id==="zoom"||e.target.id==="zClose")$("zoom").hidden=true;});
+addEventListener("keydown",e=>{if(e.key==="Escape")$("zoom").hidden=true;});
+
+function jump(id){const el=$(id);if(!el)return;try{const f=window.frameElement;
+  if(f){const hb=topWin.document.querySelector("#s-top");const y=f.getBoundingClientRect().top+topWin.scrollY+el.getBoundingClientRect().top-((hb&&hb.offsetHeight)||0)-12;topWin.scrollTo({top:y,behavior:"smooth"});}
+  else el.scrollIntoView({behavior:"smooth"});}catch(e){el.scrollIntoView();}}
+async function reload(){await fetchAll();render();}
+addEventListener("lrc-lang",render);
+
+(async function start(){
+  const linkErr=readLinkTokens();
+  session=session||load();
+  if(!session){view("out");if(linkErr)show($("inMsg"),"err",linkErr==="expired"?"That sign-in link expired. Enter your email for a new one.":"That sign-in link didn't work. Enter your email for a new one.");return;}
+  try{await reload();view("in");}catch(e){save(null);view("out");return;}
+  /* back from Stripe checkout: tickets/membership arrive a few seconds later */
+  let paid=false;try{paid=new URLSearchParams(topWin.location.search).get("paid")==="1";}catch(e){}
+  if(paid){
+    const before=data.tickets.length,pm=$("paidMsg");show(pm,"info","Payment received. Your tickets will appear here in a few seconds.");
+    try{topWin.history.replaceState(null,"",topWin.location.pathname);}catch(e){}
+    for(let i=0;i<12;i++){await new Promise(r=>setTimeout(r,2500));try{await reload();}catch(e){}if(data.tickets.length>before){show(pm,"ok","Your tickets are ready.");break;}}
+    if(data.tickets.length===before)show(pm,"info","Still processing. Refresh this page in a minute. Your receipt from Stripe is in your email.");
+  }
+  let h="";try{h=topWin.location.hash.slice(1);}catch(e){}
+  if(h==="tickets"||h==="events")setTimeout(()=>jump(h),500);
+})();
+</script>
+<script>
+/* site helper: links to other parts of the site open in the main window; pop-ups open where the visitor is looking */
+(function(){
+  if(window.parent===window) return;
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href]'); if(!a||e.defaultPrevented) return;
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;
+    var u; try{u=new URL(a.getAttribute('href'),location.href);}catch(err){return;}
+    if(u.origin!==location.origin) return;            /* Stripe, socials, email: leave alone */
+    e.preventDefault(); e.stopPropagation(); parent.postMessage({lrc:'go',href:u.href},'*');
+  },true);
+  addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
+    var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
+})();
+</script><script src="../assets/i18n-es.js"></script><script src="../assets/i18n.js"></script>
+</body></html>

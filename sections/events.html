@@ -80,20 +80,24 @@ h3{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:80%;font-weight:
    - rsvp:  full link to your RSVP form or Wix event page ("" hides the button)
    ===================================================================== */
 const EVENTS = [
+  { title:"2027 Inaugural Gala", type:"Gala", date:"", time:"", end:"",
+    place:"Queens, NY",
+    desc:"Celebrate the club’s founding year with members, families and friends. Tickets: $75 members, $100 guests.",
+    rsvp:"../account/#events" },
   { title:"Inaugural Club Meeting", type:"Meeting", date:"", time:"", end:"",
     place:"Astoria, Queens",
     desc:"Our first official meeting. Meet the Executive Board and help shape what comes next.",
-    rsvp:"../#events" },
+    rsvp:"../account/#events" },
   { title:"2028 / 2029 Potential Candidates Forum", type:"Forum", date:"", time:"", end:"",
     place:"Location TBD",
     desc:"Hear from Republicans who may seek office in 2028 and 2029, and ask them your questions.",
-    rsvp:"../#events" },
+    rsvp:"../account/#events" },
   { title:"Women in Politics Forum", subtitle:"", type:"Forum", date:"", time:"", end:"",
     place:"Location TBD",
     desc:"Latinas Supporting Women Leaders.",
-    rsvp:"../#events" }
+    rsvp:"../account/#events" }
 ];
-const SHOW = 3;
+const SHOW = 4;
 /* ===================================================================== */
 
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

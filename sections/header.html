@@ -87,7 +87,9 @@ nav ul{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:cl
   box-shadow:inset 0 0 0 1.5px rgba(245,208,102,.7);transition:background .2s}
 .lang:hover,.lang:focus-visible{background:rgba(245,208,102,.22)}
 .lang svg{width:1.2em;height:1.2em;fill:none;stroke:#f5d066;stroke-width:1.8}
-@media (max-width:1000px){.langli{position:absolute;top:min(5vh,10px);right:clamp(8px,2.5vw,18px);z-index:2}.lang{margin:0;font-size:11px;padding:6px 9px}}
+a.lang{text-decoration:none}
+@media (max-width:1300px) and (min-width:1001px){.proflbl{display:none}}
+@media (max-width:1000px){.langli{position:absolute;top:min(5vh,10px);right:clamp(8px,2.5vw,18px);z-index:2}.langli{flex-direction:column;align-items:stretch;gap:5px}.lang{margin:0;font-size:11px;padding:6px 9px;justify-content:center}.proflbl{display:none}}
 </style>
 </head>
 <body>
@@ -104,7 +106,7 @@ nav ul{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:cl
         <li><a class="tab" data-link="events" href="#" target="_top">Events</a></li>
         <li><a class="tab" data-link="involved" href="#" target="_top">Get Involved</a></li>
         <li><a class="donate" data-link="donate" href="#" target="_top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.1C.9 8.6 3 5 6.6 5c2.1 0 3.6 1.2 4.4 2.6h2C13.8 6.2 15.3 5 17.4 5 21 5 23.1 8.6 21.6 11.9 19.5 16.4 12 21 12 21z"/></svg>Donate</a></li>
-        <li class="langli"><button class="lang" id="langBtn" type="button" aria-label="Ver en español"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span id="langLbl">ES</span></button></li>
+        <li class="langli"><a class="lang prof" href="../account/" target="_top" aria-label="My Profile" title="My Profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 20.5c1.2-4 4.4-6 8-6s6.8 2 8 6"/></svg><span class="proflbl">Profile</span></a><button class="lang" id="langBtn" type="button" aria-label="Ver en español"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span id="langLbl">ES</span></button></li>
       </ul>
     </nav>
   </div>
@@ -158,7 +160,8 @@ document.querySelectorAll('[data-link]').forEach(a=>{
     b.style.fontSize='';sm.style.fontSize='';
     const cs=getComputedStyle(bar),avail=bar.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
     const phone=matchMedia('(max-width:1000px)').matches;
-    const room=phone?avail:avail-nav.scrollWidth-parseFloat(cs.columnGap||cs.gap||0);
+    const lb=document.querySelector('.langli'),lw=phone&&lb?lb.offsetWidth+8:0;
+    const room=phone?avail-2*lw:avail-nav.scrollWidth-parseFloat(cs.columnGap||cs.gap||0);
     const sealW=document.querySelector('.seal').getBoundingClientRect().width+parseFloat(getComputedStyle(brand).columnGap||0);
     const nameRoom=room-sealW-4, need=Math.max(b.offsetWidth,sm.scrollWidth);
     if(need>nameRoom&&nameRoom>0){

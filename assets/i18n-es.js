@@ -883,6 +883,22 @@ window.LRC_ES={
 "Sponsor recognition is a thank-you acknowledgment of support. It is not advertising, a marketing service, an endorsement by the club or a comparison with other businesses. Sponsors are not club members and have no voting rights. Paid for by NYC Latino Republican Club Inc.": "El reconocimiento a patrocinadores es un agradecimiento por su apoyo. No es publicidad, un servicio de mercadeo, un respaldo del club ni una comparación con otras empresas. Los patrocinadores no son miembros del club y no tienen derecho a voto. Pagado por NYC Latino Republican Club Inc.",
 "Questions? Email": "¿Preguntas? Escribe a",
 "Sponsor since": "Patrocinador desde",
-"Business sponsorship: not a club membership and no voting rights. Your team members can join the club on their own.": "Patrocinio empresarial: no es una membresía del club y no da derecho a voto. Los miembros de su equipo pueden unirse al club por su cuenta."
+"Business sponsorship: not a club membership and no voting rights. Your team members can join the club on their own.": "Patrocinio empresarial: no es una membresía del club y no da derecho a voto. Los miembros de su equipo pueden unirse al club por su cuenta.",
+"★": "★",
+"Early access": "Acceso anticipado",
+"for Patriots, Ambassadors and sponsors": "para Patriotas, Embajadores y patrocinadores",
+"They get an email and a banner in their profile as soon as you save, and only they can sign up until early access ends. It ends on its own: everyone can sign up from this date and time.": "Reciben un correo y un aviso en su perfil en cuanto guardes, y solo ellos pueden inscribirse hasta que termine el acceso anticipado. Termina solo: todos pueden inscribirse a partir de esta fecha y hora.",
+"Opens to everyone on": "Abre para todos el",
+"✓ Early-access alert sent to eligible members.": "✓ Aviso de acceso anticipado enviado a los miembros elegibles.",
+"Pick the date early access ends (when everyone can sign up), or turn early access off.": "Elige la fecha en que termina el acceso anticipado (cuando todos pueden inscribirse) o desactívalo.",
+"The early-access end date must be in the future.": "La fecha de fin del acceso anticipado debe ser futura.",
+"Early access must end before the event starts.": "El acceso anticipado debe terminar antes de que empiece el evento.",
+"Early access is open for you": "El acceso anticipado está abierto para ti",
+"Everyone else can sign up on": "Los demás podrán inscribirse el",
+"Sign up now": "Inscríbete ahora",
+"The club app is a Patriot and Ambassador benefit": "La app del club es un beneficio de Patriotas y Embajadores",
+"Your membership level doesn't include the app. You can still use your full profile and tickets in your phone's web browser, or upgrade to Patriot to unlock the app.": "Tu nivel de membresía no incluye la app. Puedes usar tu perfil y tus entradas completos en el navegador de tu teléfono, o subir a Patriota para desbloquear la app.",
+"Open in browser": "Abrir en el navegador",
+"📱 Get the app": "📱 Obtener la app"
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

@@ -258,10 +258,16 @@ details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;f
 .cev>summary{text-transform:none;letter-spacing:0;font:400 15px "Hepta Slab",Georgia,serif}.cbody h4{margin:8px 0 6px;font:900 13px "Archivo",sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#a0721e}
 .crow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:7px 0;border-top:1px solid #f1ead9}.crow:first-child{border-top:0}
 .cev{border-top:1px solid #f1ead9;padding:4px 0}.glist{margin:4px 0 8px;padding-left:18px}
+.earlybox{margin-top:12px;padding:12px 14px;border-radius:14px;background:#fff7e0;border:1.5px solid #e8c46a}.earlybox.off{background:#f6f7f9;border-color:#dde3ea}.earlybox.off .earlyw{display:none}
+.earlyt{display:flex;gap:10px;align-items:center;margin:0;text-transform:none;letter-spacing:0;font:400 16px "Hepta Slab",Georgia,serif;color:var(--ink)}.earlyw{margin-top:8px}
+.earlynow{margin:0 0 14px;padding:12px 16px;border-radius:16px;background:linear-gradient(90deg,#fff1c9,#fffaf0);border:1.5px solid #e0b545;font-size:15px;line-height:1.5}
+.earlyrow+.earlyrow{margin-top:6px;padding-top:6px;border-top:1px dashed #e0b545}.earlynow a{font-weight:700;color:#8a1020}
+.appgate{text-align:center;padding:28px 20px;border-radius:20px;background:#fff;box-shadow:0 10px 30px -14px rgba(5,42,75,.35)}.appgate img{border-radius:18px}.appgate h2{margin:12px 0 8px}.appgate p{max-width:440px;margin:0 auto 16px;line-height:1.5}
+body.gated #mcard,body.gated #btabs,body.gated section.card,body.gated #promo,body.gated #earlyNow,body.gated #appCard,body.gated #progCard,body.gated #qa{display:none!important}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=c733691f"></script>
+<script src="../assets/vendor/qrcode.js?v=14031138"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -339,6 +345,10 @@ details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;f
       <div id="detMsg" class="msg" hidden></div></section>
     <section class="card" id="flagPick" hidden></section>
     <section id="progCard" class="card slim" hidden><label class="chkline"><input type="checkbox" id="progOpt"> <span><b>Event programs:</b> list my name as an Ambassador in printed event programs</span></label><div id="progMsg" class="msg" hidden></div></section>
+    <section id="earlyNow" class="earlynow" hidden></section>
+    <section id="appGate" class="appgate" hidden><img src="../assets/app-192.png" alt="" width="72" height="72"><h2>The club app is a Patriot and Ambassador benefit</h2>
+      <p>Your membership level doesn't include the app. You can still use your full profile and tickets in your phone's web browser, or upgrade to Patriot to unlock the app.</p>
+      <div class="row" style="justify-content:center"><a class="btn gold" id="gUp" href="../join/" target="_blank" rel="noopener">See memberships</a><a class="btn ghost" id="gWeb" href="../account/" target="_blank" rel="noopener">Open in browser</a></div></section>
     <div id="promo"></div>
     <nav class="btabs" id="btabs" hidden aria-label="Profile sections">
       <button type="button" data-cat="main" class="on">🔔 <span>Main</span><b class="nb" id="nBadge" hidden></b></button>
@@ -689,7 +699,7 @@ function openEditor(ev,presetCom){
   const n=!ev;ev=ev||{};if(n&&presetCom)ev={committee_id:presetCom};
   const comOpts=(data.comms||[]).filter(c=>data.isFull||data.isBoard||data.myDir.has(c.id)).map(c=>`<option value="${c.id}"${ev.committee_id===c.id?" selected":""}>${esc(c.name_en)}</option>`).join("");const s1=ev.starts_at?nyParts(ev.starts_at):{date:"",time:""},e1=ev.ends_at?nyParts(ev.ends_at):{time:""};
   const v=x=>esc(x==null?"":x);let lang=n?L():"en";
-  const pubSrc=ev.public_opens_at||(n?new Date(Date.now()+48*36e5).toISOString():null);const pp=pubSrc?nyParts(pubSrc):{date:"",time:""};const pubD=pp.date,pubT=pp.time;
+  const pubSrc=ev.public_opens_at||(n?new Date(Date.now()+48*36e5).toISOString():null);const pp=pubSrc?nyParts(pubSrc):{date:"",time:""};const pubD=pp.date,pubT=ev.public_opens_at?pp.time:"10:00";
   const F=["title","summary","about"],orig={};
   const val=(k,l)=>ev[k+"_"+l]||"";
   $("evEdit").innerHTML=`<h3>${n?"Add an event":"Edit event details"}</h3>
@@ -714,10 +724,14 @@ function openEditor(ev,presetCom){
     <div><label>Venue name</label><input class="tin" id="e_venue_name" value="${v(ev.venue_name)}" maxlength="120" placeholder="e.g. Astoria World Manor"></div>
     <div><label>Street address</label><input class="tin" id="e_address" value="${v(ev.address)}" maxlength="200" placeholder="Street, City, NY ZIP"></div>
     <div><label>Neighborhood (shown on cards)</label><input class="tin" id="e_location" value="${v(ev.location)}" maxlength="80" placeholder="e.g. Astoria, Queens"></div>
-    <div class="two"><div><label>Open to everyone on</label><input class="tin" id="e_pub_date" type="date" value="${pubD}"></div><div><label>at</label><input class="tin" id="e_pub_time" type="time" value="${pubT}"></div></div>
     <div class="chk2"><label><input type="checkbox" id="e_sales_open"${ev.sales_open!==false?" checked":""}> Sign-ups open</label><label><input type="checkbox" id="e_listed"${ev.listed!==false?" checked":""}> Show on website</label></div>
    </div>
-   <p class="small">Before the "open to everyone" time, only Patriots, Ambassadors, sponsors and the board can sign up (early access). Leave it blank to open to everyone now.</p>
+   <div class="earlybox${pubD?"":" off"}" id="earlyBox">
+     <label class="earlyt"><input type="checkbox" id="e_early"${pubD?" checked":""}> <span>★ <b>Early access</b> for Patriots, Ambassadors and sponsors</span></label>
+     <div class="earlyw"><p class="small">They get an email and a banner in their profile as soon as you save, and only they can sign up until early access ends. It ends on its own: everyone can sign up from this date and time.</p>
+     <div class="two"><div><label>Opens to everyone on</label><input class="tin" id="e_pub_date" type="date" value="${pubD}"></div><div><label>at</label><input class="tin" id="e_pub_time" type="time" value="${pubT||"10:00"}"></div></div>
+     ${ev.early_alert_sent_at?`<p class="small ok2">✓ Early-access alert sent to eligible members.</p>`:""}</div>
+   </div>
    ${n?`<p class="small">New events are free to attend. For a paid event, email the details and we'll set up payment.</p>`:`<p class="small">Ticket prices are tied to Stripe and can't be changed here.</p>`}
    <div class="row" style="margin-top:12px"><button class="btn" type="submit" id="bEvSave">${n?"Add event":"Save changes"}</button><button class="btn ghost" type="button" id="bEvCancel">Cancel</button></div></form><div id="evEditMsg" class="msg" hidden></div>`;
   const dirty={};
@@ -749,7 +763,10 @@ function openEditor(ev,presetCom){
       is_monthly_meeting:$("e_monthly").checked,host:g("e_host")||null,committee_id:g("e_committee")?+g("e_committee"):null,committee:g("e_committee")?((data.comms.find(c=>c.id===+g("e_committee"))||{}).name_en||null):null,category:g("e_category")||($("e_monthly").checked?"community":null),
       capacity:g("e_capacity")?Math.max(1,parseInt(g("e_capacity"),10)):null,venue_name:g("e_venue_name")||null,address:g("e_address")||null,location:g("e_location")||null,
       starts_at:d?nyISO(d,st||"00:00"):null,ends_at:d&&en?nyISO(d,en):null,sales_open:$("e_sales_open").checked,listed:$("e_listed").checked,
-      public_opens_at:g("e_pub_date")?nyISO(g("e_pub_date"),g("e_pub_time")||"00:00"):null};
+      public_opens_at:$("e_early").checked&&g("e_pub_date")?nyISO(g("e_pub_date"),g("e_pub_time")||"10:00"):null};
+    if($("e_early").checked&&!g("e_pub_date")){show(m,"err","Pick the date early access ends (when everyone can sign up), or turn early access off.");$("bEvSave").disabled=false;return;}
+    if(body.public_opens_at&&Date.parse(body.public_opens_at)<=Date.now()){show(m,"err","The early-access end date must be in the future.");$("bEvSave").disabled=false;return;}
+    if(body.public_opens_at&&body.starts_at&&body.public_opens_at>=body.starts_at){show(m,"err","Early access must end before the event starts.");$("bEvSave").disabled=false;return;}
     if(body.starts_at&&body.ends_at&&body.ends_at<=body.starts_at){show(m,"err","The end time must be after the start time.");$("bEvSave").disabled=false;return;}
     try{
       if(n){body.slug=body.title_en.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)+"-"+Math.random().toString(36).slice(2,6);
@@ -802,6 +819,9 @@ function render(){
   $("progCard").hidden=!isAmb();if(isAmb())$("progOpt").checked=!!d.prof.program_listing;
   $("insider").hidden=!(isAmb()||d.isBoard);if(!$("insider").hidden)renderInsider();
   $("committees").hidden=!(d.member||d.isBoard);if(!$("committees").hidden)renderCommittees();
+  { const now=Date.now(),open=(d.events||[]).filter(e=>e.listed!==false&&e.sales_open&&e.public_opens_at&&Date.parse(e.public_opens_at)>now);
+    $("earlyNow").hidden=!(perkLevel()&&open.length);
+    if(!$("earlyNow").hidden)$("earlyNow").innerHTML=open.map(e=>`<div class="earlyrow">★ <b>${esc(L()==="es"&&e.title_es?e.title_es:e.title_en)}</b> · <span>Early access is open for you</span>. <span>Everyone else can sign up on</span> ${esc(new Date(e.public_opens_at).toLocaleString(L()==="es"?"es-US":"en-US",{timeZone:NY,month:"long",day:"numeric",hour:"numeric",minute:"2-digit"}))}. <a href="#events" data-jump="events">Sign up now</a></div>`).join(""); }
   /* membership */
   const name=(m&&m.tier==="corporate"&&m.name)||d.prof.name||(m&&m.name)||(d.user.user_metadata&&d.user.user_metadata.name)||"";
   if(d.exec&&d.exec.title){
@@ -819,7 +839,7 @@ function render(){
       ${m.billing_interval?`<div><span>Billing</span><b>${esc(BILL[m.billing_interval]||m.billing_interval)}</b></div>`:""}
       ${m.renews_at?`<div><span>${m.status==="active"?"Next payment":"Paid through"}</span><b>${esc(fmtDate(m.renews_at))}</b></div>`:""}</div>
       ${m.tier==="corporate"?`<p class="sponnote">Business sponsorship: not a club membership and no voting rights. Your team members can join the club on their own.</p>`:""}
-      ${flagLine()}<div class="mbtns">${perkLevel()?`<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button>`:""}${m.stripe_customer||m.billing_interval?`<a class="flagbtn" href="${esc(portalUrl())}" target="_blank" rel="noopener">Manage billing</a>`:""}</div>${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Rejoin the club</a>`:""}</div>`;
+      ${flagLine()}<div class="mbtns">${perkLevel()?`<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button>`:""}${m.stripe_customer||m.billing_interval?`<a class="flagbtn" href="${esc(portalUrl())}" target="_blank" rel="noopener">Manage billing</a>`:""}<button class="flagbtn" type="button" id="bGetApp"${perkLevel()&&!isStandalone()?"":" hidden"}>📱 Get the app</button></div>${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Rejoin the club</a>`:""}</div>`;
     if(m.status==="active"&&m.grace_until){$("mcard").insertAdjacentHTML("afterbegin",`<div class="paywarn" role="alert"><b>Your last payment didn't go through.</b> <span>Update your card by</span> ${esc(fmtDate(m.grace_until))} <span>to keep your member benefits.</span> <a class="btn sm gold" href="${esc(portalUrl())}" target="_blank" rel="noopener">Update card</a></div>`);}
     else if(m.status==="lapsed"||m.status==="canceled"){$("mcard").insertAdjacentHTML("afterbegin",`<div class="paywarn off" role="status"><b>Your membership has lapsed.</b> <span>Member benefits are paused until you rejoin. Your profile, tickets you bought and event history stay here.</span></div>`);}
   }else{
@@ -1207,7 +1227,12 @@ $("bActRec").addEventListener("click",async()=>{try{const r=await api("/rest/v1/
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download="board-activity-record.csv";document.body.appendChild(a);a.click();a.remove();}
   catch(e){show($("bmMsg"),"err","Couldn't download the record.");}});
 /* club app */
+function isStandalone(){try{return topWin.matchMedia("(display-mode: standalone)").matches||topWin.navigator.standalone===true;}catch(e){return false;}}
 function renderApp(){let standalone=false;try{standalone=topWin.matchMedia("(display-mode: standalone)").matches||topWin.navigator.standalone===true;}catch(e){}
+  { const m0=data.member,perk=data.isBoard||!!(m0&&m0.status==="active"&&["patriot","embajador","corporate"].includes(m0.tier));
+    /* the app is a Patriot+ benefit: someone who added it to their home screen on their own sees this instead of their profile */
+    const gate=standalone&&!perk&&!data.isQA;document.body.classList.toggle("gated",gate);$("appGate").hidden=!gate;
+    const gb=$("bGetApp");if(gb)gb.hidden=standalone||!perk; }
   let hide=false;try{hide=localStorage.getItem("lrc_app_hide")==="1";}catch(e){}
   const q=(()=>{try{return new URLSearchParams(topWin.location.search).get("app")==="1";}catch(e){return false;}})();
   const mm=data.member,appPerk=data.isBoard||!!(mm&&mm.status==="active"&&["patriot","embajador","corporate"].includes(mm.tier));
@@ -1220,6 +1245,8 @@ function renderApp(){let standalone=false;try{standalone=topWin.matchMedia("(dis
   $("bApp").hidden=false;
   if(iOS){$("appHow").textContent="On iPhone: tap the Share button in Safari, then \"Add to Home Screen\". Sign in once inside the app and it stays signed in.";$("bApp").hidden=true;}
 }
+document.addEventListener("click",e=>{if(e.target.closest("#bGetApp")){try{localStorage.removeItem("lrc_app_hide");}catch(err){}renderApp();$("appCard").hidden=false;jump("appCard");}
+  const j=e.target.closest("[data-jump]");if(j){e.preventDefault();jump(j.dataset.jump);}});
 $("bApp").addEventListener("click",async()=>{if($("appCard").classList.contains("up")){topWin.location.href="../join/";return;}const p=topWin.__lrcInstall;
   if(p){p.prompt();try{await p.userChoice;}catch(e){}topWin.__lrcInstall=null;$("appCard").hidden=true;}
   else $("appHow").textContent="In your browser menu (⋮ or Share), choose \"Install app\" or \"Add to Home Screen\". Sign in once inside the app and it stays signed in.";});
@@ -1347,6 +1374,9 @@ $("bCnSave").addEventListener("click",async()=>{const n=$("cnName").value.trim()
     data.comms=await api("/rest/v1/committees?select=*&order=name_en.asc");$("comNew").hidden=true;$("cnName").value=$("cnAbout").value=$("cnDir").value="";await reloadComs("Committee created.");}
   catch(e){show(m,"err","We couldn't create it. Please try again.");}});
 
+document.addEventListener("change",e=>{if(e.target&&e.target.id==="e_early"){const b=$("earlyBox");b.classList.toggle("off",!e.target.checked);
+  if(e.target.checked&&!$("e_pub_date").value){const p=nyParts(new Date(Date.now()+48*36e5).toISOString());$("e_pub_date").value=p.date;}}});
+
 async function reload(){await fetchAll();render();}
 addEventListener("lrc-lang",render);
 
@@ -1384,5 +1414,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=c733691f"></script><script src="../assets/i18n.js?v=c733691f"></script>
+</script><script src="../assets/i18n-es.js?v=14031138"></script><script src="../assets/i18n.js?v=14031138"></script>
 </body></html>

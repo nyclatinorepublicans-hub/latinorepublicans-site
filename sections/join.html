@@ -256,11 +256,11 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
 const TIERS = [
   { id:"young", name:"Young Leader", tag:"The next generation starts here.",
     prices:{year:40,semiannual:22,quarter:12,month:4.3},
-    perks:["Ages 18\u201325","Attend member meetings","General member voting rights","Young Leaders mentorship track"],
+    perks:["Ages 18\u201325","Attend member meetings","General member voting rights","Young Leaders mentorship track","Official club pin"],
     links:{year:"https://buy.stripe.com/test_aFafZh9chaKf37KcjN7N60t",semiannual:"https://buy.stripe.com/test_bJe5kDfAFbOj8s42Jd7N60u",quarter:"https://buy.stripe.com/test_aFa14ndsx5pV37K83x7N60v",month:"https://buy.stripe.com/test_eVq7sL3RX4lR23G5Vp7N60w"} },
   { id:"member", name:"Member", tag:"Your seat at the table.", selected:true,
     prices:{year:60,semiannual:33,quarter:18,month:6.5},
-    perks:["Support the club","Attend member meetings","General member voting rights"],
+    perks:["Support the club","Attend member meetings","General member voting rights","Official club pin"],
     links:{year:"https://buy.stripe.com/test_4gMbJ1fAFdWr23GfvZ7N60x",semiannual:"https://buy.stripe.com/test_28EeVddsx9GbdMogA37N60y",quarter:"https://buy.stripe.com/test_00w4gzgEJ3hN8s4fvZ7N60z",month:"https://buy.stripe.com/test_7sYfZhcot4lRaAccjN7N60A"} },
   { id:"patriot", name:"Patriot", tag:"All in for the club.", promo:2,
     prices:{year:120,semiannual:66,quarter:36,month:13},
@@ -268,7 +268,7 @@ const TIERS = [
     links:{year:"https://buy.stripe.com/test_5kQbJ1gEJf0v37K1F97N60B",semiannual:"https://buy.stripe.com/test_cNi00j0FL9Gb0ZC2Jd7N60C",quarter:"https://buy.stripe.com/test_4gMaEX749g4z6jWabF7N60D",month:"https://buy.stripe.com/test_cNieVdewB4lR4bO2Jd7N60E"} },
   { id:"embajador", name:"Ambassador", tag:"Carry the flag.", promo:4,
     prices:{year:300,semiannual:165,quarter:90,month:32.5},
-    perks:["Everything in Patriot","Preferred seating at events (when applicable)","Gold member card in the club app","Chairman's Insider: monthly behind-the-scenes updates","Your name in our event programs","Official club pin","Yearly roundtable with the board"],
+    perks:["Everything in Patriot","Preferred seating at events (when applicable)","Gold member card in the club app","Chairman's Insider: monthly behind-the-scenes updates","Your name in our event programs","Yearly roundtable with the board"],
     links:{year:"https://buy.stripe.com/test_7sY7sLaglbOj9w81F97N60F",semiannual:"https://buy.stripe.com/test_3cI00j4W1dWrbEg2Jd7N60G",quarter:"https://buy.stripe.com/test_3cI8wPdsxg4zdMogA37N60H",month:"https://buy.stripe.com/test_4gM5kDcot19FgYA97B7N60I"} }
 ];
 /* Billing periods. Annual is the best value; Inaugural Gala seats are a one-time PROMOTION that comes with annual plans only. */
@@ -502,5 +502,5 @@ function checkout(){
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=c733691f"></script><script src="../assets/i18n.js?v=c733691f"></script>
+</script><script src="../assets/i18n-es.js?v=14031138"></script><script src="../assets/i18n.js?v=14031138"></script>
 </body></html>

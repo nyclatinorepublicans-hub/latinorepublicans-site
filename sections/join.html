@@ -390,7 +390,7 @@ function checkout(){
   if(!t.link){soon.innerHTML='Online dues open soon. To join today, email <a href="mailto:'+CONTACT+'?subject='+encodeURIComponent('Membership: '+t.name)+'" target="_top">'+CONTACT+'</a> and we’ll get you set up.';soon.classList.add('show');return;}
   const code=chosen==='United States'?'USA':chosen==='Other'?'Other-'+(otherCode?otherCode.replace(/[^A-Z]/g,''):'')+'-'+h.replace(/[^A-Za-z]+/g,'').slice(0,24):ABBR[chosen];
   const ref=[t.id,boro,code].join('_');
-  const u=t.link+(t.link.includes('?')?'&':'?')+'prefilled_email='+encodeURIComponent(email)+'&client_reference_id='+encodeURIComponent(ref);
+  const u=t.link+(t.link.includes('?')?'&':'?')+'prefilled_email='+encodeURIComponent(email)+'&client_reference_id='+encodeURIComponent(ref)+(window.LRC_LANG==='es'?'&locale=es':'');
   document.querySelectorAll('.pay').forEach(x=>x.setAttribute('aria-busy','true'));
   try{window.top.location.href=u;}catch(err){window.open(u,'_top');}
 }
@@ -409,4 +409,5 @@ function checkout(){
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script></body></html>
+</script><script src="../assets/i18n-es.js"></script><script src="../assets/i18n.js"></script>
+</body></html>

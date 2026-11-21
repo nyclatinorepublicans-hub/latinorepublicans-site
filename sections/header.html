@@ -80,6 +80,14 @@ nav ul{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:cl
 }
 @media (max-width:359px){.name small::after{display:none}}
 @media (prefers-reduced-motion:reduce){.tab,.tab::after,.donate,.seal{transition:none}.brand:hover .seal{transform:none}}
+
+.langli{display:flex}
+.lang{display:inline-flex;align-items:center;gap:6px;margin-left:clamp(6px,.8vw,12px);padding:.55em .8em;border:0;border-radius:999px;cursor:pointer;
+  font:800 clamp(11px,min(11vh,1.05vw),14px) "Archivo",sans-serif;font-stretch:88%;letter-spacing:.1em;color:#fff;background:rgba(255,255,255,.08);
+  box-shadow:inset 0 0 0 1.5px rgba(245,208,102,.7);transition:background .2s}
+.lang:hover,.lang:focus-visible{background:rgba(245,208,102,.22)}
+.lang svg{width:1.2em;height:1.2em;fill:none;stroke:#f5d066;stroke-width:1.8}
+@media (max-width:1000px){.langli{position:absolute;top:min(5vh,10px);right:clamp(8px,2.5vw,18px);z-index:2}.lang{margin:0;font-size:11px;padding:6px 9px}}
 </style>
 </head>
 <body>
@@ -96,6 +104,7 @@ nav ul{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:cl
         <li><a class="tab" data-link="events" href="#" target="_top">Events</a></li>
         <li><a class="tab" data-link="involved" href="#" target="_top">Get Involved</a></li>
         <li><a class="donate" data-link="donate" href="#" target="_top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.1C.9 8.6 3 5 6.6 5c2.1 0 3.6 1.2 4.4 2.6h2C13.8 6.2 15.3 5 17.4 5 21 5 23.1 8.6 21.6 11.9 19.5 16.4 12 21 12 21z"/></svg>Donate</a></li>
+        <li class="langli"><button class="lang" id="langBtn" type="button" aria-label="Ver en español"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span id="langLbl">ES</span></button></li>
       </ul>
     </nav>
   </div>
@@ -163,6 +172,12 @@ document.querySelectorAll('[data-link]').forEach(a=>{
 })();
 </script>
 <script>
+(function(){const b=document.getElementById('langBtn'),l=document.getElementById('langLbl');
+  function show(){const es=window.LRC_LANG==='es';l.textContent=es?'EN':'ES';b.setAttribute('aria-label',es?'View in English':'Ver en español');b.setAttribute('lang',es?'en':'es');}
+  b.addEventListener('click',()=>{if(window.LRC_I18N)LRC_I18N.set(window.LRC_LANG==='es'?'en':'es');show();});
+  addEventListener('lrc-lang',show);addEventListener('load',show);setTimeout(show,0);
+})();
+</script><script>
 /* site helper: links to other parts of the site open in the main window; pop-ups open where the visitor is looking */
 (function(){
   if(window.parent===window) return;
@@ -176,4 +191,5 @@ document.querySelectorAll('[data-link]').forEach(a=>{
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script></body></html>
+</script><script src="../assets/i18n-es.js"></script><script src="../assets/i18n.js"></script>
+</body></html>

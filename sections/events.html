@@ -55,7 +55,7 @@ h3{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:80%;font-weight:
 @media (max-width:980px){.list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.list{grid-template-columns:1fr;gap:18px}}
 @media (prefers-reduced-motion:reduce){.ticket,.btn,.all{transition:none}.ticket:hover{transform:none}}
-</style><style id="wix-mobile-fit">/* Wix fit: no sideways scroll; if the Wix box is taller than the content, the section centers and the extra space matches its background */html{-webkit-text-size-adjust:100%;text-size-adjust:100%}html,body{max-width:100%;overflow-x:hidden}body>*{flex:0 0 auto;width:100%;box-sizing:border-box}</style>
+.lang-es .tbd{font-size:16px;letter-spacing:0}</style><style id="wix-mobile-fit">/* Wix fit: no sideways scroll; if the Wix box is taller than the content, the section centers and the extra space matches its background */html{-webkit-text-size-adjust:100%;text-size-adjust:100%}html,body{max-width:100%;overflow-x:hidden}body>*{flex:0 0 auto;width:100%;box-sizing:border-box}</style>
 </head>
 <body>
 <section class="events">
@@ -138,4 +138,5 @@ document.getElementById('list').innerHTML = upcoming.length ? upcoming.map(({e,d
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script></body></html>
+</script><script src="../assets/i18n-es.js"></script><script src="../assets/i18n.js"></script>
+</body></html>

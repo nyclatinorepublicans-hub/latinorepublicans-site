@@ -73,6 +73,23 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
   color:var(--navy);background:#fff;box-shadow:inset 0 0 0 2px var(--navy),0 3px 0 #c9bb98;transition:transform .15s,background .15s}
 .pay:hover{transform:translateY(-2px)}
 .tier:has(input:checked) .pay{color:#fff;background:linear-gradient(180deg,#ec3346,var(--red) 55%,#b3121f);box-shadow:0 0 0 2px var(--gold),0 3px 0 2px #7a0d17}
+/* corporate sponsorship */
+.spon{margin-top:clamp(22px,3vw,30px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(18px,3vw,36px);align-items:center;
+  border-radius:26px;padding:clamp(20px,3vw,34px);color:#fff;
+  background:radial-gradient(80% 90% at 0% 0%,rgba(245,208,102,.16),transparent 60%),linear-gradient(160deg,#0b3d6b,#052a4b 60%,#021a30);
+  box-shadow:0 0 0 2px var(--gold),0 8px 0 #7a5310,0 30px 60px -18px rgba(0,0,0,.6)}
+.spon .eyebrow{font-size:12px}
+.spon h2{margin:10px 0 8px;font:900 clamp(30px,4vw,44px)/.95 "Archivo",sans-serif;font-stretch:78%;text-transform:uppercase;letter-spacing:.01em;
+  text-shadow:0 1px 0 #e3b552,0 2px 0 #c99a3a,0 3px 0 #a87a22,0 4px 0 #7a5310,0 10px 16px rgba(0,0,0,.45)}
+.spon-who{margin:0 0 14px;font-style:italic;font-size:15px;line-height:1.5;color:#dfe8f4}
+.spon .price{color:#fff;margin-bottom:16px}.spon .price span{color:var(--gold-hi)}
+.spon .go{text-decoration:none}
+.spon-q{margin:14px 0 0;font-size:13px;color:#b8c7da}.spon-q a{color:var(--gold-hi)}
+.spon-perks{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.spon-perks li{position:relative;padding:12px 14px 12px 44px;border-radius:14px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(245,208,102,.3);font-size:15px;line-height:1.4}
+.spon-perks li::before{content:"★";position:absolute;left:14px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:var(--deep);font-size:11px}
+@media (max-width:860px){.spon{grid-template-columns:1fr}.spon .go{width:100%}}
 /* form */
 .fields{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
 .reps{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:10px;margin:0 0 6px}
@@ -181,6 +198,25 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
     <p class="soon" id="soon" role="status"></p>
     <p class="note" id="note"></p>
   </form>
+
+  <section class="spon" aria-labelledby="sponTitle">
+    <div class="spon-l">
+      <span class="eyebrow">For organizations &amp; businesses</span>
+      <h2 id="sponTitle">Corporate Sponsorship</h2>
+      <p class="spon-who">Political parties, organizations and businesses that want to stand with New York’s Latino community.</p>
+      <div class="price"><b>$1,000</b><span>12 months</span></div>
+      <a class="go" id="sponBtn" href="#" target="_top">Become a Sponsor <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 5.3l1.4-1.4L22.7 12l-8.1 8.1-1.4-1.4 5.7-5.7H1.5v-2h17.4z"/></svg></a>
+      <p class="spon-q">Questions or custom packages? Email <a id="sponMail" href="#" target="_top">contact@latinorepublicans.org</a></p>
+    </div>
+    <ul class="spon-perks">
+      <li>Your logo and link on our website for 12 months</li>
+      <li>Recognition from the podium at club meetings and forums</li>
+      <li>Logo on event signage and printed programs</li>
+      <li>Two tickets to our annual gala</li>
+      <li>A sponsor spotlight on our Instagram, X, Facebook and YouTube</li>
+      <li>Table or display space at one club event</li>
+    </ul>
+  </section>
  </div>
 </div>
 <script>
@@ -203,11 +239,13 @@ const TIERS = [
   { id:"patriot", name:"Patriot", tag:"All in for the club.", price:100,
     perks:["Everything in Member","Free admission to workshops","Discounts on special events","Access to members-only club merch"],
     link:"https://buy.stripe.com/test_aFa7sL1JPg4z0ZC6Zt7N603" },
-  { id:"embajador", name:"Embajador", tag:"Carry the flag.", price:250,
-    perks:["Everything in Patriot","Reserved seating at the gala & forums","Official club pin","Name on our Embajadores wall","Yearly roundtable with the board"],
+  { id:"embajador", name:"Ambassador", tag:"Carry the flag.", price:250,
+    perks:["Everything in Patriot","Reserved seating at the gala & forums","Official club pin","Name on our Ambassadors wall","Yearly roundtable with the board"],
     link:"https://buy.stripe.com/test_bJedR93RX2dJ37KfvZ7N604" }
 ];
-const PERIOD = "/ year";            /* shown next to every price */
+const PERIOD = "/ year";
+/* Corporate Sponsorship (TEST MODE link): swap for the live link when you go live */
+const SPONSOR_LINK = "https://buy.stripe.com/test_fZu6oH1JPdWr7o0bfJ7N60a";            /* shown next to every price */
 const RENEWS = true;                /* true if your Payment Links are yearly subscriptions */
 const CONTACT = "contact@latinorepublicans.org";
 const NOTE = "Dues are not tax deductible as charitable contributions for federal income tax purposes. Paid for by NYC Latino Republican Club Inc.";
@@ -260,6 +298,8 @@ const svg=(n,label)=>flagSVG(FLAGS[n],label||n);
 const ABBR={};NAMES.forEach(n=>{ABBR[n]=n.replace(/[^A-Za-z]/g,'').slice(0,12);});
 
 const tiersEl=document.getElementById('tiers');
+document.getElementById('sponBtn').href=SPONSOR_LINK;
+{const m=document.getElementById('sponMail');m.href='mailto:'+CONTACT+'?subject='+encodeURIComponent('Corporate Sponsorship');}
 tiersEl.insertAdjacentHTML('beforeend',TIERS.map((t,i)=>
  '<label class="tier"><input type="radio" name="tier" value="'+t.id+'"'+((t.selected||(!TIERS.some(x=>x.selected)&&i===0))?' checked':'')+'><span class="chk" aria-hidden="true"></span>'+
  '<h3>'+esc(t.name)+'</h3><p class="tag">'+esc(t.tag)+'</p>'+

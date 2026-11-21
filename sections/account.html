@@ -224,6 +224,18 @@ textarea.tin{resize:vertical}
 .ins{border-top:1px solid #eee5d3;padding:12px 0}.ins:first-child{border-top:0}.ins h3{margin:2px 0 6px;font:900 17px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy)}.ins p{margin:0;line-height:1.55}
 .btabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 14px;padding:6px;border-radius:16px;background:#052a4b;scrollbar-width:none;position:sticky;top:0;z-index:5}
 .btabs::-webkit-scrollbar{display:none}
+.btabs button{all:unset;cursor:pointer;flex:1 0 auto;justify-content:center;display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:999px;color:#eef3fa;font:800 12px "Archivo",sans-serif;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+.btabs button.on{background:var(--gold-hi);color:#052a4b}.btabs button:not(.on):hover,.btabs button:focus-visible{background:rgba(255,255,255,.12)}
+body.bview [data-cat]{display:none!important}
+body.bview[data-cat="main"] [data-cat="main"]:not([hidden]),body.bview[data-cat="events"] [data-cat="events"]:not([hidden]),
+body.bview[data-cat="board"] [data-cat="board"]:not([hidden]),body.bview[data-cat="members"] [data-cat="members"]:not([hidden]){display:block!important}
+#btabs [data-cat]{display:inline-flex!important}
+details.ckev{padding:0}details.ckev>summary{list-style:none;cursor:pointer;padding:12px 14px;margin:0;align-items:center}details.ckev>summary::-webkit-details-marker{display:none}
+details.ckev>summary::after{content:"▾";margin-left:6px;color:var(--navy);transition:transform .2s}details.ckev[open]>summary::after{transform:rotate(180deg)}
+details.ckev>summary b{flex:1;min-width:0}
+@media (max-width:560px){details.ckev>summary{flex-wrap:wrap;row-gap:4px;position:relative;padding-right:34px}details.ckev>summary b{flex-basis:100%}details.ckev>summary::after{position:absolute;right:14px;top:13px}}details.ckev .ckrow{margin:0 14px}details.ckev[open]{padding-bottom:6px}
+.cks{display:inline-flex;gap:6px;align-items:center;flex-wrap:wrap}.ckp{font:800 10px "Archivo",sans-serif;font-style:normal;text-transform:uppercase;letter-spacing:.06em;padding:3px 8px;border-radius:999px}.ckp.late{background:#fde8ea;color:#b3121f}.ckp.soon{background:#fff1cf;color:#7a4f00}
+details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;font:800 12px "Archivo",sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--navy)}
 .btabs a{flex:none;display:inline-flex;align-items:center;gap:6px;padding:9px 13px;border-radius:999px;color:#eef3fa;text-decoration:none;font:800 12px "Archivo",sans-serif;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
 .btabs a:hover,.btabs a:focus-visible{background:rgba(255,255,255,.1);color:var(--gold-hi)}
 .btabs .bt-n{background:rgba(245,208,102,.16);color:var(--gold-hi)}
@@ -240,7 +252,7 @@ textarea.tin{resize:vertical}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=23ec9cfa"></script>
+<script src="../assets/vendor/qrcode.js?v=552b1c5b"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -319,59 +331,59 @@ textarea.tin{resize:vertical}
     <section class="card" id="flagPick" hidden></section>
     <section id="progCard" class="card slim" hidden><label class="chkline"><input type="checkbox" id="progOpt"> <span><b>Event programs:</b> list my name as an Ambassador in printed event programs</span></label><div id="progMsg" class="msg" hidden></div></section>
     <div id="promo"></div>
-    <nav class="btabs" id="btabs" hidden aria-label="Board sections">
-      <a href="#notifications" data-j="notifications" class="bt-n">🔔 <span>Notifications</span><b class="nb" id="nBadge" hidden></b></a>
-      <a href="#checklist" data-j="checklist">✓ <span>Checklist</span><b class="nb" id="cBadge" hidden></b></a>
-      <a href="#bmCard" data-j="bmCard"><span>Meetings</span></a><a href="#myEv" data-j="myEv"><span>My Events</span></a>
-      <a href="#actCard" data-j="actCard"><span>Activity</span></a><a href="#docCard" data-j="docCard"><span>Documents</span></a></nav>
-    <section class="card" id="notifications" hidden><div class="evhead"><h2>Notifications</h2><button class="btn ghost sm" type="button" id="bSeen">Mark all as read</button></div>
+    <nav class="btabs" id="btabs" hidden aria-label="Profile sections">
+      <button type="button" data-cat="main" class="on">🔔 <span>Main</span><b class="nb" id="nBadge" hidden></b></button>
+      <button type="button" data-cat="events"><span>Events</span></button>
+      <button type="button" data-cat="board"><span>Board</span><b class="nb" id="bBadge" hidden></b></button>
+      <button type="button" data-cat="members"><span>Members</span></button></nav>
+    <section class="card" id="notifications" data-cat="main" hidden><div class="evhead"><h2>Notifications</h2><button class="btn ghost sm" type="button" id="bSeen">Mark all as read</button></div>
       <p class="small" style="margin:-6px 0 12px">Every change the board makes: meetings, events, documents, minutes and insider updates.</p>
       <div id="nList"></div>
       <details class="aprefs"><summary>Alert me automatically</summary>
         <label class="chkline"><input type="checkbox" id="alEmail"> <span>Email me when the board makes a change</span></label>
         <label class="chkline"><input type="checkbox" id="alText"> <span>Text me when the board makes a change <small>(uses the phone in My details · message and data rates may apply · reply STOP to stop)</small></span></label>
         <div id="alStatus" class="small"></div><div id="alMsg" class="msg" hidden></div></details></section>
-    <section class="card" id="checklist" hidden><div class="evhead"><h2>Event Checklist</h2><div class="seg" id="ckSeg" hidden><button type="button" data-v="mine" class="on">Mine</button><button type="button" data-v="all">Whole board</button></div></div>
+    <section class="card" id="checklist" data-cat="main" hidden><div class="evhead"><h2>Event Checklist</h2><div class="seg" id="ckSeg" hidden><button type="button" data-v="mine" class="on">Mine</button><button type="button" data-v="all">Whole board</button></div></div>
       <p class="small" style="margin:-6px 0 12px">Each board member's jobs for every club event. Due dates fill in once the event has a date.</p>
       <div id="ckList"></div><div id="ckMsg" class="msg" hidden></div></section>
-    <section class="card" id="tickets"><h2>My Tickets</h2><div id="tkList"></div>
+    <section class="card" id="tickets" data-cat="main"><h2>My Tickets</h2><div id="tkList"></div>
       <p class="small" style="margin-top:14px">Show the QR code at the door. Screenshots work. If your phone is off, give your name or the 8-character code.</p></section>
-    <section class="card" id="outCard" hidden><h2 id="outTitle">Tickets You've Shared</h2><div id="outSum" class="small" style="margin:-6px 0 12px"></div><div id="outList"></div><div id="outMsg" class="msg" hidden></div></section>
-    <section class="card" id="events"><div class="evhead"><h2>Get Tickets</h2><button class="btn ghost sm" type="button" id="bNewEv" hidden>+ Add event</button></div>
+    <section class="card" id="outCard" data-cat="events" hidden><h2 id="outTitle">Tickets You've Shared</h2><div id="outSum" class="small" style="margin:-6px 0 12px"></div><div id="outList"></div><div id="outMsg" class="msg" hidden></div></section>
+    <section class="card" id="events" data-cat="events"><div class="evhead"><h2>Get Tickets</h2><button class="btn ghost sm" type="button" id="bNewEv" hidden>+ Add event</button></div>
       <div id="evEdit" class="evedit" hidden></div><div id="evList"></div><div id="evMsg" class="msg" hidden></div></section>
-    <section class="card" id="rsvp" hidden><h2>All Events · RSVPs</h2><p class="small" style="margin:-6px 0 12px">Board view. Tap an event to see everyone who has a ticket.</p><div id="rsvpList"></div></section>
-    <section class="card" id="dir" hidden><h2>Member Directory</h2><div id="dirStats" class="dstats"></div>
+    <section class="card" id="rsvp" data-cat="events" hidden><h2>All Events · RSVPs</h2><p class="small" style="margin:-6px 0 12px">Board view. Tap an event to see everyone who has a ticket.</p><div id="rsvpList"></div></section>
+    <section class="card" id="dir" data-cat="members" hidden><h2>Member Directory</h2><div id="dirStats" class="dstats"></div>
       <div class="tools"><input id="dirQ" type="search" placeholder="Search name or email" aria-label="Search name or email" class="dq">
         <select id="dirT" aria-label="Membership level" class="dsel"><option value="">All levels</option><option value="young">Young Leader</option><option value="member">Member</option><option value="patriot">Patriot</option><option value="embajador">Ambassador</option><option value="corporate">Corporate Sponsor</option></select>
         <button class="btn ghost sm" type="button" id="dirCsv">Download CSV</button></div>
       <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th class="hide-s">Email</th><th class="hide-s">Phone</th><th>Level</th><th>Status</th><th class="hide-s">Joined</th></tr></thead><tbody id="dirRows"></tbody></table></div>
       <p class="small" style="margin-top:10px">Board view only. Please don't share member contact details outside the board.</p></section>
-    <section class="card" id="boardP" hidden><h2>Executive Board</h2><p class="small" style="margin:-6px 0 12px">Send a board member a sign-in email: new accounts get a "set your password" invite; existing accounts get a password-reset link.</p>
+    <section class="card" id="boardP" data-cat="members" hidden><h2>Executive Board</h2><p class="small" style="margin:-6px 0 12px">Send a board member a sign-in email: new accounts get a "set your password" invite; existing accounts get a password-reset link.</p>
       <div id="boardRows"></div><div id="boardMsg" class="msg" hidden></div></section>
-    <section class="card" id="myEv" hidden><div class="evhead"><h2>My Events</h2><button class="btn sm" type="button" id="bMyEvNew">+ Add event</button></div>
+    <section class="card" id="myEv" data-cat="events" hidden><div class="evhead"><h2>My Events</h2><button class="btn sm" type="button" id="bMyEvNew">+ Add event</button></div>
       <p class="small" style="margin:-6px 0 12px">Events you host (a cafecito, a meetup, a workshop). They appear on the website and in Get Tickets. Every board member can see who added each event.</p>
       <div id="myEvList"></div></section>
-    <section class="card" id="bmCard" hidden><div class="evhead"><h2>Board Meetings</h2><button class="btn sm" type="button" id="bNewBm">+ Schedule meeting</button></div>
+    <section class="card" id="bmCard" data-cat="board" hidden><div class="evhead"><h2>Board Meetings</h2><button class="btn sm" type="button" id="bNewBm">+ Schedule meeting</button></div>
       <p class="small" style="margin:-6px 0 12px">Executive Board only. Remote attendance by video or phone counts (Bylaws Art. V §7.1). Board members can't vote by proxy (§7.2).</p>
       <div id="bmEdit" class="evedit" hidden></div><div id="bmList"></div><div id="bmMsg" class="msg" hidden></div></section>
-    <section class="card" id="npCard" hidden><h2>Board Notice Preferences</h2>
+    <section class="card" id="npCard" data-cat="board" hidden><h2>Board Notice Preferences</h2>
       <p class="small" style="margin:-6px 0 12px">Under Bylaws Art. V §4, meeting notices can go by email or other electronic means only to board members who agree to receive them that way.</p>
       <div class="chk2 col"><label><input type="checkbox" id="np_email"> Email me board meeting notices</label><label><input type="checkbox" id="np_text"> Text me board meeting notices <span class="small" id="npPhone"></span></label><label><input type="checkbox" id="np_whatsapp"> Notify me in the board WhatsApp group</label></div>
       <button class="btn sm" type="button" id="bNpSave" style="margin-top:12px">Save preferences</button><div id="npMsg" class="msg" hidden></div></section>
-    <section class="card" id="actCard" hidden><div class="evhead"><h2>Board Activity</h2><button class="btn ghost sm" type="button" id="bActRec" hidden>Download full record</button></div>
+    <section class="card" id="actCard" data-cat="board" hidden><div class="evhead"><h2>Board Activity</h2><button class="btn ghost sm" type="button" id="bActRec" hidden>Download full record</button></div>
       <p class="small" style="margin:-6px 0 12px">Who did what, visible to the whole Executive Board. Exact dates and times are kept on record by the Chairman and Executive Secretary.</p>
       <div id="actList"></div></section>
-    <section class="card" id="docCard" hidden><h2>Board Documents</h2><div id="docList"></div>
+    <section class="card" id="docCard" data-cat="board" hidden><h2>Board Documents</h2><div id="docList"></div>
       <details class="about" style="margin-top:12px"><summary>Add a document</summary><div class="abody">
         <label for="docTitle">Title</label><input class="tin" id="docTitle" maxlength="120">
         <label for="docUrl" style="margin-top:10px">Link (Google Drive, Docs, etc.)</label><input class="tin" id="docUrl" placeholder="https://">
         <label for="docFile" style="margin-top:10px">Or upload a file (PDF, Word, image; up to 5 MB)</label><input id="docFile" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
         <div class="row" style="margin-top:12px"><button class="btn sm" type="button" id="bDocAdd">Add document</button></div><div id="docMsg" class="msg" hidden></div></div></details></section>
-    <section class="card" id="insider" hidden><h2>Chairman's Insider</h2><p class="small" style="margin:-6px 0 12px">Monthly behind-the-scenes updates for Ambassadors.</p>
+    <section class="card" id="insider" data-cat="members" hidden><h2>Chairman's Insider</h2><p class="small" style="margin:-6px 0 12px">Monthly behind-the-scenes updates for Ambassadors.</p>
       <div id="insCompose" hidden class="evedit"><label for="insT">Title</label><input class="tin" id="insT" maxlength="140"><label for="insB" style="margin-top:10px">Update</label><textarea class="tin" id="insB" rows="6" maxlength="8000"></textarea>
         <div class="row" style="margin-top:10px"><button class="btn sm" type="button" id="bInsPost">Post update</button><button class="btn ghost sm" type="button" id="bInsMail">Email it to Ambassadors</button><button class="btn ghost sm" type="button" id="bProg">Program listing names</button></div><div id="insMsg" class="msg" hidden></div></div>
       <div id="insList"></div></section>
-    <section class="card" id="history"><h2>Events Attended</h2><div id="hist"></div></section>
+    <section class="card" id="history" data-cat="events"><h2>Events Attended</h2><div id="hist"></div></section>
   </div>
 </div></div>
 <div class="zoom" id="zoom" hidden role="dialog" aria-modal="true" aria-label="Ticket QR code"><div class="box" id="zoomBox"></div></div>
@@ -762,7 +774,8 @@ function render(){
   $("adminLink").hidden=!d.isAdmin;
   $("dir").hidden=$("boardP").hidden=!d.isFull;if(d.isFull){renderDir();renderBoard();}
   $("bmCard").hidden=$("npCard").hidden=$("docCard").hidden=$("myEv").hidden=$("actCard").hidden=!d.isBoard;if(d.isBoard){renderBm();renderNp();renderDocs();renderMyEv();renderAct();}
-  $("btabs").hidden=$("notifications").hidden=$("checklist").hidden=!d.isBoard;if(d.isBoard){renderNotif();renderChecklist();}
+  $("btabs").hidden=$("notifications").hidden=$("checklist").hidden=!d.isBoard;document.body.classList.toggle("bview",!!d.isBoard);
+  if(d.isBoard){setCat(curCat);renderNotif();renderChecklist();}
   renderApp();
   $("progCard").hidden=!isAmb();if(isAmb())$("progOpt").checked=!!d.prof.program_listing;
   $("insider").hidden=!(isAmb()||d.isBoard);if(!$("insider").hidden)renderInsider();
@@ -807,7 +820,7 @@ function render(){
       ${used?'<span class="chip used">Checked in</span>':'<span class="chip">Valid</span>'}${isAmb()?'<span class="chip comp">★ Preferred seating</span>':""}</div>
       ${t.shared_by?`<div class="small" style="margin-top:6px"><span>Shared with you by</span> ${esc(t.shared_by)}</div>`:""}
       ${t.status==="valid"?`<button class="btn ghost sm" type="button" data-share="${t.id}" style="margin-top:10px">Share ticket</button>`:""}</div>`;}).join("")}</div>`
-    :`<div class="empty">No tickets yet. Get tickets below.</div>`;
+    :(data.isBoard?`<div class="empty">No tickets yet. Get tickets in the Events tab.</div>`:`<div class="empty">No tickets yet. Get tickets below.</div>`);
   renderOut(byId);
   /* events */
   const isMem=(m&&m.status==="active")||d.isAdmin;
@@ -866,7 +879,7 @@ $("tkList").addEventListener("click",e=>{
 $("zoom").addEventListener("click",e=>{if(e.target.id==="zoom"||e.target.id==="zClose")$("zoom").hidden=true;});
 addEventListener("keydown",e=>{if(e.key==="Escape")$("zoom").hidden=true;});
 
-function jump(id){const el=$(id);if(!el)return;try{const f=window.frameElement;
+function jump(id){const el=$(id);if(!el)return;{const sc=el.closest("[data-cat]");if(sc&&document.body.classList.contains("bview")&&sc.dataset.cat!==curCat)setCat(sc.dataset.cat);}try{const f=window.frameElement;
   if(f){const hb=topWin.document.querySelector("#s-top");const y=f.getBoundingClientRect().top+topWin.scrollY+el.getBoundingClientRect().top-((hb&&hb.offsetHeight)||0)-12;topWin.scrollTo({top:y,behavior:"smooth"});}
   else el.scrollIntoView({behavior:"smooth"});}catch(e){el.scrollIntoView();}}
 /* board: every event's RSVPs */
@@ -1208,13 +1221,18 @@ $("bProg").addEventListener("click",async()=>{try{const r=await api("/rest/v1/rp
   const txt=r.length?r.map(x=>x.name).join("\n"):"";if(!txt){show($("insMsg"),"info","No Ambassadors have opted in yet.");return;}
   await navigator.clipboard.writeText(txt);show($("insMsg"),"ok",r.length+" names copied for the program.");}catch(e){show($("insMsg"),"err","Couldn't load the list.");}});
 
+/* ===== board view: 3 essentials on Main, everything else in categories ===== */
+let curCat="main";
+function setCat(c){curCat=c;document.body.dataset.cat=c;[...document.querySelectorAll("#btabs [data-cat]")].forEach(b=>{b.classList.toggle("on",b.dataset.cat===c);b.setAttribute("aria-pressed",b.dataset.cat===c);});}
+document.addEventListener("click",e=>{const b=e.target.closest("#btabs [data-cat]");if(!b)return;setCat(b.dataset.cat);jump("btabs");});
+
 /* ===== board notifications ===== */
 function renderNotif(){const a=data.act||[],seen=data.seen||0,me=data.email;
   const fresh=a.filter(x=>x.id>seen&&x.actor_email!==me).length;
-  $("nBadge").hidden=!fresh;$("nBadge").textContent=fresh>99?"99+":fresh;
-  const rows=a.slice(0,40);
-  $("nList").innerHTML=rows.length?rows.map(x=>{const n=x.id>seen&&x.actor_email!==me;
-    return `<div class="nrow${n?" new":""}">${n?'<span class="ndot" aria-label="new"></span>':""}<div><b>${esc(x.actor_email?(x.actor_email===me?"You":nameOfB(x.actor_email)):"Club system")}</b> <span>${esc(x.action)}</span>${x.target?`: <i>${esc(x.target)}</i>`:""}<div class="small">${esc(x.month_label||"")}</div></div></div>`;}).join(""):`<div class="empty">Nothing yet. Changes by the board will show up here.</div>`;
+  data.nFresh=fresh;{const tot=fresh+(data.ckDue||0),nb=$("nBadge");nb.hidden=!tot;nb.textContent=tot>99?"99+":tot;}
+  const rows=a.slice(0,40);const row=x=>{const n=x.id>seen&&x.actor_email!==me;
+    return `<div class="nrow${n?" new":""}">${n?'<span class="ndot" aria-label="new"></span>':""}<div><b>${esc(x.actor_email?(x.actor_email===me?"You":nameOfB(x.actor_email)):"Club system")}</b> <span>${esc(x.action)}</span>${x.target?`: <i>${esc(x.target)}</i>`:""}<div class="small">${esc(x.month_label||"")}</div></div></div>`;};
+  $("nList").innerHTML=rows.length?rows.slice(0,5).map(row).join("")+(rows.length>5?`<details class="more"><summary><span>Show</span> ${rows.length-5} <span>earlier</span></summary>${rows.slice(5).map(row).join("")}</details>`:""):`<div class="empty">Nothing yet. Changes by the board will show up here.</div>`;
   const p=data.myPrefs||{};$("alEmail").checked=p.alert_email!==false;$("alText").checked=!!(p.alert_text&&p.alert_text_consent_at);
   api("/functions/v1/board-alerts",{method:"POST",body:JSON.stringify({action:"status"})}).then(st=>{
     $("alStatus").textContent=(st.email?"Email alerts are on for the club.":"Email alerts start once the club email is connected.")+" "+(st.text?"Text alerts are on for the club.":"Text alerts start once club texting is set up.");}).catch(()=>{});}
@@ -1226,7 +1244,6 @@ async function saveAlerts(){const t=$("alText").checked,m=$("alMsg");
   try{await api("/rest/v1/admins?email=eq."+encodeURIComponent(data.email),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});Object.assign(data.myPrefs,body);show(m,"ok","Alert settings saved.");}
   catch(e){show(m,"err","We couldn't save. Please try again.");}}
 $("alEmail").addEventListener("change",saveAlerts);$("alText").addEventListener("change",saveAlerts);
-document.addEventListener("click",e=>{const a=e.target.closest(".btabs a");if(!a)return;e.preventDefault();jump(a.dataset.j);});
 
 /* ===== event checklist ===== */
 let ckView="mine";
@@ -1236,15 +1253,18 @@ function renderChecklist(){const all=data.tasks||[],now=Date.now();
   const evs=Object.fromEntries((data.events||[]).map(e=>[e.id,e]));
   const list=all.filter(t=>evs[t.event_id]&&(!evs[t.event_id].starts_at||Date.parse(evs[t.event_id].starts_at)>now-7*864e5)).filter(t=>ckView==="all"||myTask(t));
   const open=all.filter(t=>myTask(t)&&!t.done_at&&t.due_at&&Date.parse(t.due_at)<now+3*864e5).length;
-  $("cBadge").hidden=!open;$("cBadge").textContent=open;
+  data.ckDue=open;const nb=$("nBadge"),tot=(data.nFresh||0)+open;nb.hidden=!tot;nb.textContent=tot>99?"99+":tot;
   if(!list.length){$("ckList").innerHTML=`<div class="empty">No checklist items yet.</div>`;return;}
   const by={};list.forEach(t=>(by[t.event_id]=by[t.event_id]||[]).push(t));
   const order=Object.keys(by).sort((a,b)=>(Date.parse(evs[a].starts_at)||9e15)-(Date.parse(evs[b].starts_at)||9e15));
   $("ckList").innerHTML=order.map(id=>{const ev=evs[id],ts=by[id],done=ts.filter(t=>t.done_at).length;
-    return `<div class="ckev"><div class="ckh"><b>${esc(L()==="es"&&ev.title_es?ev.title_es:ev.title_en)}</b><span class="small">${esc(ev.starts_at?nyDate(ev.starts_at):"Date to be announced")} · ${done}/${ts.length}</span></div>`+
+    const lateN=ts.filter(t=>!t.done_at&&t.due_at&&Date.parse(t.due_at)<now).length,soonN=ts.filter(t=>!t.done_at&&t.due_at&&Date.parse(t.due_at)>=now&&Date.parse(t.due_at)<now+3*864e5).length;
+    return `<details class="ckev" data-ev="${id}"${ckOpen.has(id)?" open":""}><summary class="ckh"><b>${esc(L()==="es"&&ev.title_es?ev.title_es:ev.title_en)}</b><span class="cks">${lateN?`<i class="ckp late">${lateN} <span>overdue</span></i>`:""}${soonN?`<i class="ckp soon">${soonN} <span>due soon</span></i>`:""}<span class="small">${esc(ev.starts_at?new Date(ev.starts_at).toLocaleDateString(L()==="es"?"es-US":"en-US",{timeZone:NY,weekday:"short",month:"short",day:"numeric"}):"Date to be announced")} · ${done}/${ts.length}</span></span></summary>`+
     ts.map(t=>{const can=data.isFull||myTask(t),late=!t.done_at&&t.due_at&&Date.parse(t.due_at)<now,soon=!t.done_at&&!late&&t.due_at&&Date.parse(t.due_at)<now+3*864e5;
       const due=t.due_at?new Date(t.due_at).toLocaleDateString(loc(),{timeZone:NY,month:"short",day:"numeric"}):(t.offset_days===0?"Event day":Math.abs(t.offset_days)+(Math.abs(t.offset_days)===1?(t.offset_days<0?" day before":" day after"):(t.offset_days<0?" days before":" days after")));
-      return `<label class="ckrow${t.done_at?" done":""}"><input type="checkbox" data-t="${t.id}" ${t.done_at?"checked":""} ${can?"":"disabled"}><span class="ckt">${esc(t.task)}<span class="small"> · ${esc(t.role==="Host"?"Host"+(t.assignee_email?" ("+nameOfB(t.assignee_email)+")":""):t.role)}</span></span><span class="ckd${late?" late":soon?" soon":""}">${esc(due)}</span></label>`;}).join("")+`</div>`;}).join("");}
+      return `<label class="ckrow${t.done_at?" done":""}"><input type="checkbox" data-t="${t.id}" ${t.done_at?"checked":""} ${can?"":"disabled"}><span class="ckt">${esc(t.task)}<span class="small"> · ${esc(t.role==="Host"?"Host"+(t.assignee_email?" ("+nameOfB(t.assignee_email)+")":""):t.role)}</span></span><span class="ckd${late?" late":soon?" soon":""}">${esc(due)}</span></label>`;}).join("")+`</details>`;}).join("");
+  $("bBadge").hidden=true;}
+const ckOpen=new Set();document.addEventListener("toggle",e=>{const d=e.target;if(d.classList&&d.classList.contains("ckev")){d.open?ckOpen.add(d.dataset.ev):ckOpen.delete(d.dataset.ev);}},true);
 document.addEventListener("change",async e=>{const c=e.target.closest("#ckList input[data-t]");if(!c)return;const id=+c.dataset.t;
   try{await api("/rest/v1/rpc/set_task_done",{method:"POST",body:JSON.stringify({p_id:id,p_done:c.checked})});const t=data.tasks.find(x=>x.id===id);t.done_at=c.checked?new Date().toISOString():null;t.done_by=c.checked?data.email:null;renderChecklist();}
   catch(err){c.checked=!c.checked;show($("ckMsg"),"err","We couldn't save that. Please try again.");}});
@@ -1287,5 +1307,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=23ec9cfa"></script><script src="../assets/i18n.js?v=23ec9cfa"></script>
+</script><script src="../assets/i18n-es.js?v=552b1c5b"></script><script src="../assets/i18n.js?v=552b1c5b"></script>
 </body></html>

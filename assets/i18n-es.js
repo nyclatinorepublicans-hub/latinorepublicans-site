@@ -795,6 +795,11 @@ window.LRC_ES={
 "Marked as sent.": "Marcado como enviado.",
 "That didn't go through. Please try again.": "No se pudo completar. Inténtalo de nuevo.",
 "day before": "día antes",
-"day after": "día después"
+"day after": "día después",
+"overdue": "atrasadas",
+"due soon": "vencen pronto",
+"Show": "Ver",
+"earlier": "anteriores",
+"No tickets yet. Get tickets in the Events tab.": "Aún no tienes entradas. Consíguelas en la pestaña Eventos."
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

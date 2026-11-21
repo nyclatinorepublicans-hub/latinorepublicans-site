@@ -1,0 +1,20 @@
+{
+  "name": "NYC Latino Republican Club",
+  "short_name": "LRC Club",
+  "description": "Your club profile: membership, QR tickets, events and board tools.",
+  "start_url": "account/?source=app",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#052a4b",
+  "theme_color": "#052a4b",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "assets/app-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/app-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "assets/app-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "My Profile", "url": "account/?source=app" },
+    { "name": "Door Check-In", "url": "checkin/?source=app" }
+  ]
+}

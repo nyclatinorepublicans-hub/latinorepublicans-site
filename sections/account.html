@@ -202,10 +202,15 @@ textarea.tin{resize:vertical}
 .chk2.col{flex-direction:column;align-items:flex-start;gap:8px;padding-top:6px}
 .docs{list-style:none;margin:0;padding:0}.docs li{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0;border-top:1px solid #eee5d3}.docs li:first-child{border-top:0}
 .docs li div{display:flex;flex-direction:column;gap:2px}.docs li .chip{align-self:flex-start}
+.appc{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-radius:16px;padding:14px 16px;margin-bottom:18px;background:linear-gradient(135deg,#052a4b,#0b3d6b);color:#fff}
+.appc img{border-radius:12px}.appc div{flex:1 1 200px}.appc b{font:900 16px "Archivo",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-hi)}.appc .small{color:#d7e3f2;margin:2px 0 0}.appc .link{color:#d7e3f2}
+.myev{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid #eee5d3}.myev:first-child{border-top:0}.myev div{display:flex;flex-direction:column;gap:2px}
+.act{list-style:none;margin:0;padding:0}.act li{padding:8px 0;border-top:1px solid #eee5d3;font-size:15px}.act li.amonth{border-top:0;padding:14px 0 4px;font:800 12px "Archivo",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#8a6a1e}
+.act li i{color:#3c4d60}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=9934670f"></script>
+<script src="../assets/vendor/qrcode.js?v=558361dc"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -270,6 +275,9 @@ textarea.tin{resize:vertical}
       <label for="qaSt" style="margin-top:10px">Membership status</label>
       <select id="qaSt" class="dsel"><option value="active">Active</option><option value="past_due">Payment due</option><option value="canceled">Canceled</option></select>
       <div id="qaMsg" class="msg" hidden></div></section>
+    <section id="appCard" class="appc" hidden><img src="../assets/app-192.png" alt="" width="56" height="56">
+      <div><b>Get the club app</b><p class="small" id="appHow">Open your profile straight from your home screen, already signed in.</p></div>
+      <button class="btn sm gold" type="button" id="bApp">Install</button><button class="link" type="button" id="bAppX" aria-label="Hide">Not now</button></section>
     <div id="paidMsg" class="msg info" hidden></div>
     <div id="mcard"></div>
     <section class="card" id="detCard" hidden><h2>My details</h2>
@@ -294,6 +302,9 @@ textarea.tin{resize:vertical}
       <p class="small" style="margin-top:10px">Board view only. Please don't share member contact details outside the board.</p></section>
     <section class="card" id="boardP" hidden><h2>Executive Board</h2><p class="small" style="margin:-6px 0 12px">Send a board member a sign-in email: new accounts get a "set your password" invite; existing accounts get a password-reset link.</p>
       <div id="boardRows"></div><div id="boardMsg" class="msg" hidden></div></section>
+    <section class="card" id="myEv" hidden><div class="evhead"><h2>My Events</h2><button class="btn sm" type="button" id="bMyEvNew">+ Add event</button></div>
+      <p class="small" style="margin:-6px 0 12px">Events you host (a cafecito, a meetup, a workshop). They appear on the website and in Get Tickets. Every board member can see who added each event.</p>
+      <div id="myEvList"></div></section>
     <section class="card" id="bmCard" hidden><div class="evhead"><h2>Board Meetings</h2><button class="btn sm" type="button" id="bNewBm">+ Schedule meeting</button></div>
       <p class="small" style="margin:-6px 0 12px">Executive Board only. Notice: 7 days for regular meetings, 48 hours for special meetings (Bylaws Art. V §4). Remote attendance by video or phone counts (§7.1). Board members can't vote by proxy (§7.2).</p>
       <div id="bmEdit" class="evedit" hidden></div><div id="bmList"></div><div id="bmMsg" class="msg" hidden></div></section>
@@ -301,6 +312,9 @@ textarea.tin{resize:vertical}
       <p class="small" style="margin:-6px 0 12px">Under Bylaws Art. V §4, meeting notices can go by email or other electronic means only to board members who agree to receive them that way.</p>
       <div class="chk2 col"><label><input type="checkbox" id="np_email"> Email me board meeting notices</label><label><input type="checkbox" id="np_text"> Text me board meeting notices <span class="small" id="npPhone"></span></label><label><input type="checkbox" id="np_whatsapp"> Notify me in the board WhatsApp group</label></div>
       <button class="btn sm" type="button" id="bNpSave" style="margin-top:12px">Save preferences</button><div id="npMsg" class="msg" hidden></div></section>
+    <section class="card" id="actCard" hidden><div class="evhead"><h2>Board Activity</h2><button class="btn ghost sm" type="button" id="bActRec" hidden>Download full record</button></div>
+      <p class="small" style="margin:-6px 0 12px">Who did what, visible to the whole Executive Board. Exact dates and times are kept on record by the Chairman and Executive Secretary.</p>
+      <div id="actList"></div></section>
     <section class="card" id="docCard" hidden><h2>Board Documents</h2><div id="docList"></div>
       <details class="about" style="margin-top:12px"><summary>Add a document</summary><div class="abody">
         <label for="docTitle">Title</label><input class="tin" id="docTitle" maxlength="120">
@@ -473,6 +487,7 @@ async function fetchAll(){
       api("/rest/v1/rpc/board_notice_contacts",{method:"POST",body:"{}"}),
       api("/rest/v1/board_documents?select=id,title,filename,mime,url,pinned,uploaded_by,uploaded_at,size_bytes&order=pinned.desc,uploaded_at.desc"),
       api("/rest/v1/admins?select=notify_email,notify_text,notify_whatsapp,notice_consent_at&email=eq."+encodeURIComponent(email))]);
+    try{data.act=await api("/rest/v1/board_activity?select=id,actor_email,action,target,month_label&order=id.desc&limit=200");}catch(e){data.act=[];}
     data.bm=mt;data.brs=rs;data.bcontacts=ct;data.bdocs=docs;data.myPrefs=me[0]||{};
   }
   /* name/phone given at sign-up: copy them onto the profile the first time */
@@ -575,7 +590,7 @@ function aboutHTML(ev){
       ${row("Date",date)}${row("Time",time)}${row("Venue",esc(ev.venue_name||""))}${row("Location",esc(ev.address||ev.location||""))}</div>
     ${mapLinks(ev)?`<div class="alinks"><span class="small">Directions:</span>${mapLinks(ev)}</div>`:""}
     ${calLinks(ev)?`<div class="alinks"><span class="small">Add to calendar:</span>${calLinks(ev)}</div>`:""}
-    ${data.isFull?`<div class="alinks"><button class="btn sm navy" type="button" data-edit="${ev.id}">Edit event details</button></div>`:""}
+    ${data.isFull||(data.isBoard&&ev.created_by===data.email)?`<div class="alinks"><button class="btn sm navy" type="button" data-edit="${ev.id}">Edit event details</button></div>`:""}
   </div></details>`;}
 function icsFor(ev){const st=ev.starts_at,en=ev.ends_at||new Date(Date.parse(st)+2*36e5).toISOString();const x=v=>String(v||"").replace(/([,;\\])/g,"\\$1").replace(/\n/g,"\\n");
   return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NYC Latino Republican Club//Events//EN","BEGIN:VEVENT","UID:"+ev.id+"@latinorepublicans.org","DTSTAMP:"+gstamp(new Date().toISOString()),
@@ -625,11 +640,11 @@ function openEditor(ev){
       if(n){body.slug=t.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)+"-"+Math.random().toString(36).slice(2,6);
         await api("/rest/v1/events",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});}
       else{body.updated_at=new Date().toISOString();await api("/rest/v1/events?id=eq."+ev.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});}
-      $("evEdit").hidden=true;await reload();show($("evMsg"),"ok",n?"Event added.":"Event details saved.");jump("events");
+      $("evEdit").hidden=true;await reload();show($("evMsg"),"ok",n?"Event added. Every board member can see that you added it.":"Event details saved.");jump("events");
     }catch(err){show(m,"err","We couldn't save the event. Please try again.");}
     $("bEvSave").disabled=false;};
 }
-document.addEventListener("click",e=>{const b=e.target.closest("button[data-edit]");if(b&&data&&data.isFull)openEditor(data.events.find(x=>x.id===b.dataset.edit));});
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-edit]");if(b&&data&&data.isBoard)openEditor(data.events.find(x=>x.id===b.dataset.edit));});
 
 function render(){
   if(!data)return;
@@ -639,7 +654,8 @@ function render(){
     $("qa").querySelectorAll("button[data-lv]").forEach(b=>{const on=b.dataset.lv===cur;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);});$("qaSt").value=st;}
   $("adminLink").hidden=!d.isAdmin;
   $("dir").hidden=$("boardP").hidden=!d.isFull;if(d.isFull){renderDir();renderBoard();}
-  $("bmCard").hidden=$("npCard").hidden=$("docCard").hidden=!d.isBoard;if(d.isBoard){renderBm();renderNp();renderDocs();}
+  $("bmCard").hidden=$("npCard").hidden=$("docCard").hidden=$("myEv").hidden=$("actCard").hidden=!d.isBoard;if(d.isBoard){renderBm();renderNp();renderDocs();renderMyEv();renderAct();}
+  renderApp();
   /* membership */
   const name=(m&&m.tier==="corporate"&&m.name)||d.prof.name||(m&&m.name)||(d.user.user_metadata&&d.user.user_metadata.name)||"";
   if(d.exec&&d.exec.title){
@@ -694,7 +710,7 @@ function render(){
       <div class="act">${!ev.sales_open?"":!p&&mine?`<span class="chip used rsv">✓ Reserved</span>${live.some(t=>t.event_id===ev.id&&t.status==="valid"&&t.kind!=="comp")?`<button class="btn ghost sm" type="button" data-cancel="${ev.id}">Cancel RSVP</button>`:""}`
         :`${p?"":`<select id="q-${ev.id}" aria-label="Quantity">${opts}</select>`}<button class="btn sm" type="button" data-ev="${ev.id}">${p?"Buy tickets":"Reserve"}</button>`}</div></div>${aboutHTML(ev)}</div>`;}).join("")
     :`<div class="empty">No events open right now.</div>`;
-  $("bNewEv").hidden=!d.isFull;
+  $("bNewEv").hidden=!d.isBoard;
   renderRsvp(byId);
   /* history */
   const att=d.tickets.filter(t=>t.status==="used").sort((a,b)=>(b.checked_in_at||"").localeCompare(a.checked_in_at||""));
@@ -1025,6 +1041,35 @@ $("bDocAdd").addEventListener("click",async()=>{const m=$("docMsg"),title=$("doc
   catch(err){show(m,"err","We couldn't add the document. Please try again.");}
   $("bDocAdd").disabled=false;});
 
+/* my events (board) */
+function renderMyEv(){const mine=data.events.filter(e=>e.created_by===data.email);
+  $("myEvList").innerHTML=mine.length?mine.map(ev=>{const n=(data.evCounts||{})[ev.id];
+    return `<div class="myev"><div><b>${esc(evTitle(ev))}</b>${ev.listed===false?' <span class="chip void">Hidden</span>':""}<span class="small">${esc(evWhen(ev)||"Date to be announced")}${ev.location?" · "+esc(ev.location):""}</span></div>
+      <button class="btn sm navy" type="button" data-edit="${ev.id}">Edit</button></div>`;}).join(""):`<div class="empty">You haven't added any events yet.</div>`;}
+$("bMyEvNew").addEventListener("click",()=>openEditor(null));
+/* board activity */
+function renderAct(){const a=data.act||[];let last="";
+  $("actList").innerHTML=a.length?`<ul class="act">${a.map(x=>{const head=x.month_label!==last?`<li class="amonth">${esc(x.month_label)}</li>`:"";last=x.month_label;
+    return head+`<li><b>${esc(x.actor_email?nameOfB(x.actor_email):"Club system")}</b> <span>${esc(x.action)}</span>${x.target?` · <i>${esc(x.target)}</i>`:""}</li>`;}).join("")}</ul>`:`<div class="empty">No board activity yet.</div>`;
+  $("bActRec").hidden=!(data.exec&&/^(Chairman|Executive Secretary)$/.test(data.exec.title||""));}
+$("bActRec").addEventListener("click",async()=>{try{const r=await api("/rest/v1/rpc/board_activity_record",{method:"POST",body:"{}"});
+  const rows=[["Board member","Email","Action","About","Date and time (New York)"]].concat(r.map(x=>[x.actor_email?nameOfB(x.actor_email):"Club system",x.actor_email||"",x.action,x.target||"",new Date(x.created_at).toLocaleString("en-US",{timeZone:NY})]));
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download="board-activity-record.csv";document.body.appendChild(a);a.click();a.remove();}
+  catch(e){show($("bmMsg"),"err","Couldn't download the record.");}});
+/* club app */
+function renderApp(){let standalone=false;try{standalone=topWin.matchMedia("(display-mode: standalone)").matches||topWin.navigator.standalone===true;}catch(e){}
+  let hide=false;try{hide=localStorage.getItem("lrc_app_hide")==="1";}catch(e){}
+  const q=(()=>{try{return new URLSearchParams(topWin.location.search).get("app")==="1";}catch(e){return false;}})();
+  $("appCard").hidden=standalone||(hide&&!q)||!(data.isBoard||q);
+  const iOS=/iP(hone|ad|od)/.test(navigator.userAgent);
+  if(iOS){$("appHow").textContent="On iPhone: tap the Share button in Safari, then \"Add to Home Screen\". Sign in once inside the app and it stays signed in.";$("bApp").hidden=true;}
+}
+$("bApp").addEventListener("click",async()=>{const p=topWin.__lrcInstall;
+  if(p){p.prompt();try{await p.userChoice;}catch(e){}topWin.__lrcInstall=null;$("appCard").hidden=true;}
+  else $("appHow").textContent="In your browser menu (⋮ or Share), choose \"Install app\" or \"Add to Home Screen\". Sign in once inside the app and it stays signed in.";});
+$("bAppX").addEventListener("click",()=>{try{localStorage.setItem("lrc_app_hide","1");}catch(e){}$("appCard").hidden=true;});
+
 async function reload(){await fetchAll();render();}
 addEventListener("lrc-lang",render);
 
@@ -1062,5 +1107,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=9934670f"></script><script src="../assets/i18n.js?v=9934670f"></script>
+</script><script src="../assets/i18n-es.js?v=558361dc"></script><script src="../assets/i18n.js?v=558361dc"></script>
 </body></html>

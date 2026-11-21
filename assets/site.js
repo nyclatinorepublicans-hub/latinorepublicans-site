@@ -142,3 +142,25 @@
   });
   setTimeout(()=>lp.querySelector('.lp-en').focus(),50);
 })();
+
+/* Keep the installed app (and open tabs) on the newest version of the site.
+   iPhones keep the app paused in the background; when it comes back, check for a newer build.
+   Away 2+ minutes: refresh automatically. Shorter: show a small "tap to update" bar so nothing being typed is lost. */
+(function(){
+  var cur=(function(){var el=document.querySelector('script[src*="?v="],link[href*="?v="],iframe[src*="?v="],iframe[data-src*="?v="]');var a=el&&(el.getAttribute('src')||el.getAttribute('href')||el.getAttribute('data-src'))||'';var m=a.match(/\?v=([0-9a-f]+)/);return m?m[1]:null;})();
+  if(!cur)return;
+  var hiddenAt=0,lastCheck=Date.now(),bar=null;
+  function showBar(){if(bar)return;bar=document.createElement('button');bar.type='button';
+    bar.textContent=(document.documentElement.lang||'').indexOf('es')===0?'Hay una nueva versión · Toca para actualizar':'New version available · Tap to update';
+    bar.setAttribute('style','position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:9999;border:0;border-radius:999px;padding:12px 20px;background:#f5d066;color:#052a4b;font:800 13px Arial,sans-serif;letter-spacing:.04em;box-shadow:0 8px 24px rgba(0,0,0,.35);cursor:pointer');
+    bar.onclick=function(){location.reload();};document.body.appendChild(bar);}
+  function check(away){if(Date.now()-lastCheck<20000)return;lastCheck=Date.now();
+    fetch(location.pathname+'?check='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():'';}).then(function(t){
+      var m=t.match(/\?v=([0-9a-f]+)/);if(!m||m[1]===cur)return;
+      if(away>=120000)location.reload();else showBar();}).catch(function(){});}
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){hiddenAt=Date.now();return;}
+    check(hiddenAt?Date.now()-hiddenAt:0);});
+  addEventListener('pageshow',function(e){if(e.persisted)check(120000);});
+  setInterval(function(){if(!document.hidden)check(0);},15*60*1000);
+})();

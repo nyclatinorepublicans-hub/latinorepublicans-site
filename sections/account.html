@@ -207,10 +207,20 @@ textarea.tin{resize:vertical}
 .myev{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid #eee5d3}.myev:first-child{border-top:0}.myev div{display:flex;flex-direction:column;gap:2px}
 .act{list-style:none;margin:0;padding:0}.act li{padding:8px 0;border-top:1px solid #eee5d3;font-size:15px}.act li.amonth{border-top:0;padding:14px 0 4px;font:800 12px "Archivo",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#8a6a1e}
 .act li i{color:#3c4d60}
+.langpick{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:#fff;border-radius:12px;padding:10px 12px;margin-bottom:6px}
+.langpick label{display:flex;gap:6px;align-items:center;margin:0;text-transform:none;letter-spacing:0;font:700 15px "Hepta Slab",Georgia,serif;color:var(--ink)}
+.mstar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0 4px;padding:10px 12px;border-radius:12px;background:#fff6dc;box-shadow:inset 0 0 0 2px var(--gold);text-transform:none;letter-spacing:0}
+.mstar span{font:900 14px "Archivo",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#7a4f00}.mstar i{font-style:normal}
+.evgroup{margin:16px 0 4px;font:900 13px "Archivo",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#52637a}.evgroup:first-child{margin-top:0}
+.evgroup.gold{color:#9a6a00}.evgroup i{font:italic 400 13px "Hepta Slab",Georgia,serif;letter-spacing:0;text-transform:none;color:#7a6a4a}
+.evwrap.monthly{border-top:0;background:linear-gradient(135deg,#fffaf0,#fff3d6);border-radius:16px;padding:6px 16px;margin:8px 0;box-shadow:inset 0 0 0 2px var(--gold)}
+.evwrap.monthly h3{font-size:21px}.mbadge{display:inline-block;margin-bottom:4px;padding:5px 10px;border-radius:999px;background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:var(--deep);font:900 11px "Archivo",sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.cbadge{display:inline-block;margin-bottom:4px;padding:4px 9px;border-radius:999px;background:#e9eef5;color:#2a4566;font:800 10px "Archivo",sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.k-urgent{background:#fde8ea;color:#8f1220}.k-special{background:#fff0c7;color:#7a4f00}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=558361dc"></script>
+<script src="../assets/vendor/qrcode.js?v=bc47d5a5"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -306,7 +316,7 @@ textarea.tin{resize:vertical}
       <p class="small" style="margin:-6px 0 12px">Events you host (a cafecito, a meetup, a workshop). They appear on the website and in Get Tickets. Every board member can see who added each event.</p>
       <div id="myEvList"></div></section>
     <section class="card" id="bmCard" hidden><div class="evhead"><h2>Board Meetings</h2><button class="btn sm" type="button" id="bNewBm">+ Schedule meeting</button></div>
-      <p class="small" style="margin:-6px 0 12px">Executive Board only. Notice: 7 days for regular meetings, 48 hours for special meetings (Bylaws Art. V §4). Remote attendance by video or phone counts (§7.1). Board members can't vote by proxy (§7.2).</p>
+      <p class="small" style="margin:-6px 0 12px">Executive Board only. Remote attendance by video or phone counts (Bylaws Art. V §7.1). Board members can't vote by proxy (§7.2).</p>
       <div id="bmEdit" class="evedit" hidden></div><div id="bmList"></div><div id="bmMsg" class="msg" hidden></div></section>
     <section class="card" id="npCard" hidden><h2>Board Notice Preferences</h2>
       <p class="small" style="margin:-6px 0 12px">Under Bylaws Art. V §4, meeting notices can go by email or other electronic means only to board members who agree to receive them that way.</p>
@@ -602,11 +612,22 @@ document.addEventListener("click",e=>{const b=e.target.closest("button[data-ics]
 /* ===== board: add / edit event details ===== */
 function openEditor(ev){
   const n=!ev;ev=ev||{};const s1=ev.starts_at?nyParts(ev.starts_at):{date:"",time:""},e1=ev.ends_at?nyParts(ev.ends_at):{time:""};
-  const v=x=>esc(x==null?"":x);
+  const v=x=>esc(x==null?"":x);let lang=n?L():"en";
+  const F=["title","summary","about"],orig={};
+  const val=(k,l)=>ev[k+"_"+l]||"";
   $("evEdit").innerHTML=`<h3>${n?"Add an event":"Edit event details"}</h3>
-   <form id="fEv" novalidate><div class="egrid">
-    <div><label>Title (English)</label><input class="tin" id="e_title_en" value="${v(ev.title_en)}" maxlength="120" required></div>
-    <div><label>Title (Spanish)</label><input class="tin" id="e_title_es" value="${v(ev.title_es)}" maxlength="120"></div>
+   <form id="fEv" novalidate>
+    <div class="langpick"><span class="small">I'm writing in:</span><label><input type="radio" name="e_lang" value="en"${lang==="en"?" checked":""}> English</label><label><input type="radio" name="e_lang" value="es"${lang==="es"?" checked":""}> Español</label>
+      <span class="small">The website translates it automatically.</span></div>
+    <label class="mstar"><input type="checkbox" id="e_monthly"${ev.is_monthly_meeting?" checked":""}> <span>★ Monthly General Meeting</span> <i class="small">the main monthly meeting for all club members</i></label>
+    <label>Title</label><input class="tin" id="p_title" maxlength="120">
+    <label>Short summary (for event cards)</label><textarea class="tin" id="p_summary" rows="2" maxlength="300"></textarea>
+    <label>What to expect</label><textarea class="tin" id="p_about" rows="4" maxlength="2000"></textarea>
+    <details class="about" id="oBox"><summary id="oSum"></summary><div class="abody"><p class="small">Filled in automatically when you save. Change anything here and your wording is kept.</p>
+      <label>Title</label><input class="tin" id="o_title" maxlength="120">
+      <label>Short summary</label><textarea class="tin" id="o_summary" rows="2" maxlength="300"></textarea>
+      <label>What to expect</label><textarea class="tin" id="o_about" rows="4" maxlength="2000"></textarea></div></details>
+    <div class="egrid">
     <div><label>Hosted by</label><input class="tin" id="e_host" value="${v(ev.host)}" maxlength="120" placeholder="e.g. Hosted by Yanely Rodriguez (Cafecito)"></div>
     <div><label>Committee</label><input class="tin" id="e_committee" value="${v(ev.committee)}" maxlength="120" placeholder="e.g. Membership & Outreach"></div>
     <div><label>Category</label><select class="tin" id="e_category"><option value="">Choose…</option>${Object.entries(CATS).map(([k,l])=>`<option value="${k}"${ev.category===k?" selected":""}>${l}</option>`).join("")}</select></div>
@@ -618,29 +639,43 @@ function openEditor(ev){
     <div><label>Neighborhood (shown on cards)</label><input class="tin" id="e_location" value="${v(ev.location)}" maxlength="80" placeholder="e.g. Astoria, Queens"></div>
     <div class="chk2"><label><input type="checkbox" id="e_sales_open"${ev.sales_open!==false?" checked":""}> Sign-ups open</label><label><input type="checkbox" id="e_listed"${ev.listed!==false?" checked":""}> Show on website</label></div>
    </div>
-   <label>Short summary (English, for event cards)</label><textarea class="tin" id="e_summary_en" rows="2" maxlength="300">${v(ev.summary_en)}</textarea>
-   <label>Short summary (Spanish)</label><textarea class="tin" id="e_summary_es" rows="2" maxlength="300">${v(ev.summary_es)}</textarea>
-   <label>What to expect (English)</label><textarea class="tin" id="e_about_en" rows="4" maxlength="2000">${v(ev.about_en)}</textarea>
-   <label>What to expect (Spanish)</label><textarea class="tin" id="e_about_es" rows="4" maxlength="2000">${v(ev.about_es)}</textarea>
    ${n?`<p class="small">New events are free to attend. For a paid event, email the details and we'll set up payment.</p>`:`<p class="small">Ticket prices are tied to Stripe and can't be changed here.</p>`}
    <div class="row" style="margin-top:12px"><button class="btn" type="submit" id="bEvSave">${n?"Add event":"Save changes"}</button><button class="btn ghost" type="button" id="bEvCancel">Cancel</button></div></form><div id="evEditMsg" class="msg" hidden></div>`;
+  const dirty={};
+  function fill(){const o=lang==="en"?"es":"en";F.forEach(k=>{$("p_"+k).value=val(k,lang);$("o_"+k).value=val(k,o);orig[k]=val(k,lang);dirty[k]=false;});
+    $("oSum").textContent=lang==="en"?"Spanish version (automatic)":"English version (automatic)";}
+  fill();
+  F.forEach(k=>$("o_"+k).addEventListener("input",()=>{dirty[k]=true;}));
+  document.querySelectorAll('input[name="e_lang"]').forEach(r=>r.addEventListener("change",()=>{
+    const typed=F.some(k=>$("p_"+k).value.trim()!==orig[k]);lang=r.value;if(!typed)fill();else{$("oSum").textContent=lang==="en"?"Spanish version (automatic)":"English version (automatic)";F.forEach(k=>{orig[k]="";});}}));
   $("evEdit").hidden=false;jump("evEdit");
   $("bEvCancel").onclick=()=>{$("evEdit").hidden=true;};
   $("fEv").onsubmit=async e=>{e.preventDefault();const g=id=>$(id).value.trim(),m=$("evEditMsg");
-    const t=g("e_title_en");if(t.length<3){show(m,"err","Please enter a title.");return;}
+    const P={};F.forEach(k=>P[k]=g("p_"+k));
+    if(P.title.length<3){show(m,"err","Please enter a title.");return;}
     const d=g("e_date"),st=g("e_start"),en=g("e_end");
     if(en&&!st){show(m,"err","Add a start time, or clear the end time.");return;}
-    const body={title_en:t,title_es:g("e_title_es")||t,host:g("e_host")||null,committee:g("e_committee")||null,category:g("e_category")||null,
-      capacity:g("e_capacity")?Math.max(1,parseInt(g("e_capacity"),10)):null,venue_name:g("e_venue_name")||null,address:g("e_address")||null,location:g("e_location")||null,
-      starts_at:d?nyISO(d,st||"00:00"):null,ends_at:d&&en?nyISO(d,en):null,sales_open:$("e_sales_open").checked,listed:$("e_listed").checked,
-      summary_en:g("e_summary_en")||null,summary_es:g("e_summary_es")||null,about_en:g("e_about_en")||null,about_es:g("e_about_es")||null};
-    if(body.starts_at&&body.ends_at&&body.ends_at<=body.starts_at){show(m,"err","The end time must be after the start time.");return;}
     $("bEvSave").disabled=true;
+    /* translate what's new or missing in the other language, unless someone typed it by hand */
+    const O={};F.forEach(k=>O[k]=g("o_"+k));
+    const need={};F.forEach(k=>{if(P[k]&&!dirty[k]&&(P[k]!==orig[k]||!O[k]))need[k]=P[k];});
+    let warn="";
+    if(Object.keys(need).length){show(m,"info","Translating…");
+      try{const r=await api("/functions/v1/translate",{method:"POST",body:JSON.stringify({from:lang,texts:need})});Object.assign(O,r.texts||{});}
+      catch(err){warn=lang==="en"?"Saved, but the automatic Spanish translation didn't work right now. Spanish visitors will see the English text until someone edits it.":"Saved, but the automatic English translation didn't work right now. The Spanish text is shown in both languages until someone edits it.";
+        F.forEach(k=>{if(need[k]&&!O[k])O[k]=P[k];});}}
+    F.forEach(k=>{if(!P[k])O[k]=O[k]||"";});
+    const EN=lang==="en"?P:O,ES=lang==="en"?O:P;
+    const body={title_en:EN.title||ES.title,title_es:ES.title||EN.title,summary_en:EN.summary||null,summary_es:ES.summary||null,about_en:EN.about||null,about_es:ES.about||null,
+      is_monthly_meeting:$("e_monthly").checked,host:g("e_host")||null,committee:g("e_committee")||null,category:g("e_category")||($("e_monthly").checked?"community":null),
+      capacity:g("e_capacity")?Math.max(1,parseInt(g("e_capacity"),10)):null,venue_name:g("e_venue_name")||null,address:g("e_address")||null,location:g("e_location")||null,
+      starts_at:d?nyISO(d,st||"00:00"):null,ends_at:d&&en?nyISO(d,en):null,sales_open:$("e_sales_open").checked,listed:$("e_listed").checked};
+    if(body.starts_at&&body.ends_at&&body.ends_at<=body.starts_at){show(m,"err","The end time must be after the start time.");$("bEvSave").disabled=false;return;}
     try{
-      if(n){body.slug=t.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)+"-"+Math.random().toString(36).slice(2,6);
+      if(n){body.slug=body.title_en.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)+"-"+Math.random().toString(36).slice(2,6);
         await api("/rest/v1/events",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});}
       else{body.updated_at=new Date().toISOString();await api("/rest/v1/events?id=eq."+ev.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});}
-      $("evEdit").hidden=true;await reload();show($("evMsg"),"ok",n?"Event added. Every board member can see that you added it.":"Event details saved.");jump("events");
+      $("evEdit").hidden=true;await reload();show($("evMsg"),warn?"info":"ok",warn||(n?"Event added in English and Spanish. Every board member can see that you added it.":"Event details saved in English and Spanish."));jump("events");
     }catch(err){show(m,"err","We couldn't save the event. Please try again.");}
     $("bEvSave").disabled=false;};
 }
@@ -701,10 +736,12 @@ function render(){
   renderOut(byId);
   /* events */
   const isMem=(m&&m.status==="active")||d.isAdmin;
-  const open=d.events.filter(e=>e.listed!==false||d.isFull);
+  const open=d.events.filter(e=>e.listed!==false||d.isFull).sort((a,b)=>(b.is_monthly_meeting?1:0)-(a.is_monthly_meeting?1:0));
+  const nMonthly=open.filter(e=>e.is_monthly_meeting).length;
   $("evList").innerHTML=open.length?open.map(ev=>{const p=isMem?ev.price_member_cents:ev.price_guest_cents;const mine=live.filter(t=>t.event_id===ev.id).length;
     const opts=[1,2,3,4].map(n=>`<option value="${n}">${n}</option>`).join("");
-    return `<div class="evwrap"><div class="ev"><div><h3>${esc(evTitle(ev))}${ev.listed===false?' <span class="chip void">Hidden</span>':""}${!ev.sales_open?' <span class="chip">Sign-ups closed</span>':""}</h3><div class="meta">${esc(evWhen(ev))}${ev.location?" · "+esc(ev.location):""}</div>
+    const head=ev.is_monthly_meeting&&open.indexOf(ev)===0?`<div class="evgroup gold">★ <span>Monthly General Meetings</span> <i>For all club members</i></div>`:!ev.is_monthly_meeting&&open.indexOf(ev)===nMonthly?`<div class="evgroup">${nMonthly?"<span>Other events and gatherings</span>":"<span>Events</span>"}</div>`:"";
+    return head+`<div class="evwrap${ev.is_monthly_meeting?" monthly":""}"><div class="ev"><div>${ev.is_monthly_meeting?'<span class="mbadge">★ <span>Monthly General Meeting</span></span>':ev.category?`<span class="cbadge">${esc(CATS[ev.category]||ev.category)}</span>`:""}<h3>${esc(evTitle(ev))}${ev.listed===false?' <span class="chip void">Hidden</span>':""}${!ev.sales_open?' <span class="chip">Sign-ups closed</span>':""}</h3><div class="meta">${esc(evWhen(ev))}${ev.location?" · "+esc(ev.location):""}</div>
       <div class="price">${p?`${money(p)} ${isMem?"<span>member price</span>":(ev.price_member_cents<ev.price_guest_cents?`<span>· members</span> ${money(ev.price_member_cents)}`:"")}`:"<span>Free</span>"}</div>
       ${mine?`<div class="small"><span>You have</span> ${mine} <span>${mine===1?"ticket":"tickets"}</span></div>`:""}</div>
       <div class="act">${!ev.sales_open?"":!p&&mine?`<span class="chip used rsv">✓ Reserved</span>${live.some(t=>t.event_id===ev.id&&t.status==="valid"&&t.kind!=="comp")?`<button class="btn ghost sm" type="button" data-cancel="${ev.id}">Cancel RSVP</button>`:""}`
@@ -876,6 +913,7 @@ $("outList").addEventListener("click",async e=>{const b=e.target.closest("button
   b.disabled=false;});
 
 /* ===================== EXECUTIVE BOARD ===================== */
+const KIND={urgent:"Urgent",regular:"Regular",special:"Special"};
 const PLAT={whatsapp:"WhatsApp",google_meet:"Google Meet",zoom:"Zoom",phone:"Phone call",in_person:"In person"};
 const boardList=()=>(data.bcontacts||[]).slice().sort((a,b)=>(a.name||"").localeCompare(b.name||""));
 const nameOfB=e=>{const b=(data.bcontacts||[]).find(x=>x.email===e);return b?(b.name||e):e;};
@@ -886,14 +924,13 @@ function quorum(m){
 }
 function noticeStatus(m){
   const log=m.notice_log||[];if(!log.length)return `<span class="nwarn">Notice not sent yet</span>`;
-  const first=log.reduce((a,b)=>a.at<b.at?a:b),lead=(Date.parse(m.starts_at)-Date.parse(first.at))/36e5,req=m.kind==="special"?48:168;
-  const chans=[...new Set(log.map(x=>x.channel))].join(", ");
-  return `<span class="${lead>=req?"nok":"nwarn"}">Notice sent ${esc(new Date(first.at).toLocaleDateString(loc(),{timeZone:NY,month:"short",day:"numeric"}))} by ${esc(chans)} · ${lead>=req?"meets":"does NOT meet"} the ${m.kind==="special"?"48-hour":"7-day"} rule</span>`;
+  const first=log.reduce((a,b)=>a.at<b.at?a:b),chans=[...new Set(log.map(x=>x.channel))].join(", ");
+  return `<span class="nok">Notice sent ${esc(new Date(first.at).toLocaleDateString(loc(),{timeZone:NY,month:"short",day:"numeric"}))} by ${esc(chans)}</span>`;
 }
 function noticeText(m){
   const when=nyDate(m.starts_at)+", "+nyTime(m.starts_at)+(m.ends_at?" – "+nyTime(m.ends_at):"")+" (New York time)";
   const where=PLAT[m.platform]+(m.join_link?": "+m.join_link:"")+(m.location?" · "+m.location:"");
-  return `NOTICE OF ${m.kind==="special"?"SPECIAL":"REGULAR"} EXECUTIVE BOARD MEETING${m.executive_session?" (EXECUTIVE SESSION)":""}
+  return `NOTICE OF ${KIND[m.kind].toUpperCase()} EXECUTIVE BOARD MEETING${m.executive_session?" (EXECUTIVE SESSION)":""}
 NYC Latino Republican Club Inc.
 
 ${m.title}
@@ -916,9 +953,9 @@ function renderBm(){
     const roster=boardList().map(b=>{const r=data.brs.find(x=>x.meeting_id===m.id&&x.email===b.email);
       return `<li><span>${esc(b.name||b.email)} <i class="small">${esc(b.title||"")}</i></span><b class="rs-${r?r.response:"none"}">${r?{attending:"Attending",remote:"Attending remotely",absent:"Can't attend"}[r.response]:"No reply"}</b>${r&&r.note?`<p class="small">“${esc(r.note)}”</p>`:""}</li>`;}).join("");
     const contacts=data.bcontacts||[],em=contacts.filter(c=>c.notify_email).map(c=>c.email),ph=contacts.filter(c=>c.notify_text&&c.phone).map(c=>e164(c.phone)).filter(Boolean);
-    const txt=noticeText(m),subj=`Notice: ${m.kind==="special"?"Special":"Regular"} Executive Board Meeting · ${nyDate(m.starts_at)}`;
+    const txt=noticeText(m),subj=`${m.kind==="urgent"?"URGENT ":""}Notice: ${KIND[m.kind]} Executive Board Meeting · ${nyDate(m.starts_at)}`;
     return `<article class="bm${m.canceled_at?" bm-x":""}" id="bm-${m.id}">
-      <div class="bmtop"><div><span class="chip ${m.kind==="special"?"comp":""}">${m.kind==="special"?"Special meeting":"Regular meeting"}</span>${m.executive_session?' <span class="chip void">Executive session</span>':""}${m.canceled_at?' <span class="chip void">Canceled</span>':""}
+      <div class="bmtop"><div><span class="chip k-${m.kind}">${{urgent:"Urgent meeting",regular:"Regular meeting",special:"Special meeting"}[m.kind]}</span>${m.executive_session?' <span class="chip void">Executive session</span>':""}${m.canceled_at?' <span class="chip void">Canceled</span>':""}
         <h3>${esc(m.title)}</h3><div class="meta">${esc(nyDate(m.starts_at))} · ${esc(nyTime(m.starts_at))}${m.ends_at?" – "+esc(nyTime(m.ends_at)):""}</div></div>
         <div class="plat plat-${m.platform}">${esc(PLAT[m.platform])}${m.join_link&&!m.canceled_at?`<a class="btn sm" href="${esc(m.join_link)}" target="_blank" rel="noopener">Join</a>`:""}</div></div>
       ${m.location?`<p class="small">📍 ${esc(m.location)} · <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(m.location)}" target="_blank" rel="noopener">Directions</a></p>`:""}
@@ -965,7 +1002,7 @@ function openBmEditor(mt){
   const n=!mt;mt=mt||{kind:"regular",platform:"whatsapp",called_by:[data.email]};
   const s1=mt.starts_at?nyParts(mt.starts_at):{date:"",time:""},e1=mt.ends_at?nyParts(mt.ends_at):{time:""},v=x=>esc(x==null?"":x);
   $("bmEdit").innerHTML=`<h3>${n?"Schedule a board meeting":"Edit board meeting"}</h3><form id="fBm" novalidate><div class="egrid">
-    <div><label>Type</label><select class="tin" id="b_kind"${n?"":" disabled"}><option value="regular"${mt.kind==="regular"?" selected":""}>Regular (7 days' notice)</option><option value="special"${mt.kind==="special"?" selected":""}>Special (48 hours' notice)</option></select></div>
+    <div><label>Type</label><select class="tin" id="b_kind"${n?"":" disabled"}>${Object.entries(KIND).map(([k,l])=>`<option value="${k}"${mt.kind===k?" selected":""}>${l}</option>`).join("")}</select></div>
     <div><label>Title</label><input class="tin" id="b_title" maxlength="120" value="${v(mt.title||(n?"Monthly Executive Board Meeting":""))}"></div>
     <div><label>Date</label><input class="tin" id="b_date" type="date" value="${s1.date}"></div>
     <div class="two"><div><label>Starts</label><input class="tin" id="b_start" type="time" value="${s1.time}"></div><div><label>Ends</label><input class="tin" id="b_end" type="time" value="${e1.time}"></div></div>
@@ -974,8 +1011,8 @@ function openBmEditor(mt){
     <div><label>Address (in person)</label><input class="tin" id="b_loc" value="${v(mt.location)}" maxlength="200"></div>
     <div class="chk2"><label><input type="checkbox" id="b_exec"${mt.executive_session?" checked":""}> Executive session (closed, Art. III §5)</label></div></div>
     ${n?`<label>Called by</label><div class="chk2 col">${boardList().map(b=>`<label><input type="checkbox" class="b_call" value="${esc(b.email)}"${(mt.called_by||[]).includes(b.email)?" checked":""}> ${esc(b.name||b.email)} <span class="small">${esc(b.title||"")}</span></label>`).join("")}</div>
-      <p class="small">A special meeting must be called by the Chairman or any two board members (Art. V §1).</p>`:""}
-    <label>Purpose${n?" (required for special meetings)":""}</label><input class="tin" id="b_purpose" maxlength="500" value="${v(mt.purpose)}">
+`:""}
+    <label>Purpose</label><input class="tin" id="b_purpose" maxlength="500" value="${v(mt.purpose)}">
     <label>Agenda</label><textarea class="tin" id="b_agenda" rows="5" maxlength="4000" placeholder="1. Call to order&#10;2. Approval of minutes&#10;3. Treasurer's report&#10;4. Old business&#10;5. New business&#10;6. Adjournment">${v(mt.agenda)}</textarea>
     <div class="row" style="margin-top:12px"><button class="btn" type="submit" id="bBmSave">${n?"Schedule meeting":"Save changes"}</button><button class="btn ghost" type="button" id="bBmCancel">Cancel</button></div></form><div id="bmEditMsg" class="msg" hidden></div>`;
   $("bmEdit").hidden=false;jump("bmEdit");
@@ -992,12 +1029,7 @@ function openBmEditor(mt){
     const body={title:g("b_title"),starts_at:startISO,ends_at:endISO,platform:plat,join_link:link||null,location:g("b_loc")||null,executive_session:$("b_exec").checked,purpose:g("b_purpose")||null,agenda:g("b_agenda")||null};
     if(n){
       const callers=[...document.querySelectorAll(".b_call:checked")].map(x=>x.value);
-      const hours=(Date.parse(startISO)-Date.now())/36e5,chair=boardList().find(b=>b.title==="Chairman");
       if(!callers.length){show(m,"err","Choose who is calling the meeting.");return;}
-      if(kind==="regular"&&hours<168){show(m,"err","Regular meetings need at least 7 days' notice (Art. V §4). Pick a later date, or schedule a special meeting.");return;}
-      if(kind==="special"&&hours<48){show(m,"err","Special meetings need at least 48 hours' notice (Art. V §4).");return;}
-      if(kind==="special"&&!(callers.length>=2||(chair&&callers.includes(chair.email)))){show(m,"err","A special meeting must be called by the Chairman or any two board members (Art. V §1).");return;}
-      if(kind==="special"&&!body.purpose){show(m,"err","Please state the purpose of the special meeting.");return;}
       Object.assign(body,{kind,called_by:callers});
     }
     $("bBmSave").disabled=true;
@@ -1107,5 +1139,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=558361dc"></script><script src="../assets/i18n.js?v=558361dc"></script>
+</script><script src="../assets/i18n-es.js?v=bc47d5a5"></script><script src="../assets/i18n.js?v=bc47d5a5"></script>
 </body></html>

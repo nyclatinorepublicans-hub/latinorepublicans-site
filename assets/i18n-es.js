@@ -516,6 +516,17 @@ window.LRC_ES={
 "Invite sent. They'll get an email to set their password.": "Invitación enviada. Recibirá un correo para crear su contraseña.",
 "They already have an account, so we sent a set-new-password email.": "Ya tiene cuenta, así que le enviamos un correo para crear una nueva contraseña.",
 "Couldn't send that email. Please try again later.": "No se pudo enviar ese correo. Inténtalo más tarde.",
-"Welcome! Set your password": "¡Bienvenido! Crea tu contraseña"
+"Welcome! Set your password": "¡Bienvenido! Crea tu contraseña",
+"Corporate Sponsor": "Patrocinador corporativo",
+"Sponsor gala tickets": "Entradas de gala del patrocinador",
+"Your sponsorship includes": "Tu patrocinio incluye",
+"gala tickets. They are in My Tickets below.": "entradas para la gala. Están abajo en Mis entradas.",
+"Test mode · Quality control": "Modo de prueba · Control de calidad",
+"Switch this test profile to any level to see exactly what a member at that level sees. Each level uses its own test flag.": "Cambia este perfil de prueba a cualquier nivel para ver exactamente lo que ve un miembro de ese nivel. Cada nivel usa su propia bandera de prueba.",
+"No membership": "Sin membresía",
+"Membership status": "Estado de la membresía",
+"Switched. This is the profile as that member sees it.": "Listo. Así ve el perfil un miembro de ese nivel.",
+"Couldn't switch. Please try again.": "No se pudo cambiar. Inténtalo de nuevo.",
+"Corporate": "Corporativo"
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

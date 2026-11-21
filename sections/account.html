@@ -166,10 +166,15 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
 .brow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 0;border-top:1px solid #eee5d3}.brow:first-child{border-top:0}
 .brow>.minis{min-width:64px}
 .bwho{flex:1 1 220px;display:flex;flex-direction:column;gap:2px}.bwho b{font:900 16px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy)}
+.qa{border-radius:16px;padding:16px 18px;margin-bottom:18px;background:repeating-linear-gradient(135deg,#fff3d6 0 14px,#ffeec4 14px 28px);box-shadow:inset 0 0 0 2px #e0b44f;color:#4d3505}
+.qat{display:block;font:900 13px "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#7a4f00}
+.qabtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.qabtns button{border:0;border-radius:999px;padding:9px 14px;cursor:pointer;font:800 12px "Archivo",sans-serif;letter-spacing:.06em;background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px #d6a844}
+.qabtns button.on{background:var(--navy);color:#fff;box-shadow:none}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=863b9b53"></script>
+<script src="../assets/vendor/qrcode.js?v=657a96ef"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -222,6 +227,13 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
       <span><a id="adminLink" class="btn gold sm" href="../checkin/" target="_top" hidden>Door check-in</a>
       <button class="btn ghost sm" id="bChg" type="button">Change password</button>
       <button class="btn ghost sm" id="bOut" type="button">Sign out</button></span></div>
+    <section id="qa" class="qa" hidden>
+      <b class="qat">Test mode · Quality control</b><p class="small">Switch this test profile to any level to see exactly what a member at that level sees. Each level uses its own test flag.</p>
+      <div class="qabtns"><button type="button" data-lv="none">No membership</button><button type="button" data-lv="young">Young Leader · $25</button><button type="button" data-lv="member">Member · $50</button>
+        <button type="button" data-lv="patriot">Patriot · $100</button><button type="button" data-lv="embajador">Ambassador · $250</button><button type="button" data-lv="corporate">Corporate · $1,000</button></div>
+      <label for="qaSt" style="margin-top:10px">Membership status</label>
+      <select id="qaSt" class="dsel"><option value="active">Active</option><option value="past_due">Payment due</option><option value="canceled">Canceled</option></select>
+      <div id="qaMsg" class="msg" hidden></div></section>
     <div id="paidMsg" class="msg info" hidden></div>
     <div id="mcard"></div>
     <section class="card" id="flagPick" hidden></section>
@@ -232,7 +244,7 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
     <section class="card" id="rsvp" hidden><h2>All Events · RSVPs</h2><p class="small" style="margin:-6px 0 12px">Board view. Tap an event to see everyone who has a ticket.</p><div id="rsvpList"></div></section>
     <section class="card" id="dir" hidden><h2>Member Directory</h2><div id="dirStats" class="dstats"></div>
       <div class="tools"><input id="dirQ" type="search" placeholder="Search name or email" aria-label="Search name or email" class="dq">
-        <select id="dirT" aria-label="Membership level" class="dsel"><option value="">All levels</option><option value="young">Young Leader</option><option value="member">Member</option><option value="patriot">Patriot</option><option value="embajador">Ambassador</option></select>
+        <select id="dirT" aria-label="Membership level" class="dsel"><option value="">All levels</option><option value="young">Young Leader</option><option value="member">Member</option><option value="patriot">Patriot</option><option value="embajador">Ambassador</option><option value="corporate">Corporate Sponsor</option></select>
         <button class="btn ghost sm" type="button" id="dirCsv">Download CSV</button></div>
       <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th class="hide-s">Email</th><th>Level</th><th>Status</th><th class="hide-s">Joined</th></tr></thead><tbody id="dirRows"></tbody></table></div>
       <p class="small" style="margin-top:10px">Board view only. Please don't share member contact details outside the board.</p></section>
@@ -248,7 +260,7 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
 const SB_URL="https://ccfcvzmnaeasfiigtnvz.supabase.co";
 const SB_KEY="sb_publishable_nzBBd1P7v-mVTbbjfd8JSw_i0FXzcZm"; /* public key: the database rules decide what each person can see */
 const JOIN_BONUS={cutoff:Date.parse("2027-01-01T05:00:00Z"),patriot:2,embajador:4};
-const TIER={young:"Young Leader",member:"Member",patriot:"Patriot",embajador:"Ambassador"};
+const TIER={young:"Young Leader",member:"Member",patriot:"Patriot",embajador:"Ambassador",corporate:"Corporate Sponsor"};
 const STATUS={active:"Active",past_due:"Payment due",canceled:"Canceled"};
 const SKEY="lrc_session";
 const $=id=>document.getElementById(id);
@@ -387,9 +399,10 @@ async function fetchAll(){
     api("/rest/v1/admins?select=email,name,title,role,subtitle&email=eq."+encodeURIComponent(email)),
     api("/rest/v1/comp_grants?select=*"),
   ]);
+  let qa=[];try{qa=await api("/rest/v1/qa_accounts?select=email&email=eq."+encodeURIComponent(email));}catch(e){}
   let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name,flags&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
   data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,all:null,flags:prof?(prof.flags&&prof.flags.length?prof.flags:(prof.country_code?[prof.country_code]:[])):[]};
-  data.isFull=!!(data.exec&&data.exec.role==="full");
+  data.isFull=!!(data.exec&&data.exec.role==="full");data.isQA=qa.length>0;
   /* first visit after joining: use the flag they tapped on the Join page */
   if(!data.flags.length){try{const n=localStorage.getItem("lrc_flag");const c=n&&NAME_ISO[n];if(c){data.flags=[c];saveFlags([c],true);}}catch(e){}}
   if(data.isFull){
@@ -460,6 +473,8 @@ function render(){
   if(!data)return;
   const d=data,m=d.member,es=L()==="es";
   $("whoEm").textContent=d.email;
+  $("qa").hidden=!d.isQA;if(d.isQA){const cur=m?m.tier:"none",st=m?m.status:"active";
+    $("qa").querySelectorAll("button[data-lv]").forEach(b=>{const on=b.dataset.lv===cur;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);});$("qaSt").value=st;}
   $("adminLink").hidden=!d.isAdmin;
   $("dir").hidden=$("boardP").hidden=!d.isFull;if(d.isFull){renderDir();renderBoard();}
   /* membership */
@@ -483,12 +498,13 @@ function render(){
       ${flagLine()}<a class="btn gold" href="../join/" target="_top">Join the club</a></div>`;
   }
   /* gala bonus */
-  const grant=d.grants.find(g=>g.promo==="gala2027-join-bonus");
+  const grant=d.grants.find(g=>g.promo==="gala2027-join-bonus"||g.promo==="sponsor-gala-2027");
   const before=Date.now()<JOIN_BONUS.cutoff;
   let promo="";
   const star=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#d6a844" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z"/></svg>`;
-  if(grant)promo=`<div class="promo">${star}<div><b class="t">Gala bonus unlocked</b><p><span>Your free gala tickets:</span> <b>${grant.tickets}</b>. <span>They are in My Tickets below.</span></p></div></div>`;
-  else if(before&&!d.exec&&(!m||m.tier!=="embajador"))promo=`<div class="promo">${star}<div><b class="t">Gala bonus</b><p>Join or upgrade before December 31: Patriot members get 2 free gala tickets and Ambassador members get 4.</p>
+  if(grant&&grant.promo==="sponsor-gala-2027")promo=`<div class="promo">${star}<div><b class="t">Sponsor gala tickets</b><p><span>Your sponsorship includes</span> <b>${grant.tickets}</b> <span>gala tickets. They are in My Tickets below.</span></p></div></div>`;
+  else if(grant)promo=`<div class="promo">${star}<div><b class="t">Gala bonus unlocked</b><p><span>Your free gala tickets:</span> <b>${grant.tickets}</b>. <span>They are in My Tickets below.</span></p></div></div>`;
+  else if(before&&!d.exec&&(!m||(m.tier!=="embajador"&&m.tier!=="corporate")))promo=`<div class="promo">${star}<div><b class="t">Gala bonus</b><p>Join or upgrade before December 31: Patriot members get 2 free gala tickets and Ambassador members get 4.</p>
     <a class="btn sm" style="margin-top:10px" href="../join/" target="_top">See memberships</a></div></div>`;
   $("promo").innerHTML=promo;
   /* tickets */
@@ -587,7 +603,7 @@ function renderDir(){
   const d=data,q=($("dirQ").value||"").trim().toLowerCase(),t=$("dirT").value;
   const act=d.memList.filter(m=>m.status==="active");
   const by=k=>act.filter(m=>m.tier===k).length;
-  $("dirStats").innerHTML=`<span><b>${act.length}</b> <i>active members</i></span><span><b>${by("young")}</b> <i>Young Leader</i></span><span><b>${by("member")}</b> <i>Member</i></span><span><b>${by("patriot")}</b> <i>Patriot</i></span><span><b>${by("embajador")}</b> <i>Ambassador</i></span>`;
+  $("dirStats").innerHTML=`<span><b>${act.length}</b> <i>active members</i></span><span><b>${by("young")}</b> <i>Young Leader</i></span><span><b>${by("member")}</b> <i>Member</i></span><span><b>${by("patriot")}</b> <i>Patriot</i></span><span><b>${by("embajador")}</b> <i>Ambassador</i></span><span><b>${by("corporate")}</b> <i>Corporate</i></span>`;
   const rows=d.memList.filter(m=>(!t||m.tier===t)&&(!q||((m.name||"")+" "+m.email).toLowerCase().includes(q)));
   $("dirRows").innerHTML=rows.length?rows.map(m=>{const f=d.pflags[m.email]||[];
     return `<tr><td><span class="minis sm">${miniFlags(f)}</span>${esc(m.name||"")}<span class="em2"><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></span></td><td class="hide-s"><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></td>
@@ -612,6 +628,13 @@ $("boardRows").addEventListener("click",async e=>{const b=e.target.closest("butt
     show(m,/^(invited|reset_sent)$/.test(v)?"ok":"err",v==="invited"?"Invite sent. They'll get an email to set their password.":v==="reset_sent"?"They already have an account, so we sent a set-new-password email.":"Couldn't send that email. Please try again later.");}
   catch(err){show(m,"err","Couldn't send that email. Please try again later.");}
   b.disabled=false;});
+/* test account: level switcher */
+async function qaSwitch(level){const st=$("qaSt").value,m=$("qaMsg");$("qa").querySelectorAll("button").forEach(b=>b.disabled=true);
+  try{await api("/functions/v1/qa-switch",{method:"POST",body:JSON.stringify({level,status:st})});await reload();show(m,"ok","Switched. This is the profile as that member sees it.");}
+  catch(e){show(m,"err","Couldn't switch. Please try again.");}
+  $("qa").querySelectorAll("button").forEach(b=>b.disabled=false);}
+$("qa").addEventListener("click",e=>{const b=e.target.closest("button[data-lv]");if(b)qaSwitch(b.dataset.lv);});
+$("qaSt").addEventListener("change",()=>{const on=$("qa").querySelector("button.on");if(on&&on.dataset.lv!=="none")qaSwitch(on.dataset.lv);});
 async function reload(){await fetchAll();render();}
 addEventListener("lrc-lang",render);
 
@@ -649,5 +672,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=863b9b53"></script><script src="../assets/i18n.js?v=863b9b53"></script>
+</script><script src="../assets/i18n-es.js?v=657a96ef"></script><script src="../assets/i18n.js?v=657a96ef"></script>
 </body></html>

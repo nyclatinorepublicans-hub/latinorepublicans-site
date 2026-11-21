@@ -65,6 +65,14 @@ input[type=email]:focus,select:focus{border-color:var(--gold);outline:0}
 .promo p{margin:0;font-size:15px;line-height:1.5}
 
 /* tickets */
+details.tkev{border-radius:14px;box-shadow:inset 0 0 0 2px #eadfc8;background:#fff;margin:0 0 10px}
+details.tkev>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 40px 12px 14px;position:relative}
+details.tkev>summary::-webkit-details-marker{display:none}
+details.tkev>summary::after{content:"▾";position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--navy);font-size:18px;transition:transform .2s}
+details.tkev[open]>summary::after{transform:translateY(-50%) rotate(180deg)}
+details.tkev .tkh{flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:2px}details.tkev .tkh b{color:var(--navy);font-size:16px;line-height:1.25}
+details.tkev .tkw{font-size:13px;opacity:.75}details.tkev .tkn{display:flex;gap:6px;flex-wrap:wrap}details.tkev .tkn .chip{margin:0}
+details.tkev>.tickets{padding:0 12px 12px}details.tkev.past{opacity:.8}
 .tickets{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
 .tk{border-radius:16px;background:var(--cream);box-shadow:inset 0 0 0 2px #eadfc8;padding:16px;display:flex;flex-direction:column;align-items:center;text-align:center}
 .tk h3{margin:0 0 4px;font:900 17px "Archivo",sans-serif;font-stretch:88%;text-transform:uppercase;color:var(--navy)}
@@ -315,7 +323,7 @@ body.gated #contactCard{display:none!important}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=dff4a010"></script>
+<script src="../assets/vendor/qrcode.js?v=e4d974c1"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -923,16 +931,25 @@ function render(){
     <a class="btn sm" style="margin-top:10px" href="../join/" target="_top">See memberships</a></div></div>`;
   $("promo").innerHTML=promo;
   /* tickets */
+  const tkOpen=new Set([...document.querySelectorAll("#tkList details.tkev[open]")].map(x=>x.dataset.ev));if(window.__tkOpenNext){tkOpen.add(window.__tkOpenNext);window.__tkOpenNext=null;}
   const byId=Object.fromEntries(d.events.map(e=>[e.id,e]));
   const live=d.tickets.filter(t=>t.status!=="void");
-  $("tkList").innerHTML=live.length?`<div class="tickets">${live.map((t,i)=>{const ev=byId[t.event_id];const used=t.status==="used";
-      return `<div class="tk${used?" is-used":""}"><h3>${esc(evTitle(ev))}</h3><div class="when">${esc(evWhen(ev))}${ev&&ev.location?" · "+esc(ev.location):""}</div>
+  const tkCard=(t,i,all)=>{const used=t.status==="used";
+      return `<div class="tk${used?" is-used":""}">${all.length>1?`<div class="when tkof"><span>Ticket</span> ${i+1} <span>of</span> ${all.length}</div>`:""}
       <button class="qr" type="button" data-i="${d.tickets.indexOf(t)}" aria-label="Enlarge QR code">${qrSvg("lrc:"+t.token)}</button>
       <div class="code">${esc(t.token.slice(0,8).toUpperCase())}</div>
       <div class="chips">${t.kind==="comp"?'<span class="chip comp">Complimentary</span>':(t.price_cents?'<span class="chip">Paid</span>':'<span class="chip">Reserved</span>')}
       ${used?'<span class="chip used">Checked in</span>':'<span class="chip">Valid</span>'}${isAmb()?'<span class="chip comp">★ Preferred seating</span>':""}${t.gift?`<span class="chip gift">🎁 <span>Gift</span>${t.gift_note?" · "+esc(t.gift_note):""}</span>`:""}</div>
       ${t.shared_by?`<div class="small" style="margin-top:6px"><span>Shared with you by</span> ${esc(t.shared_by)}</div>`:""}
-      ${t.status==="valid"?`<button class="btn ghost sm" type="button" data-share="${t.id}" style="margin-top:10px">Share ticket</button>`:""}</div>`;}).join("")}</div>`
+      ${t.status==="valid"?`<button class="btn ghost sm" type="button" data-share="${t.id}" style="margin-top:10px">Share ticket</button>`:""}</div>`;};
+  const groups={};live.forEach(t=>{(groups[t.event_id]=groups[t.event_id]||[]).push(t);});
+  const nowT=Date.now(),evT=id=>{const e=byId[id];return e&&e.starts_at?Date.parse(e.starts_at):Infinity;};
+  const isPast=id=>{const e=byId[id];return !!(e&&e.starts_at&&Date.parse(e.starts_at)+6*3600e3<nowT);};
+  const gids=Object.keys(groups).sort((a,b)=>(isPast(a)-isPast(b))||(isPast(a)?evT(b)-evT(a):evT(a)-evT(b)));
+  $("tkList").innerHTML=live.length?gids.map(id=>{const ts=groups[id],ev=byId[id],n=ts.length,used=ts.filter(t=>t.status==="used").length,gift=ts.some(t=>t.gift),past=isPast(id);
+      return `<details class="tkev${past?" past":""}" data-ev="${esc(id)}"${tkOpen.has(id)?" open":""}><summary><span class="tkh"><b>${esc(evTitle(ev))}</b><span class="tkw">${esc(evWhen(ev))}${ev&&ev.location?" · "+esc(ev.location):""}</span></span>
+        <span class="tkn">${gift?'<span class="chip gift">🎁</span>':""}${past?'<span class="chip used">Past</span>':""}<span class="chip">${n} ${n===1?"<span>ticket</span>":"<span>tickets</span>"}</span>${used&&!past?`<span class="chip used">${used} <span>checked in</span></span>`:""}</span></summary>
+        <div class="tickets">${ts.map(tkCard).join("")}</div></details>`;}).join("")
     :(data.isBoard?`<div class="empty">No tickets yet. Get tickets in the Events tab.</div>`:`<div class="empty">No tickets yet. Get tickets below.</div>`);
   renderOut(byId);
   /* events */
@@ -974,7 +991,7 @@ $("evList").addEventListener("click",async e=>{
     const r=await api("/functions/v1/buy-ticket",{method:"POST",body:JSON.stringify({event_id:id,qty,return_url:pageUrl(),lang:L()})});
     if(r.url){topWin.location.href=r.url;return;}
     if(r.already){show(m,"info","You're already on the list for this event. Your ticket is in My Tickets.");await reload();return;}
-    if(r.free){show(m,"ok",r.issued===1?"Reserved! Your ticket is in My Tickets.":"Reserved! Your tickets are in My Tickets.");await reload();jump("tickets");}
+    if(r.free){window.__tkOpenNext=id;show(m,"ok",r.issued===1?"Reserved! Your ticket is in My Tickets.":"Reserved! Your tickets are in My Tickets.");await reload();jump("tickets");}
   }catch(err){
     const c=err.body&&err.body.error;
     show(m,"err",c==="early_access"?"Sign-ups are open to Patriots and Ambassadors first. Check back when it opens to everyone, or upgrade for early access.":c==="soldout"?"Sorry, this event is full.":c==="limit"?"You already have the most free tickets allowed for this event (4).":c==="closed"?"Tickets for this event are closed.":c==="signin"||err.message==="signin"?"Please sign in again.":"Something went wrong. Please try again.");
@@ -1315,7 +1332,7 @@ function renderApp(){let standalone=false;try{standalone=topWin.matchMedia("(dis
   if(iOS){$("appHow").textContent="On iPhone: tap the Share button in Safari, then \"Add to Home Screen\". Sign in once inside the app and it stays signed in.";$("bApp").hidden=true;}
 }
 document.addEventListener("click",e=>{if(e.target.closest("#bGetApp")){try{localStorage.removeItem("lrc_app_hide");}catch(err){}renderApp();$("appCard").hidden=false;jump("appCard");}
-  const j=e.target.closest("[data-jump]");if(j){e.preventDefault();jump(j.dataset.jump);}});
+  const j=e.target.closest("[data-jump]");if(j){e.preventDefault();if(j.dataset.tkev){const dt=document.querySelector(`#tkList details.tkev[data-ev="${j.dataset.tkev}"]`);if(dt)dt.open=true;}jump(j.dataset.jump);}});
 $("bApp").addEventListener("click",async()=>{if($("appCard").classList.contains("up")){topWin.location.href="../join/";return;}const p=topWin.__lrcInstall;
   if(p){p.prompt();try{await p.userChoice;}catch(e){}topWin.__lrcInstall=null;$("appCard").hidden=true;}
   else $("appHow").textContent="In your browser menu (⋮ or Share), choose \"Install app\" or \"Add to Home Screen\". Sign in once inside the app and it stays signed in.";});
@@ -1434,10 +1451,10 @@ function renderMemberNotif(){const d=data,now=Date.now(),win=NOTIF_DAYS*864e5,es
   (d.events||[]).filter(e=>e.listed!==false&&!(e.public_opens_at&&Date.parse(e.public_opens_at)>now)&&fresh(e.created_at)&&(!e.starts_at||Date.parse(e.starts_at)>now)).forEach(e=>items.push({k:"ev",key:"ev:"+e.id,at:Date.parse(e.created_at),
     html:`<span class="ntag">${e.is_monthly_meeting?"★ ":""}<span>New event</span></span><b>${esc(title(e))}</b>${e.starts_at?`<div>${esc(when(e.starts_at))}</div>`:""}<a href="#events" data-jump="events">Get tickets</a>`}));
   (d.tickets||[]).filter(t=>t.shared_by&&t.status!=="void"&&fresh(t.shared_at||t.created_at)).forEach(t=>{const e=(d.events||[]).find(x=>x.id===t.event_id);items.push({k:"tk",key:"tk:"+t.id,at:Date.parse(t.shared_at||t.created_at),
-    html:`<span class="ntag"><span>Ticket for you</span></span><b>${esc(e?title(e):"Event")}</b><div><span>Shared with you by</span> ${esc(t.shared_by)}</div><a href="#tickets" data-jump="tickets">See ticket</a>`});});
+    html:`<span class="ntag"><span>Ticket for you</span></span><b>${esc(e?title(e):"Event")}</b><div><span>Shared with you by</span> ${esc(t.shared_by)}</div><a href="#tickets" data-jump="tickets" data-tkev="${esc(t.event_id)}">See ticket</a>`});});
   {const g={};(d.tickets||[]).filter(t=>t.gift&&t.status!=="void"&&(!t.gift_opened_at||fresh(t.gift_opened_at))).forEach(t=>{(g[t.event_id]=g[t.event_id]||[]).push(t);});
    Object.entries(g).forEach(([eid,ts])=>{const e=(d.events||[]).find(x=>x.id===eid),t=ts[0];items.push({k:"gift",key:"gift:"+eid,at:Date.parse(t.created_at),
-    html:`<span class="ntag gold">🎁 <span>A gift for you</span></span><b>${ts.length} ${ts.length===1?`<span>ticket</span>`:`<span>tickets</span>`}: ${esc(e?title(e):"Event")}</b>${t.gift_note?`<div>“${esc(t.gift_note)}”</div>`:""}<a href="#tickets" data-jump="tickets">See tickets</a>`});});}
+    html:`<span class="ntag gold">🎁 <span>A gift for you</span></span><b>${ts.length} ${ts.length===1?`<span>ticket</span>`:`<span>tickets</span>`}: ${esc(e?title(e):"Event")}</b>${t.gift_note?`<div>“${esc(t.gift_note)}”</div>`:""}<a href="#tickets" data-jump="tickets" data-tkev="${esc(eid)}">See tickets</a>`});});}
   if((d.member||d.isBoard)&&(!d.prof.welcome_seen_at||fresh(d.prof.welcome_seen_at)))items.push({k:"welcome",key:"welcome",at:d.prof.welcome_seen_at?Date.parse(d.prof.welcome_seen_at):now+1,
     html:`<span class="ntag gold">🎬 <span>Welcome from the Chairman</span></span><b>A message for our members</b><div><span>A short video from Chairman Elijah Diaz.</span></div><button type="button" class="link" data-welcome>▶ <span>Watch the welcome video</span></button>`});
   const hid=new Set((d.prof&&d.prof.notif_hidden)||[]);const all=items.length;
@@ -1583,6 +1600,7 @@ addEventListener("lrc-lang",render);
   if(window.parent===window) return;
   document.addEventListener('click',function(e){
     var a=e.target.closest&&e.target.closest('a[href]'); if(!a||e.defaultPrevented) return;
+    var h0=a.getAttribute('href')||''; if(h0.length>1&&h0.charAt(0)==='#') return;  /* in-page links (notifications, jump links) stay put */
     if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;
     var u; try{u=new URL(a.getAttribute('href'),location.href);}catch(err){return;}
     if(u.origin!==location.origin) return;            /* Stripe, socials, email: leave alone */
@@ -1591,5 +1609,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=dff4a010"></script><script src="../assets/i18n.js?v=dff4a010"></script>
+</script><script src="../assets/i18n-es.js?v=e4d974c1"></script><script src="../assets/i18n.js?v=e4d974c1"></script>
 </body></html>

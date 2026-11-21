@@ -167,6 +167,7 @@ document.getElementById('groups').innerHTML=GROUPS.map(g=>
   if(window.parent===window) return;
   document.addEventListener('click',function(e){
     var a=e.target.closest&&e.target.closest('a[href]'); if(!a||e.defaultPrevented) return;
+    var h0=a.getAttribute('href')||''; if(h0.length>1&&h0.charAt(0)==='#') return;  /* in-page links (notifications, jump links) stay put */
     if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;
     var u; try{u=new URL(a.getAttribute('href'),location.href);}catch(err){return;}
     if(u.origin!==location.origin) return;            /* Stripe, socials, email: leave alone */
@@ -175,5 +176,5 @@ document.getElementById('groups').innerHTML=GROUPS.map(g=>
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=dff4a010"></script><script src="../assets/i18n.js?v=dff4a010"></script>
+</script><script src="../assets/i18n-es.js?v=e4d974c1"></script><script src="../assets/i18n.js?v=e4d974c1"></script>
 </body></html>

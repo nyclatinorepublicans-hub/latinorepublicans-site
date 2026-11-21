@@ -264,10 +264,20 @@ details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;f
 .earlyrow+.earlyrow{margin-top:6px;padding-top:6px;border-top:1px dashed #e0b545}.earlynow a{font-weight:700;color:#8a1020}
 .appgate{text-align:center;padding:28px 20px;border-radius:20px;background:#fff;box-shadow:0 10px 30px -14px rgba(5,42,75,.35)}.appgate img{border-radius:18px}.appgate h2{margin:12px 0 8px}.appgate p{max-width:440px;margin:0 auto 16px;line-height:1.5}
 body.gated #mcard,body.gated #btabs,body.gated section.card,body.gated #promo,body.gated #earlyNow,body.gated #appCard,body.gated #progCard,body.gated #qa{display:none!important}
+.mn{position:relative;padding:12px 14px;border-radius:14px;border:1px solid #eee5d3;margin-top:10px;line-height:1.45;display:grid;gap:3px}.mn:first-child{margin-top:0}
+.mn>b{font:900 16px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy);letter-spacing:.02em}.mn a{justify-self:start;margin-top:4px;font-weight:700;color:#8a1020}
+.ntag{font:800 11px "Archivo",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#5a6b80}.ntag.gold{color:#a0721e}
+.mn-early{background:linear-gradient(100deg,#fff0c2,#fffaf0 60%);border:2px solid #e0b545;box-shadow:0 8px 22px -14px rgba(160,114,30,.7)}
+.mn-early .ntag{color:#8a5a00}.mn-early .ntag::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#d51b2f;margin-right:6px;vertical-align:1px;animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(213,27,47,.6)}70%{box-shadow:0 0 0 8px rgba(213,27,47,0)}100%{box-shadow:0 0 0 0 rgba(213,27,47,0)}}
+.cd{font:900 17px "Archivo",sans-serif;color:#8a1020;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mn-warn{background:#fff1cf;border-color:#e0a400}.mn-ins{background:#fffaf0}
+.bnh{margin-top:18px;padding-top:14px;border-top:1px solid #eee5d3}.bnh h3{margin:0;font:900 16px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy)}
+@media (prefers-reduced-motion:reduce){.mn-early .ntag::before{animation:none}}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=14031138"></script>
+<script src="../assets/vendor/qrcode.js?v=f0461363"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -355,13 +365,16 @@ body.gated #mcard,body.gated #btabs,body.gated section.card,body.gated #promo,bo
       <button type="button" data-cat="events"><span>Events</span></button>
       <button type="button" data-cat="board"><span>Board</span><b class="nb" id="bBadge" hidden></b></button>
       <button type="button" data-cat="members"><span>Members</span></button></nav>
-    <section class="card" id="notifications" data-cat="main" hidden><div class="evhead"><h2>Notifications</h2><button class="btn ghost sm" type="button" id="bSeen">Mark all as read</button></div>
-      <p class="small" style="margin:-6px 0 12px">Every change the board makes: meetings, events, documents, minutes and insider updates.</p>
+    <section class="card" id="notifications" data-cat="main" hidden><div class="evhead"><h2>🔔 <span>Notifications</span> <b class="nb" id="mnCount" hidden></b></h2></div>
+      <p class="small" style="margin:-6px 0 12px">Club news for you. Each notification clears on its own after 5 days.</p>
+      <div id="mnList"></div>
+      <div id="boardNotif" hidden><div class="evhead bnh"><h3>Board activity</h3><button class="btn ghost sm" type="button" id="bSeen">Mark all as read</button></div>
+      <p class="small" style="margin:-4px 0 10px">Every change the board makes: meetings, events, documents, minutes and insider updates.</p>
       <div id="nList"></div>
       <details class="aprefs"><summary>Alert me automatically</summary>
         <label class="chkline"><input type="checkbox" id="alEmail"> <span>Email me when the board makes a change</span></label>
         <label class="chkline"><input type="checkbox" id="alText"> <span>Text me when the board makes a change <small>(uses the phone in My details · message and data rates may apply · reply STOP to stop)</small></span></label>
-        <div id="alStatus" class="small"></div><div id="alMsg" class="msg" hidden></div></details></section>
+        <div id="alStatus" class="small"></div><div id="alMsg" class="msg" hidden></div></details></div></section>
     <section class="card" id="checklist" data-cat="main" hidden><div class="evhead"><h2>Event Checklist</h2><div class="seg" id="ckSeg" hidden><button type="button" data-v="mine" class="on">Mine</button><button type="button" data-v="all">Whole board</button></div></div>
       <p class="small" style="margin:-6px 0 12px">Each board member's jobs for every club event. Due dates fill in once the event has a date.</p>
       <div id="ckList"></div><div id="ckMsg" class="msg" hidden></div></section>
@@ -558,7 +571,7 @@ async function fetchAll(){
   const email=(user.email||"").toLowerCase();
   let [members,tickets,events,admins,grants]=await Promise.all([
     api("/rest/v1/members?select=*&email=eq."+encodeURIComponent(email)),
-    api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents,owner_email,holder_name,shared_by&or=(owner_email.eq."+encodeURIComponent(email)+",shared_by.eq."+encodeURIComponent(email)+")&order=created_at.asc"),
+    api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents,owner_email,holder_name,shared_by,shared_at&or=(owner_email.eq."+encodeURIComponent(email)+",shared_by.eq."+encodeURIComponent(email)+")&order=created_at.asc"),
     api("/rest/v1/events?select=*&order=starts_at.asc.nullslast"),
     api("/rest/v1/admins?select=email,name,title,role,subtitle,advisory_title&email=eq."+encodeURIComponent(email)),
     api("/rest/v1/comp_grants?select=*"),
@@ -569,6 +582,7 @@ async function fetchAll(){
   data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,out,prof:prof||{},all:null,flags:prof?(prof.flags&&prof.flags.length?prof.flags:(prof.country_code?[prof.country_code]:[])):[]};
   data.isFull=!!(data.exec&&data.exec.role==="full");data.isQA=qa.length>0;
   data.isBoard=!!(data.exec&&data.exec.title);
+  try{data.ins=await api("/rest/v1/insider_updates?select=id,title,month_label,created_at&order=id.desc&limit=3");}catch(e){data.ins=[];}
   try{const [cs,cm]=await Promise.all([api("/rest/v1/committees?select=*&order=name_en.asc"),api("/rest/v1/committee_members?select=committee_id,email,role")]);
     try{data.cdirs=Object.fromEntries((await api("/rest/v1/rpc/committee_directors",{method:"POST",body:"{}"})).map(x=>[x.committee_id,x.name]));}catch(e){data.cdirs={};}
     data.comms=cs;data.cmem=cm;data.myDir=new Set(cm.filter(x=>x.email===email&&x.role==="director").map(x=>x.committee_id));data.myComms=new Set(cm.filter(x=>x.email===email).map(x=>x.committee_id));}
@@ -813,14 +827,15 @@ function render(){
   $("adminLink").hidden=!d.isAdmin;
   $("dir").hidden=$("boardP").hidden=!d.isFull;if(d.isFull){renderDir();renderBoard();}
   $("bmCard").hidden=$("npCard").hidden=$("docCard").hidden=$("myEv").hidden=$("actCard").hidden=!d.isBoard;if(d.isBoard){renderBm();renderNp();renderDocs();renderMyEv();renderAct();}
-  $("btabs").hidden=$("notifications").hidden=$("checklist").hidden=!d.isBoard;document.body.classList.toggle("bview",!!d.isBoard);
+  $("btabs").hidden=$("checklist").hidden=!d.isBoard;document.body.classList.toggle("bview",!!d.isBoard);
+  $("notifications").hidden=false;$("boardNotif").hidden=!d.isBoard;$("earlyNow").hidden=true;renderMemberNotif();
   if(d.isBoard){setCat(curCat);renderNotif();renderChecklist();}
   renderApp();
   $("progCard").hidden=!isAmb();if(isAmb())$("progOpt").checked=!!d.prof.program_listing;
   $("insider").hidden=!(isAmb()||d.isBoard);if(!$("insider").hidden)renderInsider();
   $("committees").hidden=!(d.member||d.isBoard);if(!$("committees").hidden)renderCommittees();
   { const now=Date.now(),open=(d.events||[]).filter(e=>e.listed!==false&&e.sales_open&&e.public_opens_at&&Date.parse(e.public_opens_at)>now);
-    $("earlyNow").hidden=!(perkLevel()&&open.length);
+    $("earlyNow").hidden=true;
     if(!$("earlyNow").hidden)$("earlyNow").innerHTML=open.map(e=>`<div class="earlyrow">★ <b>${esc(L()==="es"&&e.title_es?e.title_es:e.title_en)}</b> · <span>Early access is open for you</span>. <span>Everyone else can sign up on</span> ${esc(new Date(e.public_opens_at).toLocaleString(L()==="es"?"es-US":"en-US",{timeZone:NY,month:"long",day:"numeric",hour:"numeric",minute:"2-digit"}))}. <a href="#events" data-jump="events">Sign up now</a></div>`).join(""); }
   /* membership */
   const name=(m&&m.tier==="corporate"&&m.name)||d.prof.name||(m&&m.name)||(d.user.user_metadata&&d.user.user_metadata.name)||"";
@@ -1281,10 +1296,35 @@ let curCat="main";
 function setCat(c){curCat=c;document.body.dataset.cat=c;[...document.querySelectorAll("#btabs [data-cat]")].forEach(b=>{b.classList.toggle("on",b.dataset.cat===c);b.setAttribute("aria-pressed",b.dataset.cat===c);});}
 document.addEventListener("click",e=>{const b=e.target.closest("#btabs [data-cat]");if(!b)return;setCat(b.dataset.cat);jump("btabs");});
 
+/* ===== member notifications: early access (with countdown), Chairman's Insider, new events, shared tickets, payment problems.
+   Each one clears on its own 5 days after it was posted; early access also clears when sign-ups open to everyone. ===== */
+const NOTIF_DAYS=5;
+function cdText(ms){if(ms<=0)return L()==="es"?"abierto para todos":"open to everyone now";const s=Math.floor(ms/1e3),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),x=s%60;
+  return (d?d+"d ":"")+String(h).padStart(2,"0")+"h "+String(m).padStart(2,"0")+"m "+String(x).padStart(2,"0")+"s";}
+function renderMemberNotif(){const d=data,now=Date.now(),win=NOTIF_DAYS*864e5,es=L()==="es",items=[];
+  const fresh=t=>t&&now-Date.parse(t)<win;const title=e=>es&&e.title_es?e.title_es:e.title_en;
+  const when=iso=>new Date(iso).toLocaleString(es?"es-US":"en-US",{timeZone:NY,weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+  const m=d.member;
+  if(m&&m.status==="active"&&m.grace_until)items.push({k:"warn",at:now,html:`<b>Your last payment didn't go through.</b> <span>Update your card by</span> ${esc(fmtDate(m.grace_until))} <span>to keep your member benefits.</span> <a href="${esc(portalUrl())}" target="_blank" rel="noopener">Update card</a>`});
+  const elig=earlyOK();
+  (d.events||[]).filter(e=>e.listed!==false&&e.sales_open&&e.public_opens_at&&Date.parse(e.public_opens_at)>now&&fresh(e.early_alert_sent_at||e.updated_at||e.created_at)).forEach(e=>items.push({k:"early",at:Date.parse(e.early_alert_sent_at||e.updated_at||e.created_at),until:e.public_opens_at,
+    html:elig?`<span class="ntag">★ <span>Early access promotion</span></span><b>${esc(title(e))}</b><div><span>You can sign up now, before anyone else.</span> <span>Early access ends in</span> <b class="cd" data-until="${esc(e.public_opens_at)}">${cdText(Date.parse(e.public_opens_at)-now)}</b></div><a href="#events" data-jump="events">Sign up now</a>`
+             :`<span class="ntag">★ <span>Early access promotion</span></span><b>${esc(title(e))}</b><div><span>Patriots and Ambassadors are signing up early. Sign-ups open to you in</span> <b class="cd" data-until="${esc(e.public_opens_at)}">${cdText(Date.parse(e.public_opens_at)-now)}</b></div><a href="../join/" target="_top">Upgrade for early access</a>`}));
+  (d.ins||[]).filter(u=>fresh(u.created_at)).forEach(u=>items.push({k:"ins",at:Date.parse(u.created_at),html:`<span class="ntag gold">✉ <span>Chairman's Insider</span> · ${esc(u.month_label)}</span><b>${esc(u.title)}</b><a href="#insider" data-jump="insider">Read it</a>`}));
+  (d.events||[]).filter(e=>e.listed!==false&&!(e.public_opens_at&&Date.parse(e.public_opens_at)>now)&&fresh(e.created_at)&&(!e.starts_at||Date.parse(e.starts_at)>now)).forEach(e=>items.push({k:"ev",at:Date.parse(e.created_at),
+    html:`<span class="ntag">${e.is_monthly_meeting?"★ ":""}<span>New event</span></span><b>${esc(title(e))}</b>${e.starts_at?`<div>${esc(when(e.starts_at))}</div>`:""}<a href="#events" data-jump="events">Get tickets</a>`}));
+  (d.tickets||[]).filter(t=>t.shared_by&&t.status!=="void"&&fresh(t.shared_at||t.created_at)).forEach(t=>{const e=(d.events||[]).find(x=>x.id===t.event_id);items.push({k:"tk",at:Date.parse(t.shared_at||t.created_at),
+    html:`<span class="ntag"><span>Ticket for you</span></span><b>${esc(e?title(e):"Event")}</b><div><span>Shared with you by</span> ${esc(t.shared_by)}</div><a href="#tickets" data-jump="tickets">See ticket</a>`});});
+  items.sort((a,b)=>(a.k==="warn"?-2:a.k==="early"?-1:0)-(b.k==="warn"?-2:b.k==="early"?-1:0)||b.at-a.at);
+  d.mnN=items.length;$("mnCount").hidden=!items.length;$("mnCount").textContent=items.length;
+  $("mnList").innerHTML=items.length?items.map(i=>`<div class="mn mn-${i.k}">${i.html}</div>`).join(""):`<div class="empty">You're all caught up.</div>`;
+}
+setInterval(()=>{document.querySelectorAll(".cd[data-until]").forEach(el=>{el.textContent=cdText(Date.parse(el.dataset.until)-Date.now());});},1000);
+
 /* ===== board notifications ===== */
 function renderNotif(){const a=data.act||[],seen=data.seen||0,me=data.email;
   const fresh=a.filter(x=>x.id>seen&&x.actor_email!==me).length;
-  data.nFresh=fresh;{const tot=fresh+(data.ckDue||0),nb=$("nBadge");nb.hidden=!tot;nb.textContent=tot>99?"99+":tot;}
+  data.nFresh=fresh;{const tot=fresh+(data.ckDue||0)+(data.mnN||0),nb=$("nBadge");nb.hidden=!tot;nb.textContent=tot>99?"99+":tot;}
   const rows=a.slice(0,40);const row=x=>{const n=x.id>seen&&x.actor_email!==me;
     return `<div class="nrow${n?" new":""}">${n?'<span class="ndot" aria-label="new"></span>':""}<div><b>${esc(x.actor_email?(x.actor_email===me?"You":nameOfB(x.actor_email)):"Club system")}</b> <span>${esc(x.action)}</span>${x.target?`: <i>${esc(x.target)}</i>`:""}<div class="small">${esc(x.month_label||"")}</div></div></div>`;};
   $("nList").innerHTML=rows.length?rows.slice(0,5).map(row).join("")+(rows.length>5?`<details class="more"><summary><span>Show</span> ${rows.length-5} <span>earlier</span></summary>${rows.slice(5).map(row).join("")}</details>`:""):`<div class="empty">Nothing yet. Changes by the board will show up here.</div>`;
@@ -1308,7 +1348,7 @@ function renderChecklist(){const all=data.tasks||[],now=Date.now();
   const evs=Object.fromEntries((data.events||[]).map(e=>[e.id,e]));
   const list=all.filter(t=>evs[t.event_id]&&(!evs[t.event_id].starts_at||Date.parse(evs[t.event_id].starts_at)>now-7*864e5)).filter(t=>ckView==="all"||myTask(t));
   const open=all.filter(t=>myTask(t)&&!t.done_at&&t.due_at&&Date.parse(t.due_at)<now+3*864e5).length;
-  data.ckDue=open;const nb=$("nBadge"),tot=(data.nFresh||0)+open;nb.hidden=!tot;nb.textContent=tot>99?"99+":tot;
+  data.ckDue=open;const nb=$("nBadge"),tot=(data.nFresh||0)+open+(data.mnN||0);nb.hidden=!tot;nb.textContent=tot>99?"99+":tot;
   if(!list.length){$("ckList").innerHTML=`<div class="empty">No checklist items yet.</div>`;return;}
   const by={};list.forEach(t=>(by[t.event_id]=by[t.event_id]||[]).push(t));
   const order=Object.keys(by).sort((a,b)=>(Date.parse(evs[a].starts_at)||9e15)-(Date.parse(evs[b].starts_at)||9e15));
@@ -1414,5 +1454,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=14031138"></script><script src="../assets/i18n.js?v=14031138"></script>
+</script><script src="../assets/i18n-es.js?v=f0461363"></script><script src="../assets/i18n.js?v=f0461363"></script>
 </body></html>

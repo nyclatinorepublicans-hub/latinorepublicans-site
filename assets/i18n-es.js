@@ -899,6 +899,18 @@ window.LRC_ES={
 "The club app is a Patriot and Ambassador benefit": "La app del club es un beneficio de Patriotas y Embajadores",
 "Your membership level doesn't include the app. You can still use your full profile and tickets in your phone's web browser, or upgrade to Patriot to unlock the app.": "Tu nivel de membresía no incluye la app. Puedes usar tu perfil y tus entradas completos en el navegador de tu teléfono, o subir a Patriota para desbloquear la app.",
 "Open in browser": "Abrir en el navegador",
-"📱 Get the app": "📱 Obtener la app"
+"📱 Get the app": "📱 Obtener la app",
+"Club news for you. Each notification clears on its own after 5 days.": "Noticias del club para ti. Cada notificación se borra sola a los 5 días.",
+"Board activity": "Actividad de la Junta",
+"Early access promotion": "Promoción de acceso anticipado",
+"You can sign up now, before anyone else.": "Puedes inscribirte ahora, antes que nadie.",
+"Early access ends in": "El acceso anticipado termina en",
+"Patriots and Ambassadors are signing up early. Sign-ups open to you in": "Los Patriotas y Embajadores se están inscribiendo antes. Las inscripciones abren para ti en",
+"Read it": "Leer",
+"New event": "Nuevo evento",
+"Get tickets": "Conseguir entradas",
+"Ticket for you": "Entrada para ti",
+"See ticket": "Ver entrada",
+"You're all caught up.": "Estás al día."
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

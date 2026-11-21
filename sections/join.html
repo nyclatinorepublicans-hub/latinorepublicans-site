@@ -61,6 +61,9 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
 .tier:has(input:checked) .chk::after{content:"";width:7px;height:12px;border:solid var(--deep);border-width:0 3px 3px 0;transform:translateY(-1px) rotate(45deg)}
 .tier h3{margin:0;padding-right:28px;font-family:"Archivo",sans-serif;font-weight:900;font-stretch:80%;text-transform:uppercase;letter-spacing:.04em;font-size:22px;color:var(--navy)}
 .tier .tag{margin:2px 0 12px;font-style:italic;font-size:13.5px;color:#b0402f}
+.spon-h{margin:0 0 12px;font:900 13px "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-hi,#f5d066)}
+.spon-rules{margin-top:16px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(245,208,102,.35);font-size:14px;line-height:1.5;color:#dfe7f2}
+.spon-rules p{margin:0 0 8px}.spon-rules p:last-child{margin:0}.spon-rules b{color:#fff}
 .seg{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:0 auto 16px;padding:5px;border-radius:999px;background:#eef1f6;width:max-content;max-width:100%}
 .seg button{all:unset;cursor:pointer;padding:9px 14px;border-radius:999px;font:800 12px "Archivo",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#33465c}
 .seg button i{font-style:normal;font-size:10px;color:#a0721e;margin-left:2px;white-space:nowrap}
@@ -221,16 +224,22 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
       <div class="price" id="sponPrice"></div><p class="yr lt" id="sponYear"></p>
       <a class="go" id="sponBtn" href="#" target="_top">Become a Sponsor <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.2 5.3l1.4-1.4L22.7 12l-8.1 8.1-1.4-1.4 5.7-5.7H1.5v-2h17.4z"/></svg></a>
       <a class="spon-see" href="../sponsors/" target="_top">See our sponsors →</a>
-      <p class="spon-q">Questions or custom packages? Email <a id="sponMail" href="#" target="_top">contact@latinorepublicans.org</a></p>
+      <p class="spon-q">Questions? Email <a id="sponMail" href="#" target="_top">contact@latinorepublicans.org</a></p>
     </div>
+    <div class="spon-r">
+    <p class="spon-h">How we say thank you</p>
     <ul class="spon-perks">
-      <li>Your logo and link on our website while you sponsor</li>
-      <li>Recognition from the podium at club meetings and forums</li>
-      <li>Logo on event signage and printed programs</li>
+      <li>Your name, logo and link on our Sponsors page while you sponsor</li>
+      <li>A thank-you from the podium at club meetings and forums</li>
+      <li>Your name and logo on our thank-you sign at events and in printed programs</li>
       <li id="sponPromo" class="gp">★ <b>Promotion:</b> six reserved seats at our Inaugural Gala (one-time, annual sponsorships only)</li>
-      <li>A sponsor spotlight on our Instagram, X, Facebook and YouTube</li>
-      <li>Table or display space at one club event</li>
+      <li>A thank-you post on our Instagram, X, Facebook and YouTube</li>
     </ul>
+    <div class="spon-rules">
+      <p><b>For the business only.</b> A sponsorship is not a club membership and carries no voting rights. It does not make the organization’s owners, employees or members part of the club; anyone who wants to join signs up as a member.</p>
+      <p><b>A thank-you, not a marketing service.</b> Sponsors receive a thank-you acknowledgment of their support. The club does not sell advertising, marketing services, endorsements or comparisons with other businesses.</p>
+    </div>
+    </div>
   </section>
  </div>
 </div>
@@ -246,21 +255,21 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
    ===================================================================== */
 const TIERS = [
   { id:"young", name:"Young Leader", tag:"The next generation starts here.",
-    prices:{year:25,semiannual:14,quarter:7,month:2.5},
+    prices:{year:40,semiannual:22,quarter:12,month:4.3},
     perks:["Ages 18\u201325","Attend member meetings","General member voting rights","Young Leaders mentorship track"],
-    links:{year:"https://buy.stripe.com/test_6oU9AT4W1aKfaAccjN7N601",semiannual:"https://buy.stripe.com/test_eVq8wPcotbOj9w8cjN7N60f",quarter:"https://buy.stripe.com/test_28EdR9gEJ9Gb5fS5Vp7N60e",month:"https://buy.stripe.com/test_bJeaEX3RX2dJ0ZCdnR7N60d"} },
+    links:{year:"https://buy.stripe.com/test_aFafZh9chaKf37KcjN7N60t",semiannual:"https://buy.stripe.com/test_bJe5kDfAFbOj8s42Jd7N60u",quarter:"https://buy.stripe.com/test_aFa14ndsx5pV37K83x7N60v",month:"https://buy.stripe.com/test_eVq7sL3RX4lR23G5Vp7N60w"} },
   { id:"member", name:"Member", tag:"Your seat at the table.", selected:true,
-    prices:{year:50,semiannual:27,quarter:14,month:5},
+    prices:{year:60,semiannual:33,quarter:18,month:6.5},
     perks:["Support the club","Attend member meetings","General member voting rights"],
-    links:{year:"https://buy.stripe.com/test_eVq28r88d5pV37KdnR7N602",semiannual:"https://buy.stripe.com/test_6oU4gz1JPdWraAcdnR7N60i",quarter:"https://buy.stripe.com/test_5kQ5kDdsx9Gb37K3Nh7N60h",month:"https://buy.stripe.com/test_bJedR92NT19F0ZC3Nh7N60g"} },
+    links:{year:"https://buy.stripe.com/test_4gMbJ1fAFdWr23GfvZ7N60x",semiannual:"https://buy.stripe.com/test_28EeVddsx9GbdMogA37N60y",quarter:"https://buy.stripe.com/test_00w4gzgEJ3hN8s4fvZ7N60z",month:"https://buy.stripe.com/test_7sYfZhcot4lRaAccjN7N60A"} },
   { id:"patriot", name:"Patriot", tag:"All in for the club.", promo:2,
-    prices:{year:100,semiannual:55,quarter:28,month:10},
+    prices:{year:120,semiannual:66,quarter:36,month:13},
     perks:["Everything in Member","Free admission to workshops","Discounts on special events","Access to members-only club merch","The club app on your phone","Early access to event sign-ups","Printable membership certificate","Founding Member badge when you join before the Inaugural Gala"],
-    links:{year:"https://buy.stripe.com/test_aFa7sL1JPg4z0ZC6Zt7N603",semiannual:"https://buy.stripe.com/test_3cI00jbkpaKf4bOabF7N60l",quarter:"https://buy.stripe.com/test_9B67sLdsxdWr5fS0B57N60k",month:"https://buy.stripe.com/test_fZu7sL2NTf0v5fSgA37N60j"} },
+    links:{year:"https://buy.stripe.com/test_5kQbJ1gEJf0v37K1F97N60B",semiannual:"https://buy.stripe.com/test_cNi00j0FL9Gb0ZC2Jd7N60C",quarter:"https://buy.stripe.com/test_4gMaEX749g4z6jWabF7N60D",month:"https://buy.stripe.com/test_cNieVdewB4lR4bO2Jd7N60E"} },
   { id:"embajador", name:"Ambassador", tag:"Carry the flag.", promo:4,
-    prices:{year:250,semiannual:135,quarter:70,month:25},
+    prices:{year:300,semiannual:165,quarter:90,month:32.5},
     perks:["Everything in Patriot","Preferred seating at events (when applicable)","Gold member card in the club app","Chairman's Insider: monthly behind-the-scenes updates","Your name in our event programs","Official club pin","Yearly roundtable with the board"],
-    links:{year:"https://buy.stripe.com/test_bJedR93RX2dJ37KfvZ7N604",semiannual:"https://buy.stripe.com/test_aFa00j749cSn4bOfvZ7N60o",quarter:"https://buy.stripe.com/test_00w00j4W119FbEgabF7N60n",month:"https://buy.stripe.com/test_6oU4gz9ch19FgYA97B7N60m"} }
+    links:{year:"https://buy.stripe.com/test_7sY7sLaglbOj9w81F97N60F",semiannual:"https://buy.stripe.com/test_3cI00j4W1dWrbEg2Jd7N60G",quarter:"https://buy.stripe.com/test_3cI8wPdsxg4zdMogA37N60H",month:"https://buy.stripe.com/test_4gM5kDcot19FgYA97B7N60I"} }
 ];
 /* Billing periods. Annual is the best value; Inaugural Gala seats are a one-time PROMOTION that comes with annual plans only. */
 const PERIODS = [
@@ -270,8 +279,8 @@ const PERIODS = [
   {id:"month",label:"Monthly",per:"/ month",months:1}];
 const PROMO_BY = "December 31";        /* gala promotion: join on an annual plan by this date */
 /* Corporate Sponsorship (TEST MODE links): swap for the live links when you go live */
-const SPONSOR = {prices:{year:2500,semiannual:1350,quarter:700,month:250},
-  links:{year:"https://buy.stripe.com/test_6oUaEXbkp19FeQsfvZ7N60p",semiannual:"https://buy.stripe.com/test_7sYfZhfAF4lRaAcerV7N60q",quarter:"https://buy.stripe.com/test_28EbJ1dsxaKf4bO3Nh7N60r",month:"https://buy.stripe.com/test_aFaaEXdsx7y3aAc1F97N60s"}};
+const SPONSOR = {prices:{year:2500,semiannual:1375,quarter:750,month:270},
+  links:{year:"https://buy.stripe.com/test_6oUaEXbkp19FeQsfvZ7N60p",semiannual:"https://buy.stripe.com/test_cNieVd2NT5pV0ZC2Jd7N60J",quarter:"https://buy.stripe.com/test_6oU9AT1JP19FaAcerV7N60K",month:"https://buy.stripe.com/test_14A4gz1JP8C70ZC5Vp7N60L"}};
 const CONTACT = "contact@latinorepublicans.org";
 const NOTE = "Dues are not tax deductible as charitable contributions for federal income tax purposes. Paid for by NYC Latino Republican Club Inc.";
 /* ===================================================================== */
@@ -324,7 +333,7 @@ const ABBR={};NAMES.forEach(n=>{ABBR[n]=n.replace(/[^A-Za-z]/g,'').slice(0,12);}
 
 const tiersEl=document.getElementById('tiers');
 let per="year",sper="year";
-const money=n=>'$'+(n%1?n.toFixed(2):n.toLocaleString('en-US'));
+const money=n=>'$'+(n%1?n.toFixed(2):n.toLocaleString('en-US'));/* $4.30, $32.50, $2,500 */
 const perOf=id=>PERIODS.find(p=>p.id===id);
 const segHTML=(name,cur)=>PERIODS.map(p=>'<button type="button" role="radio" aria-checked="'+(p.id===cur)+'" data-'+name+'="'+p.id+'">'+esc(p.label)+(p.best?' <i>Best value</i>':'')+'</button>').join('');
 function paintSponsor(){const P=perOf(sper),v=SPONSOR.prices[sper];
@@ -493,5 +502,5 @@ function checkout(){
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=83c2837c"></script><script src="../assets/i18n.js?v=83c2837c"></script>
+</script><script src="../assets/i18n-es.js?v=3370b0a0"></script><script src="../assets/i18n.js?v=3370b0a0"></script>
 </body></html>

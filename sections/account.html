@@ -260,7 +260,7 @@ details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;f
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=83c2837c"></script>
+<script src="../assets/vendor/qrcode.js?v=3370b0a0"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -320,8 +320,8 @@ details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;f
       <button class="btn ghost sm" id="bOut" type="button">Sign out</button></span></div>
     <section id="qa" class="qa" hidden>
       <b class="qat">Test mode · Quality control</b><p class="small">Switch this test profile to any level to see exactly what a member at that level sees. Each level uses its own test flag.</p>
-      <div class="qabtns"><button type="button" data-lv="none">No membership</button><button type="button" data-lv="young">Young Leader · $25</button><button type="button" data-lv="member">Member · $50</button>
-        <button type="button" data-lv="patriot">Patriot · $100</button><button type="button" data-lv="embajador">Ambassador · $250</button><button type="button" data-lv="corporate">Corporate · $1,000</button></div>
+      <div class="qabtns"><button type="button" data-lv="none">No membership</button><button type="button" data-lv="young">Young Leader · $40</button><button type="button" data-lv="member">Member · $60</button>
+        <button type="button" data-lv="patriot">Patriot · $120</button><button type="button" data-lv="embajador">Ambassador · $300</button><button type="button" data-lv="corporate">Corporate · $2,500</button></div>
       <label for="qaSt" style="margin-top:10px">Membership status</label>
       <select id="qaSt" class="dsel"><option value="active">Active</option><option value="past_due">Payment due</option><option value="canceled">Canceled</option></select>
       <div id="qaMsg" class="msg" hidden></div></section>
@@ -1382,5 +1382,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=83c2837c"></script><script src="../assets/i18n.js?v=83c2837c"></script>
+</script><script src="../assets/i18n-es.js?v=3370b0a0"></script><script src="../assets/i18n.js?v=3370b0a0"></script>
 </body></html>

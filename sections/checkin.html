@@ -49,7 +49,7 @@ td.code{font:700 13px ui-monospace,Menlo,monospace;letter-spacing:.1em}
   table{font-size:12px}th,td{padding:6px 4px}td:last-child,th:last-child{width:120px}}
 .printbox{display:none}@media print{.printbox{display:inline-block;width:14px;height:14px;border:1.5px solid #000}}
 </style>
-<script src="../assets/vendor/jsQR.js?v=edfeb5f4"></script>
+<script src="../assets/vendor/jsQR.js?v=6130a94a"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -162,6 +162,7 @@ async function checkin(code){
     if(r.result==="used"&&t.checked_in_at)extra+=" · "+new Date(t.checked_in_at).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
     if(r.result==="wrong_event"&&t.events)extra+=" · "+(L()==="es"&&t.events.title_es?t.events.title_es:t.events.title_en);
     if(r.result==="ok"&&t.kind==="comp")extra+=" · Complimentary";
+    if(r.result==="ok"&&t.preferred)extra+=" · ★ Ambassador: preferred seating";
     showRes(k,msg,extra);
     if(navigator.vibrate)navigator.vibrate(k==="ok"?80:[60,60,60]);
     if(r.result==="ok"){const x=tickets.find(z=>z.token===t.token);if(x){x.status="used";x.checked_in_at=t.checked_in_at;}renderList();}
@@ -240,5 +241,5 @@ function fillEvents(){$("evSel").innerHTML=events.map(e=>`<option value="${e.id}
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=edfeb5f4"></script><script src="../assets/i18n.js?v=edfeb5f4"></script>
+</script><script src="../assets/i18n-es.js?v=6130a94a"></script><script src="../assets/i18n.js?v=6130a94a"></script>
 </body></html>

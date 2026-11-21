@@ -111,7 +111,8 @@ function gcal(e,d){
 const pin='<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" fill="#c8693f"/></svg>';
 
 const today=new Date();today.setHours(0,0,0,0);
-const upcoming=EVENTS.map((e,i)=>({e,i,d:parseDate(e.date)}))
+function drawEvents(LIST){
+const upcoming=LIST.map((e,i)=>({e,i,d:parseDate(e.date)}))
   .filter(x=>!x.d||x.d>=today)
   .sort((a,b)=>(a.d&&b.d)?a.d-b.d:(a.d?-1:(b.d?1:a.i-b.i)))
   .slice(0,SHOW);
@@ -123,6 +124,25 @@ document.getElementById('list').innerHTML = upcoming.length ? upcoming.map(({e,d
   return '<article class="ticket"><div class="stub"><div class="date" aria-hidden="true">'+dateBox+'</div><div class="stubinfo"><span class="tag">'+esc(e.type||'Event')+'</span><div class="when">'+when+'</div></div><span class="notch l"></span><span class="notch r"></span></div>'
    +'<div class="body"><h3>'+esc(e.title)+'</h3>'+(e.subtitle?'<p class="subt">'+esc(e.subtitle)+'</p>':'')+'<p class="where">'+pin+esc(e.place||'Location TBD')+'</p><p class="desc">'+esc(e.desc)+'</p>'+(btns?'<div class="btns">'+btns+'</div>':'')+'</div></article>';
 }).join('') : '<p class="empty">New events are on the way. Follow @latinorepublicansnyc for announcements.</p>';
+}
+drawEvents(EVENTS);
+
+/* live event details from the club database (the board edits them in their profile); the list above is the fallback */
+(function(){
+  const SB="https://ccfcvzmnaeasfiigtnvz.supabase.co",KEY="sb_publishable_nzBBd1P7v-mVTbbjfd8JSw_i0FXzcZm",NY="America/New_York";
+  const CAT={gala:"Gala",civics:"Civics",business:"Business",community:"Community",cafecito:"Cafecito",fundraiser:"Fundraiser",workshop:"Workshop",social:"Social Mixer"};
+  let rows=null;
+  const p2=n=>String(n).padStart(2,"0");
+  function parts(iso){const f=new Intl.DateTimeFormat("en-US",{timeZone:NY,year:"numeric",month:"2-digit",day:"2-digit",hour:"numeric",minute:"2-digit",hour12:true}).formatToParts(new Date(iso));
+    const g=k=>(f.find(x=>x.type===k)||{}).value;return {date:g("year")+"-"+g("month")+"-"+g("day"),time:g("hour")+":"+g("minute")+" "+g("dayPeriod")};}
+  function map(){const es=window.LRC_LANG==="es";
+    return rows.map(r=>{const a=r.starts_at?parts(r.starts_at):null,b=r.ends_at?parts(r.ends_at):null;
+      return {title:es&&r.title_es?r.title_es:r.title_en,type:CAT[r.category]||(r.is_gala?"Gala":"Event"),date:a?a.date:"",time:a&&r.starts_at?a.time:"",end:b?b.time:"",
+        place:[r.venue_name,r.location].filter(Boolean).join(" · ")||"",desc:(es?r.summary_es||r.summary_en:r.summary_en)||"",rsvp:"../account/#events"};});}
+  fetch(SB+"/rest/v1/events?select=*&listed=eq.true&order=starts_at.asc.nullslast",{headers:{apikey:KEY}})
+    .then(r=>r.ok?r.json():null).then(j=>{if(j&&j.length){rows=j;drawEvents(map());}}).catch(()=>{});
+  addEventListener("lrc-lang",()=>{if(rows)drawEvents(map());});
+})();
 </script>
 <script>
 /* site helper: links to other parts of the site open in the main window; pop-ups open where the visitor is looking */
@@ -138,5 +158,5 @@ document.getElementById('list').innerHTML = upcoming.length ? upcoming.map(({e,d
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=5a171dfe"></script><script src="../assets/i18n.js?v=5a171dfe"></script>
+</script><script src="../assets/i18n-es.js?v=81c9ad0a"></script><script src="../assets/i18n.js?v=81c9ad0a"></script>
 </body></html>

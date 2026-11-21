@@ -175,10 +175,24 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
 .tin:focus{border-color:var(--gold);outline:0}.opt{font-weight:600;letter-spacing:.04em;text-transform:none;color:#8a97a8}
 #upFields{margin-bottom:12px}#upFields label:first-child{margin-top:0}
 td.acts{white-space:nowrap;text-align:right}td.acts .link{font-size:13px;margin-left:8px}
+.evwrap{border-top:1px solid #eee5d3}.evwrap:first-of-type{border-top:0}.evwrap .ev{border-top:0}
+.evhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.about{margin:-4px 0 14px}.about summary{cursor:pointer;list-style:none;font:800 12px "Archivo",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);display:inline-flex;align-items:center;gap:6px;padding:6px 0}
+.about summary::-webkit-details-marker{display:none}.about summary::before{content:"▸";color:var(--gold)}.about[open] summary::before{content:"▾"}
+.abody{background:#faf6ec;border-radius:14px;padding:14px 16px;margin-top:6px}
+.atext{margin:0 0 12px;font-size:15px;line-height:1.55;color:#2b3b4e}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px 18px}
+.arow span{display:block;font:800 11px "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8a6a1e}.arow b{font-size:15px;font-weight:700;color:var(--ink)}
+.tbd2{font-weight:400;color:#8a97a8}
+.alinks{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}.alinks .btn{text-decoration:none}
+.evedit{background:#faf6ec;border-radius:14px;padding:16px;margin:10px 0 16px;box-shadow:inset 0 0 0 2px #eadfc8}.evedit h3{margin:0 0 10px;font:900 18px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy)}
+.evedit label{margin-top:10px}.egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0 14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.chk2{display:flex;gap:16px;align-items:flex-end;padding-top:24px}.chk2 label{display:flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0;font:600 14px "Hepta Slab",Georgia,serif;color:var(--ink)}
+textarea.tin{resize:vertical}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=5a171dfe"></script>
+<script src="../assets/vendor/qrcode.js?v=81c9ad0a"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -256,7 +270,8 @@ td.acts{white-space:nowrap;text-align:right}td.acts .link{font-size:13px;margin-
     <section class="card" id="tickets"><h2>My Tickets</h2><div id="tkList"></div>
       <p class="small" style="margin-top:14px">Show the QR code at the door. Screenshots work. If your phone is off, give your name or the 8-character code.</p></section>
     <section class="card" id="outCard" hidden><h2 id="outTitle">Tickets You've Shared</h2><div id="outSum" class="small" style="margin:-6px 0 12px"></div><div id="outList"></div><div id="outMsg" class="msg" hidden></div></section>
-    <section class="card" id="events"><h2>Get Tickets</h2><div id="evList"></div><div id="evMsg" class="msg" hidden></div></section>
+    <section class="card" id="events"><div class="evhead"><h2>Get Tickets</h2><button class="btn ghost sm" type="button" id="bNewEv" hidden>+ Add event</button></div>
+      <div id="evEdit" class="evedit" hidden></div><div id="evList"></div><div id="evMsg" class="msg" hidden></div></section>
     <section class="card" id="rsvp" hidden><h2>All Events · RSVPs</h2><p class="small" style="margin:-6px 0 12px">Board view. Tap an event to see everyone who has a ticket.</p><div id="rsvpList"></div></section>
     <section class="card" id="dir" hidden><h2>Member Directory</h2><div id="dirStats" class="dstats"></div>
       <div class="tools"><input id="dirQ" type="search" placeholder="Search name or email" aria-label="Search name or email" class="dq">
@@ -441,7 +456,7 @@ async function fetchAll(){
   }
 }
 function fmtDate(iso){if(!iso)return"";return new Date(iso).toLocaleDateString(L()==="es"?"es-US":"en-US",{year:"numeric",month:"long",day:"numeric"});}
-function evWhen(ev){if(!ev)return"";if(ev.starts_at)return new Date(ev.starts_at).toLocaleString(L()==="es"?"es-US":"en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"});
+function evWhen(ev){if(!ev)return"";if(ev.starts_at)return new Date(ev.starts_at).toLocaleString(L()==="es"?"es-US":"en-US",{timeZone:"America/New_York",weekday:"short",month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"});
   return (L()==="es"?ev.date_label_es:ev.date_label_en)||"";}
 const evTitle=ev=>ev?(L()==="es"&&ev.title_es?ev.title_es:ev.title_en):"";
 const money=c=>"$"+(c/100).toFixed(c%100?2:0);
@@ -493,6 +508,92 @@ function openFlagPicker(){
   paint();$("flagPick").hidden=false;jump("flagPick");
 }
 document.addEventListener("click",e=>{if(e.target.closest("#bFlag"))openFlagPicker();});
+
+/* ===== event details (About) ===== */
+const NY="America/New_York";
+const CATS={gala:"Gala",civics:"Civics",business:"Business",community:"Community",cafecito:"Cafecito",fundraiser:"Fundraiser",workshop:"Workshop",social:"Social Mixer"};
+const loc=()=>L()==="es"?"es-US":"en-US";
+const nyDate=iso=>new Date(iso).toLocaleDateString(loc(),{timeZone:NY,weekday:"long",month:"long",day:"numeric",year:"numeric"});
+const nyTime=iso=>new Date(iso).toLocaleTimeString(loc(),{timeZone:NY,hour:"numeric",minute:"2-digit"});
+function nyParts(iso){const f=new Intl.DateTimeFormat("en-CA",{timeZone:NY,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date(iso));
+  const g=k=>(f.find(x=>x.type===k)||{}).value;return {date:`${g("year")}-${g("month")}-${g("day")}`,time:`${g("hour")==="24"?"00":g("hour")}:${g("minute")}`};}
+function nyISO(d,t){if(!d)return null;const [y,m,dd]=d.split("-").map(Number),[h,mi]=(t||"00:00").split(":").map(Number);const guess=Date.UTC(y,m-1,dd,h,mi);
+  const asNY=new Date(new Date(guess).toLocaleString("en-US",{timeZone:NY})),asUTC=new Date(new Date(guess).toLocaleString("en-US",{timeZone:"UTC"}));
+  return new Date(guess-(asNY-asUTC)).toISOString();}
+const gstamp=iso=>new Date(iso).toISOString().replace(/[-:]/g,"").replace(/\.\d{3}/,"");
+function calLinks(ev){if(!ev.starts_at)return"";const st=ev.starts_at,en=ev.ends_at||new Date(Date.parse(st)+2*36e5).toISOString();
+  const where=[ev.venue_name,ev.address||ev.location].filter(Boolean).join(", ");
+  const g="https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(evTitle(ev)+" | NYC Latino Republican Club")+"&dates="+gstamp(st)+"/"+gstamp(en)+"&ctz="+NY+"&location="+encodeURIComponent(where)+"&details="+encodeURIComponent((L()==="es"?ev.about_es||ev.about_en:ev.about_en)||"");
+  return `<a class="btn ghost sm" href="${g}" target="_blank" rel="noopener">Google Calendar</a><button class="btn ghost sm" type="button" data-ics="${ev.id}">Apple / Outlook (.ics)</button>`;}
+function mapLinks(ev){const q=[ev.venue_name,ev.address||ev.location].filter(Boolean).join(", ");if(!ev.address&&!ev.venue_name)return"";
+  return `<a class="btn ghost sm" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(q)}" target="_blank" rel="noopener">Google Maps</a><a class="btn ghost sm" href="https://maps.apple.com/?daddr=${encodeURIComponent(q)}" target="_blank" rel="noopener">Apple Maps</a><a class="btn ghost sm" href="https://waze.com/ul?q=${encodeURIComponent(q)}&navigate=yes" target="_blank" rel="noopener">Waze</a>`;}
+function aboutHTML(ev){
+  const es=L()==="es",about=(es?ev.about_es||ev.about_en:ev.about_en)||(es?ev.summary_es||ev.summary_en:ev.summary_en)||"";
+  const tbd='<i class="tbd2">To be announced</i>';
+  const row=(k,v)=>`<div class="arow"><span>${k}</span><b>${v||tbd}</b></div>`;
+  const time=ev.starts_at?esc(nyTime(ev.starts_at))+(ev.ends_at?" – "+esc(nyTime(ev.ends_at)):""):"";
+  const date=ev.starts_at?esc(nyDate(ev.starts_at)):esc((es?ev.date_label_es:ev.date_label_en)||"");
+  return `<details class="about"><summary>About this event</summary><div class="abody">
+    ${about?`<p class="atext">${esc(about)}</p>`:""}
+    <div class="agrid">${row("Hosted by",esc(ev.host||""))}${row("Committee",esc(ev.committee||""))}${row("Category",ev.category?esc(CATS[ev.category]||ev.category):"")}
+      ${row("Date",date)}${row("Time",time)}${row("Venue",esc(ev.venue_name||""))}${row("Location",esc(ev.address||ev.location||""))}</div>
+    ${mapLinks(ev)?`<div class="alinks"><span class="small">Directions:</span>${mapLinks(ev)}</div>`:""}
+    ${calLinks(ev)?`<div class="alinks"><span class="small">Add to calendar:</span>${calLinks(ev)}</div>`:""}
+    ${data.isFull?`<div class="alinks"><button class="btn sm navy" type="button" data-edit="${ev.id}">Edit event details</button></div>`:""}
+  </div></details>`;}
+function icsFor(ev){const st=ev.starts_at,en=ev.ends_at||new Date(Date.parse(st)+2*36e5).toISOString();const x=v=>String(v||"").replace(/([,;\\])/g,"\\$1").replace(/\n/g,"\\n");
+  return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NYC Latino Republican Club//Events//EN","BEGIN:VEVENT","UID:"+ev.id+"@latinorepublicans.org","DTSTAMP:"+gstamp(new Date().toISOString()),
+    "DTSTART:"+gstamp(st),"DTEND:"+gstamp(en),"SUMMARY:"+x(evTitle(ev)+" | NYC Latino Republican Club"),"LOCATION:"+x([ev.venue_name,ev.address||ev.location].filter(Boolean).join(", ")),
+    "DESCRIPTION:"+x(ev.about_en||ev.summary_en||""),"END:VEVENT","END:VCALENDAR"].join("\r\n");}
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-ics]");if(!b)return;const ev=data.events.find(x=>x.id===b.dataset.ics);
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([icsFor(ev)],{type:"text/calendar"}));a.download=(ev.slug||"event")+".ics";document.body.appendChild(a);a.click();a.remove();});
+
+/* ===== board: add / edit event details ===== */
+function openEditor(ev){
+  const n=!ev;ev=ev||{};const s1=ev.starts_at?nyParts(ev.starts_at):{date:"",time:""},e1=ev.ends_at?nyParts(ev.ends_at):{time:""};
+  const v=x=>esc(x==null?"":x);
+  $("evEdit").innerHTML=`<h3>${n?"Add an event":"Edit event details"}</h3>
+   <form id="fEv" novalidate><div class="egrid">
+    <div><label>Title (English)</label><input class="tin" id="e_title_en" value="${v(ev.title_en)}" maxlength="120" required></div>
+    <div><label>Title (Spanish)</label><input class="tin" id="e_title_es" value="${v(ev.title_es)}" maxlength="120"></div>
+    <div><label>Hosted by</label><input class="tin" id="e_host" value="${v(ev.host)}" maxlength="120" placeholder="e.g. Hosted by Yanely Rodriguez (Cafecito)"></div>
+    <div><label>Committee</label><input class="tin" id="e_committee" value="${v(ev.committee)}" maxlength="120" placeholder="e.g. Membership & Outreach"></div>
+    <div><label>Category</label><select class="tin" id="e_category"><option value="">Choose…</option>${Object.entries(CATS).map(([k,l])=>`<option value="${k}"${ev.category===k?" selected":""}>${l}</option>`).join("")}</select></div>
+    <div><label>Capacity</label><input class="tin" id="e_capacity" type="number" min="1" max="5000" value="${v(ev.capacity)}"></div>
+    <div><label>Date</label><input class="tin" id="e_date" type="date" value="${s1.date}"></div>
+    <div class="two"><div><label>Starts</label><input class="tin" id="e_start" type="time" value="${s1.time}"></div><div><label>Ends</label><input class="tin" id="e_end" type="time" value="${e1.time}"></div></div>
+    <div><label>Venue name</label><input class="tin" id="e_venue_name" value="${v(ev.venue_name)}" maxlength="120" placeholder="e.g. Astoria World Manor"></div>
+    <div><label>Street address</label><input class="tin" id="e_address" value="${v(ev.address)}" maxlength="200" placeholder="Street, City, NY ZIP"></div>
+    <div><label>Neighborhood (shown on cards)</label><input class="tin" id="e_location" value="${v(ev.location)}" maxlength="80" placeholder="e.g. Astoria, Queens"></div>
+    <div class="chk2"><label><input type="checkbox" id="e_sales_open"${ev.sales_open!==false?" checked":""}> Sign-ups open</label><label><input type="checkbox" id="e_listed"${ev.listed!==false?" checked":""}> Show on website</label></div>
+   </div>
+   <label>Short summary (English, for event cards)</label><textarea class="tin" id="e_summary_en" rows="2" maxlength="300">${v(ev.summary_en)}</textarea>
+   <label>Short summary (Spanish)</label><textarea class="tin" id="e_summary_es" rows="2" maxlength="300">${v(ev.summary_es)}</textarea>
+   <label>What to expect (English)</label><textarea class="tin" id="e_about_en" rows="4" maxlength="2000">${v(ev.about_en)}</textarea>
+   <label>What to expect (Spanish)</label><textarea class="tin" id="e_about_es" rows="4" maxlength="2000">${v(ev.about_es)}</textarea>
+   ${n?`<p class="small">New events are free to attend. For a paid event, email the details and we'll set up payment.</p>`:`<p class="small">Ticket prices are tied to Stripe and can't be changed here.</p>`}
+   <div class="row" style="margin-top:12px"><button class="btn" type="submit" id="bEvSave">${n?"Add event":"Save changes"}</button><button class="btn ghost" type="button" id="bEvCancel">Cancel</button></div></form><div id="evEditMsg" class="msg" hidden></div>`;
+  $("evEdit").hidden=false;jump("evEdit");
+  $("bEvCancel").onclick=()=>{$("evEdit").hidden=true;};
+  $("fEv").onsubmit=async e=>{e.preventDefault();const g=id=>$(id).value.trim(),m=$("evEditMsg");
+    const t=g("e_title_en");if(t.length<3){show(m,"err","Please enter a title.");return;}
+    const d=g("e_date"),st=g("e_start"),en=g("e_end");
+    if(en&&!st){show(m,"err","Add a start time, or clear the end time.");return;}
+    const body={title_en:t,title_es:g("e_title_es")||t,host:g("e_host")||null,committee:g("e_committee")||null,category:g("e_category")||null,
+      capacity:g("e_capacity")?Math.max(1,parseInt(g("e_capacity"),10)):null,venue_name:g("e_venue_name")||null,address:g("e_address")||null,location:g("e_location")||null,
+      starts_at:d?nyISO(d,st||"00:00"):null,ends_at:d&&en?nyISO(d,en):null,sales_open:$("e_sales_open").checked,listed:$("e_listed").checked,
+      summary_en:g("e_summary_en")||null,summary_es:g("e_summary_es")||null,about_en:g("e_about_en")||null,about_es:g("e_about_es")||null};
+    if(body.starts_at&&body.ends_at&&body.ends_at<=body.starts_at){show(m,"err","The end time must be after the start time.");return;}
+    $("bEvSave").disabled=true;
+    try{
+      if(n){body.slug=t.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)+"-"+Math.random().toString(36).slice(2,6);
+        await api("/rest/v1/events",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});}
+      else{body.updated_at=new Date().toISOString();await api("/rest/v1/events?id=eq."+ev.id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});}
+      $("evEdit").hidden=true;await reload();show($("evMsg"),"ok",n?"Event added.":"Event details saved.");jump("events");
+    }catch(err){show(m,"err","We couldn't save the event. Please try again.");}
+    $("bEvSave").disabled=false;};
+}
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-edit]");if(b&&data&&data.isFull)openEditor(data.events.find(x=>x.id===b.dataset.edit));});
 
 function render(){
   if(!data)return;
@@ -547,15 +648,16 @@ function render(){
   renderOut(byId);
   /* events */
   const isMem=(m&&m.status==="active")||d.isAdmin;
-  const open=d.events.filter(e=>e.sales_open);
+  const open=d.events.filter(e=>e.listed!==false||d.isFull);
   $("evList").innerHTML=open.length?open.map(ev=>{const p=isMem?ev.price_member_cents:ev.price_guest_cents;const mine=live.filter(t=>t.event_id===ev.id).length;
     const opts=[1,2,3,4].map(n=>`<option value="${n}">${n}</option>`).join("");
-    return `<div class="ev"><div><h3>${esc(evTitle(ev))}</h3><div class="meta">${esc(evWhen(ev))}${ev.location?" · "+esc(ev.location):""}</div>
+    return `<div class="evwrap"><div class="ev"><div><h3>${esc(evTitle(ev))}${ev.listed===false?' <span class="chip void">Hidden</span>':""}${!ev.sales_open?' <span class="chip">Sign-ups closed</span>':""}</h3><div class="meta">${esc(evWhen(ev))}${ev.location?" · "+esc(ev.location):""}</div>
       <div class="price">${p?`${money(p)} ${isMem?"<span>member price</span>":(ev.price_member_cents<ev.price_guest_cents?`<span>· members</span> ${money(ev.price_member_cents)}`:"")}`:"<span>Free</span>"}</div>
       ${mine?`<div class="small"><span>You have</span> ${mine} <span>${mine===1?"ticket":"tickets"}</span></div>`:""}</div>
-      <div class="act">${!p&&mine?`<span class="chip used rsv">✓ Reserved</span>${live.some(t=>t.event_id===ev.id&&t.status==="valid"&&t.kind!=="comp")?`<button class="btn ghost sm" type="button" data-cancel="${ev.id}">Cancel RSVP</button>`:""}`
-        :`${p?"":`<select id="q-${ev.id}" aria-label="Quantity">${opts}</select>`}<button class="btn sm" type="button" data-ev="${ev.id}">${p?"Buy tickets":"Reserve"}</button>`}</div></div>`;}).join("")
+      <div class="act">${!ev.sales_open?"":!p&&mine?`<span class="chip used rsv">✓ Reserved</span>${live.some(t=>t.event_id===ev.id&&t.status==="valid"&&t.kind!=="comp")?`<button class="btn ghost sm" type="button" data-cancel="${ev.id}">Cancel RSVP</button>`:""}`
+        :`${p?"":`<select id="q-${ev.id}" aria-label="Quantity">${opts}</select>`}<button class="btn sm" type="button" data-ev="${ev.id}">${p?"Buy tickets":"Reserve"}</button>`}</div></div>${aboutHTML(ev)}</div>`;}).join("")
     :`<div class="empty">No events open right now.</div>`;
+  $("bNewEv").hidden=!d.isFull;
   renderRsvp(byId);
   /* history */
   const att=d.tickets.filter(t=>t.status==="used").sort((a,b)=>(b.checked_in_at||"").localeCompare(a.checked_in_at||""));
@@ -566,6 +668,7 @@ function render(){
 }
 
 /* buy or reserve */
+$("bNewEv").addEventListener("click",()=>openEditor(null));
 $("evList").addEventListener("click",async e=>{
   const cb=e.target.closest("button[data-cancel]");
   if(cb){cb.disabled=true;const m=$("evMsg");
@@ -756,5 +859,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=5a171dfe"></script><script src="../assets/i18n.js?v=5a171dfe"></script>
+</script><script src="../assets/i18n-es.js?v=81c9ad0a"></script><script src="../assets/i18n.js?v=81c9ad0a"></script>
 </body></html>

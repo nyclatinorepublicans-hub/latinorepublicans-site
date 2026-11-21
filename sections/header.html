@@ -105,7 +105,7 @@ a.lang{text-decoration:none}
         <li><a class="tab" data-link="about" href="#" target="_top">About Us</a></li>
         <li><a class="tab" data-link="events" href="#" target="_top">Events</a></li>
         <li><a class="tab" data-link="involved" href="#" target="_top">Get Involved</a></li>
-        <li><a class="donate" data-link="donate" href="#" target="_top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.1C.9 8.6 3 5 6.6 5c2.1 0 3.6 1.2 4.4 2.6h2C13.8 6.2 15.3 5 17.4 5 21 5 23.1 8.6 21.6 11.9 19.5 16.4 12 21 12 21z"/></svg>Donate</a></li>
+        <li><a class="donate" data-link="join" href="#" target="_top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.2 6.8.7-5.1 4.6 1.4 6.7L12 17.3l-6 3.4 1.4-6.7-5.1-4.6 6.8-.7z"/></svg>Join the Club</a></li>
         <li class="langli"><a class="lang prof" href="../account/" target="_top" aria-label="My Profile" title="My Profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 20.5c1.2-4 4.4-6 8-6s6.8 2 8 6"/></svg><span class="proflbl">Profile</span></a><button class="lang" id="langBtn" type="button" aria-label="Ver en español"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span id="langLbl">ES</span></button></li>
       </ul>
     </nav>
@@ -129,7 +129,8 @@ const LINKS = {
   about:    SITE + "#about",
   events:   SITE + "#events",
   involved: SITE + "#get-involved",
-  donate:   DONATE_LINK
+  donate:   DONATE_LINK,
+  join:     SITE + "join/"
 };
 /* If a tab changes the address bar but the page does NOT scroll to the
    section, change false to true. The page then reloads straight onto
@@ -194,5 +195,5 @@ document.querySelectorAll('[data-link]').forEach(a=>{
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=81c9ad0a"></script><script src="../assets/i18n.js?v=81c9ad0a"></script>
+</script><script src="../assets/i18n-es.js?v=4fa28402"></script><script src="../assets/i18n.js?v=4fa28402"></script>
 </body></html>

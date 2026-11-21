@@ -171,10 +171,14 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
 .qabtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .qabtns button{border:0;border-radius:999px;padding:9px 14px;cursor:pointer;font:800 12px "Archivo",sans-serif;letter-spacing:.06em;background:#fff;color:var(--navy);box-shadow:inset 0 0 0 1.5px #d6a844}
 .qabtns button.on{background:var(--navy);color:#fff;box-shadow:none}
+.tin{width:100%;font:16px "Hepta Slab",Georgia,serif;padding:13px 14px;border-radius:12px;border:2px solid #d9d2c3;background:#fffdf8;color:var(--ink)}
+.tin:focus{border-color:var(--gold);outline:0}.opt{font-weight:600;letter-spacing:.04em;text-transform:none;color:#8a97a8}
+#upFields{margin-bottom:12px}#upFields label:first-child{margin-top:0}
+td.acts{white-space:nowrap;text-align:right}td.acts .link{font-size:13px;margin-left:8px}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=657a96ef"></script>
+<script src="../assets/vendor/qrcode.js?v=532db905"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -192,7 +196,11 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
     </div>
     <p class="small" id="authHint">Use the email you joined or bought tickets with, so your membership and tickets load automatically.</p>
     <form id="fPw" novalidate>
-      <label for="em">Email</label><input id="em" type="email" autocomplete="email" required placeholder="you@example.com">
+      <div id="upFields" hidden>
+        <label for="nm">Full name</label><input id="nm" type="text" autocomplete="name" maxlength="80" required class="tin">
+        <label for="ph" style="margin-top:12px">Phone <span class="opt">(optional)</span></label><input id="ph" type="tel" autocomplete="tel" maxlength="20" class="tin" placeholder="(555) 555-5555">
+      </div>
+      <label for="em" id="emLbl">Email</label><input id="em" type="email" autocomplete="email" required placeholder="you@example.com">
       <div class="pwrow"><label for="pw">Password</label>
         <div class="pwbox"><input id="pw" type="password" autocomplete="current-password" required minlength="8">
         <button type="button" class="eye" id="eye" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
@@ -225,6 +233,7 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
   <div id="vIn" hidden>
     <div class="bar"><span class="who"><span>Signed in as</span> <b id="whoEm"></b></span>
       <span><a id="adminLink" class="btn gold sm" href="../checkin/" target="_top" hidden>Door check-in</a>
+      <button class="btn ghost sm" id="bDet" type="button">Edit details</button>
       <button class="btn ghost sm" id="bChg" type="button">Change password</button>
       <button class="btn ghost sm" id="bOut" type="button">Sign out</button></span></div>
     <section id="qa" class="qa" hidden>
@@ -236,17 +245,24 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
       <div id="qaMsg" class="msg" hidden></div></section>
     <div id="paidMsg" class="msg info" hidden></div>
     <div id="mcard"></div>
+    <section class="card" id="detCard" hidden><h2>My details</h2>
+      <form id="fDet" novalidate><label for="dNm">Full name</label><input id="dNm" type="text" autocomplete="name" maxlength="80" class="tin">
+        <label for="dPh" style="margin-top:12px">Phone <span class="opt">(optional)</span></label><input id="dPh" type="tel" autocomplete="tel" maxlength="20" class="tin">
+        <p class="small">Your phone number is only visible to you and the club's Executive Board.</p>
+        <div class="row"><button class="btn" type="submit" id="bDetSave">Save</button><button class="btn ghost" type="button" id="bDetCancel">Cancel</button></div></form>
+      <div id="detMsg" class="msg" hidden></div></section>
     <section class="card" id="flagPick" hidden></section>
     <div id="promo"></div>
     <section class="card" id="tickets"><h2>My Tickets</h2><div id="tkList"></div>
       <p class="small" style="margin-top:14px">Show the QR code at the door. Screenshots work. If your phone is off, give your name or the 8-character code.</p></section>
+    <section class="card" id="outCard" hidden><h2 id="outTitle">Tickets You've Shared</h2><div id="outSum" class="small" style="margin:-6px 0 12px"></div><div id="outList"></div><div id="outMsg" class="msg" hidden></div></section>
     <section class="card" id="events"><h2>Get Tickets</h2><div id="evList"></div><div id="evMsg" class="msg" hidden></div></section>
     <section class="card" id="rsvp" hidden><h2>All Events · RSVPs</h2><p class="small" style="margin:-6px 0 12px">Board view. Tap an event to see everyone who has a ticket.</p><div id="rsvpList"></div></section>
     <section class="card" id="dir" hidden><h2>Member Directory</h2><div id="dirStats" class="dstats"></div>
       <div class="tools"><input id="dirQ" type="search" placeholder="Search name or email" aria-label="Search name or email" class="dq">
         <select id="dirT" aria-label="Membership level" class="dsel"><option value="">All levels</option><option value="young">Young Leader</option><option value="member">Member</option><option value="patriot">Patriot</option><option value="embajador">Ambassador</option><option value="corporate">Corporate Sponsor</option></select>
         <button class="btn ghost sm" type="button" id="dirCsv">Download CSV</button></div>
-      <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th class="hide-s">Email</th><th>Level</th><th>Status</th><th class="hide-s">Joined</th></tr></thead><tbody id="dirRows"></tbody></table></div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th class="hide-s">Email</th><th class="hide-s">Phone</th><th>Level</th><th>Status</th><th class="hide-s">Joined</th></tr></thead><tbody id="dirRows"></tbody></table></div>
       <p class="small" style="margin-top:10px">Board view only. Please don't share member contact details outside the board.</p></section>
     <section class="card" id="boardP" hidden><h2>Executive Board</h2><p class="small" style="margin:-6px 0 12px">Send a board member a sign-in email: new accounts get a "set your password" invite; existing accounts get a password-reset link.</p>
       <div id="boardRows"></div><div id="boardMsg" class="msg" hidden></div></section>
@@ -314,10 +330,11 @@ async function api(path,opt={}){
 
 /* 2) sign in: password (default), email link (backup), forgot password */
 let mode="in";
+const PHONE_OK=v=>/^\+?[0-9 ()\-.]{7,20}$/.test(v)&&v.replace(/\D/g,"").length>=7;
 const AUTH=(path,body)=>fetch(SB_URL+"/auth/v1/"+path,{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
 const emailOk=em=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
 function setMode(m){mode=m;document.querySelectorAll(".tabs .tab").forEach(b=>{const on=b.dataset.mode===m;b.classList.toggle("on",on);b.setAttribute("aria-selected",on);});
-  $("bPw").textContent=m==="up"?"Create account":"Sign in";$("pwRules").hidden=m!=="up";$("bForgot").hidden=m==="up";
+  $("bPw").textContent=m==="up"?"Create account":"Sign in";$("pwRules").hidden=m!=="up";$("upFields").hidden=m!=="up";{const dot=document.querySelector(".alt>span");if(dot)dot.hidden=m==="up";}$("bForgot").hidden=m==="up";
   $("pw").setAttribute("autocomplete",m==="up"?"new-password":"current-password");$("inMsg").hidden=true;}
 document.querySelector(".tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b)setMode(b.dataset.mode);});
 $("eye").addEventListener("click",()=>{const on=$("pw").type==="password";$("pw").type=on?"text":"password";$("eye").setAttribute("aria-pressed",on);$("eye").setAttribute("aria-label",on?"Hide password":"Show password");});
@@ -325,6 +342,9 @@ $("fPw").addEventListener("submit",async e=>{
   e.preventDefault();const em=$("em").value.trim().toLowerCase(),pw=$("pw").value,m=$("inMsg"),b=$("bPw");
   if(!emailOk(em)){show(m,"err","Please enter a valid email.");return;}
   if(pw.length<8){show(m,"err","Password must be at least 8 characters.");return;}
+  const nm=$("nm").value.trim(),ph=$("ph").value.trim();
+  if(mode==="up"&&nm.length<2){show(m,"err","Please enter your full name.");$("nm").focus();return;}
+  if(mode==="up"&&ph&&!PHONE_OK(ph)){show(m,"err","Please check the phone number, or leave it blank.");$("ph").focus();return;}
   b.disabled=true;
   try{
     if(mode==="in"){
@@ -334,7 +354,7 @@ $("fPw").addEventListener("submit",async e=>{
       else if(/confirm/i.test(j.error_description||j.msg||j.error_code||""))show(m,"err","Please confirm your email first. Check your inbox for the confirmation link.");
       else show(m,"err","Wrong email or password. If you have never set a password, choose Create account or Forgot password.");
     }else{
-      const r=await fetch(SB_URL+"/auth/v1/signup?redirect_to="+encodeURIComponent(pageUrl()),{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({email:em,password:pw})});
+      const r=await fetch(SB_URL+"/auth/v1/signup?redirect_to="+encodeURIComponent(pageUrl()),{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({email:em,password:pw,data:{name:nm,phone:ph||null}})});
       const j=await r.json().catch(()=>({}));
       if(r.ok&&j.access_token){save({access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600)});$("pw").value="";await enter();}
       else if(r.ok)show(m,"ok","Almost done. We sent a confirmation link to your email. Click it once and you are in. No email after a few minutes? You may already have an account: use Forgot password.");
@@ -392,27 +412,32 @@ function view(v){$("vOut").hidden=v!=="out";$("vIn").hidden=v!=="in";$("vLoad").
 async function fetchAll(){
   const user=await api("/auth/v1/user");
   const email=(user.email||"").toLowerCase();
-  const [members,tickets,events,admins,grants]=await Promise.all([
+  let [members,tickets,events,admins,grants]=await Promise.all([
     api("/rest/v1/members?select=*&email=eq."+encodeURIComponent(email)),
-    api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents&owner_email=eq."+encodeURIComponent(email)+"&order=created_at.asc"),
+    api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents,owner_email,holder_name,shared_by&or=(owner_email.eq."+encodeURIComponent(email)+",shared_by.eq."+encodeURIComponent(email)+")&order=created_at.asc"),
     api("/rest/v1/events?select=*&order=starts_at.asc.nullslast"),
     api("/rest/v1/admins?select=email,name,title,role,subtitle&email=eq."+encodeURIComponent(email)),
     api("/rest/v1/comp_grants?select=*"),
   ]);
   let qa=[];try{qa=await api("/rest/v1/qa_accounts?select=email&email=eq."+encodeURIComponent(email));}catch(e){}
-  let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name,flags&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
-  data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,all:null,flags:prof?(prof.flags&&prof.flags.length?prof.flags:(prof.country_code?[prof.country_code]:[])):[]};
+  let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name,flags,name,phone&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
+  const out=tickets.filter(t=>t.owner_email!==email);tickets=tickets.filter(t=>t.owner_email===email);
+  data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,out,prof:prof||{},all:null,flags:prof?(prof.flags&&prof.flags.length?prof.flags:(prof.country_code?[prof.country_code]:[])):[]};
   data.isFull=!!(data.exec&&data.exec.role==="full");data.isQA=qa.length>0;
+  /* name/phone given at sign-up: copy them onto the profile the first time */
+  const md=user.user_metadata||{};
+  if(!data.prof.name&&md.name){data.prof.name=md.name;data.prof.phone=data.prof.phone||md.phone||null;saveDetails(md.name,md.phone||null,true);}
   /* first visit after joining: use the flag they tapped on the Join page */
   if(!data.flags.length){try{const n=localStorage.getItem("lrc_flag");const c=n&&NAME_ISO[n];if(c){data.flags=[c];saveFlags([c],true);}}catch(e){}}
   if(data.isFull){
     const [all,mem,profs,board]=await Promise.all([
       api("/rest/v1/tickets?select=id,event_id,owner_email,holder_name,kind,token,status,checked_in_at,price_cents,created_at&status=neq.void&order=created_at.asc"),
       api("/rest/v1/members?select=email,name,tier,status,joined_at,renews_at&order=joined_at.desc"),
-      api("/rest/v1/profiles?select=email,flags,country_code"),
+      api("/rest/v1/profiles?select=email,flags,country_code,name,phone"),
       api("/rest/v1/admins?select=email,name,title,role,subtitle&order=name.asc")]);
     data.all=all;data.mem=Object.fromEntries(mem.map(x=>[x.email,x]));data.memList=mem;data.board=board.filter(b=>b.title);
     data.pflags=Object.fromEntries(profs.map(x=>[x.email,x.flags&&x.flags.length?x.flags:(x.country_code?[x.country_code]:[])]));
+    data.pinfo=Object.fromEntries(profs.map(x=>[x.email,x]));
   }
 }
 function fmtDate(iso){if(!iso)return"";return new Date(iso).toLocaleDateString(L()==="es"?"es-US":"en-US",{year:"numeric",month:"long",day:"numeric"});}
@@ -478,7 +503,7 @@ function render(){
   $("adminLink").hidden=!d.isAdmin;
   $("dir").hidden=$("boardP").hidden=!d.isFull;if(d.isFull){renderDir();renderBoard();}
   /* membership */
-  const name=m&&m.name||(d.user.user_metadata&&d.user.user_metadata.name)||"";
+  const name=(m&&m.tier==="corporate"&&m.name)||d.prof.name||(m&&m.name)||(d.user.user_metadata&&d.user.user_metadata.name)||"";
   if(d.exec&&d.exec.title){
     const ex=d.exec;
     $("mcard").innerHTML=`<div class="mcard exec${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(ex.name||name||"")}</div><div class="memail">${esc(d.email)}</div></div>
@@ -515,8 +540,11 @@ function render(){
       <button class="qr" type="button" data-i="${d.tickets.indexOf(t)}" aria-label="Enlarge QR code">${qrSvg("lrc:"+t.token)}</button>
       <div class="code">${esc(t.token.slice(0,8).toUpperCase())}</div>
       <div class="chips">${t.kind==="comp"?'<span class="chip comp">Complimentary</span>':(t.price_cents?'<span class="chip">Paid</span>':'<span class="chip">Reserved</span>')}
-      ${used?'<span class="chip used">Checked in</span>':'<span class="chip">Valid</span>'}</div></div>`;}).join("")}</div>`
+      ${used?'<span class="chip used">Checked in</span>':'<span class="chip">Valid</span>'}</div>
+      ${t.shared_by?`<div class="small" style="margin-top:6px"><span>Shared with you by</span> ${esc(t.shared_by)}</div>`:""}
+      ${t.status==="valid"?`<button class="btn ghost sm" type="button" data-share="${t.id}" style="margin-top:10px">Share ticket</button>`:""}</div>`;}).join("")}</div>`
     :`<div class="empty">No tickets yet. Get tickets below.</div>`;
+  renderOut(byId);
   /* events */
   const isMem=(m&&m.status==="active")||d.isAdmin;
   const open=d.events.filter(e=>e.sales_open);
@@ -606,13 +634,13 @@ function renderDir(){
   $("dirStats").innerHTML=`<span><b>${act.length}</b> <i>active members</i></span><span><b>${by("young")}</b> <i>Young Leader</i></span><span><b>${by("member")}</b> <i>Member</i></span><span><b>${by("patriot")}</b> <i>Patriot</i></span><span><b>${by("embajador")}</b> <i>Ambassador</i></span><span><b>${by("corporate")}</b> <i>Corporate</i></span>`;
   const rows=d.memList.filter(m=>(!t||m.tier===t)&&(!q||((m.name||"")+" "+m.email).toLowerCase().includes(q)));
   $("dirRows").innerHTML=rows.length?rows.map(m=>{const f=d.pflags[m.email]||[];
-    return `<tr><td><span class="minis sm">${miniFlags(f)}</span>${esc(m.name||"")}<span class="em2"><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></span></td><td class="hide-s"><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></td>
+    return `<tr><td><span class="minis sm">${miniFlags(f)}</span>${esc(m.name||"")}<span class="em2"><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></span></td><td class="hide-s"><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></td><td class="hide-s">${esc((d.pinfo[m.email]||{}).phone||"")}</td>
       <td>${esc(TIER[m.tier]||m.tier)}</td><td><span class="st-${esc(m.status)}-d">${esc(STATUS[m.status]||m.status)}</span></td><td class="hide-s">${esc(fmtDate(m.joined_at))}</td></tr>`;}).join("")
-    :`<tr><td colspan="5"><span>No members yet.</span></td></tr>`;
+    :`<tr><td colspan="6"><span>No members yet.</span></td></tr>`;
 }
 ["dirQ","dirT"].forEach(id=>$(id).addEventListener("input",()=>data&&renderDir()));
 $("dirCsv").addEventListener("click",()=>{const d=data;
-  const rows=[["Name","Email","Level","Status","Joined","Renews","Flags"]].concat(d.memList.map(m=>[m.name||"",m.email,TIER[m.tier]||m.tier,m.status,m.joined_at||"",m.renews_at||"",(d.pflags[m.email]||[]).join(" ")]));
+  const rows=[["Name","Email","Phone","Level","Status","Joined","Renews","Flags"]].concat(d.memList.map(m=>[(d.pinfo[m.email]||{}).name||m.name||"",m.email,(d.pinfo[m.email]||{}).phone||"",TIER[m.tier]||m.tier,m.status,m.joined_at||"",m.renews_at||"",(d.pflags[m.email]||[]).join(" ")]));
   const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download="club-members.csv";document.body.appendChild(a);a.click();a.remove();});
 /* board: list + invites */
@@ -635,6 +663,62 @@ async function qaSwitch(level){const st=$("qaSt").value,m=$("qaMsg");$("qa").que
   $("qa").querySelectorAll("button").forEach(b=>b.disabled=false);}
 $("qa").addEventListener("click",e=>{const b=e.target.closest("button[data-lv]");if(b)qaSwitch(b.dataset.lv);});
 $("qaSt").addEventListener("change",()=>{const on=$("qa").querySelector("button.on");if(on&&on.dataset.lv!=="none")qaSwitch(on.dataset.lv);});
+/* ===== my details ===== */
+async function saveDetails(name,phone,quiet){
+  try{await api("/rest/v1/profiles?on_conflict=email",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({name,phone:phone||null,updated_at:new Date().toISOString()})});return true;}
+  catch(e){if(!quiet)throw e;return false;}
+}
+$("bDet").addEventListener("click",()=>{$("dNm").value=data.prof.name||"";$("dPh").value=data.prof.phone||"";$("detMsg").hidden=true;$("detCard").hidden=false;jump("detCard");$("dNm").focus();});
+$("bDetCancel").addEventListener("click",()=>{$("detCard").hidden=true;});
+$("fDet").addEventListener("submit",async e=>{e.preventDefault();const n=$("dNm").value.trim(),p=$("dPh").value.trim(),m=$("detMsg");
+  if(n.length<2){show(m,"err","Please enter your full name.");return;}
+  if(p&&!PHONE_OK(p)){show(m,"err","Please check the phone number, or leave it blank.");return;}
+  $("bDetSave").disabled=true;
+  try{await saveDetails(n,p);data.prof.name=n;data.prof.phone=p||null;$("detCard").hidden=true;render();}
+  catch(err){show(m,"err","We couldn't save. Please try again.");}
+  $("bDetSave").disabled=false;});
+
+/* ===== share a ticket by email ===== */
+const SPONSOR_SEATS=10;
+$("tkList").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-share]");if(!b)return;e.stopPropagation();
+  const t=data.tickets.find(x=>x.id===b.dataset.share),ev=data.events.find(x=>x.id===t.event_id);
+  $("zoomBox").innerHTML=`<h3>Share ticket</h3><p class="small" style="margin:0 0 12px">${esc(evTitle(ev))}. They'll get an email to create an account (or sign in) and their ticket with its own QR code. Your copy of this QR code stops working.</p>
+    <form id="fShare" novalidate style="text-align:left"><label for="shNm">Guest's full name</label><input id="shNm" class="tin" maxlength="80" autocomplete="off">
+    <label for="shEm" style="margin-top:10px">Guest's email</label><input id="shEm" type="email" class="tin" autocomplete="off">
+    <div class="row" style="margin-top:14px"><button class="btn" type="submit" id="bShare">Share</button><button class="btn ghost" type="button" id="zClose">Cancel</button></div></form><div id="shMsg" class="msg" hidden></div>`;
+  const z=$("zoom");z.hidden=false;const V=window.__LRCV;if(V)z.querySelector(".box").style.marginTop=(V.top+10)+"px";$("shNm").focus();
+  $("fShare").onsubmit=async ev2=>{ev2.preventDefault();const nm=$("shNm").value.trim(),em=$("shEm").value.trim().toLowerCase(),m=$("shMsg");
+    if(nm.length<2){show(m,"err","Please enter your guest's name.");return;}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)){show(m,"err","Please enter a valid email.");return;}
+    if(em===data.email){show(m,"err","That's your own email.");return;}
+    $("bShare").disabled=true;
+    try{const r=await api("/functions/v1/share-ticket",{method:"POST",body:JSON.stringify({action:"share",ticket_id:t.id,to_email:em,to_name:nm,return_url:pageUrl()})});
+      $("zoom").hidden=true;await reload();
+      show($("outMsg"),r.notified==="failed"?"err":"ok",r.notified==="failed"?"Ticket shared, but the email didn't send. Use Resend below.":"Ticket shared. We emailed "+em+".");jump("outCard");}
+    catch(err){show(m,"err","We couldn't share that ticket. Please try again.");$("bShare").disabled=false;}};
+});
+function renderOut(byId){
+  const d=data,o=d.out||[],corp=d.member&&d.member.tier==="corporate";
+  const comps=d.tickets.filter(t=>t.kind==="comp"&&t.status!=="void"),outComps=o.filter(t=>t.kind==="comp"&&t.status!=="void");
+  if(!o.length&&!corp){$("outCard").hidden=true;return;}
+  $("outCard").hidden=false;
+  $("outTitle").textContent=corp?"Your Gala Table":"Tickets You've Shared";
+  $("outSum").innerHTML=corp?`<b>${outComps.length}</b> <span>of</span> <b>${comps.length+outComps.length}</b> <span>seats assigned to guests</span> · <b>${comps.length}</b> <span>still with you. Use "Share ticket" on a seat above to assign it.</span>`:`<span>Tickets you gave to someone else. You can take back any ticket that hasn't been used yet.</span>`;
+  $("outList").innerHTML=o.length?`<div style="overflow-x:auto"><table><thead><tr><th>Guest</th><th class="hide-s">Email</th><th>Event</th><th>Status</th><th></th></tr></thead><tbody>${o.map(t=>`<tr>
+      <td>${esc(t.holder_name||"")}<span class="em2">${esc(t.owner_email)}</span></td><td class="hide-s">${esc(t.owner_email)}</td><td>${esc(evTitle(byId[t.event_id]))}</td>
+      <td>${t.status==="used"?'<span class="in">✓ <span>Checked in</span></span>':t.status==="void"?"<span>Canceled</span>":"<span>Not yet</span>"}</td>
+      <td class="acts">${t.status==="valid"?`<button class="link" type="button" data-resend="${t.id}">Resend</button> <button class="link" type="button" data-reclaim="${t.id}">Take back</button>`:""}</td></tr>`).join("")}</tbody></table></div>`
+    :`<div class="empty">No seats assigned yet.</div>`;
+}
+$("outList").addEventListener("click",async e=>{const b=e.target.closest("button[data-resend],button[data-reclaim]");if(!b)return;b.disabled=true;const m=$("outMsg");
+  const action=b.dataset.resend?"resend":"reclaim",id=b.dataset.resend||b.dataset.reclaim;
+  try{const r=await api("/functions/v1/share-ticket",{method:"POST",body:JSON.stringify({action,ticket_id:id,return_url:pageUrl()})});
+    if(action==="reclaim"){await reload();show($("outMsg"),"ok","Ticket is back in My Tickets with a new QR code.");}
+    else show(m,r.notified==="failed"?"err":"ok",r.notified==="failed"?"The email didn't send. Please try again later.":"Email sent again.");}
+  catch(err){show(m,"err","Something went wrong. Please try again.");}
+  b.disabled=false;});
+
 async function reload(){await fetchAll();render();}
 addEventListener("lrc-lang",render);
 
@@ -672,5 +756,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=657a96ef"></script><script src="../assets/i18n.js?v=657a96ef"></script>
+</script><script src="../assets/i18n-es.js?v=532db905"></script><script src="../assets/i18n.js?v=532db905"></script>
 </body></html>

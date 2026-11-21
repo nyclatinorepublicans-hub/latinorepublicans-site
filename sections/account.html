@@ -130,13 +130,9 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
 .trust{display:flex;gap:12px;align-items:flex-start;margin-top:18px;padding:14px;border-radius:14px;background:#eef3fa;color:#163b63}
 .trust svg{flex:none;width:26px;height:26px;fill:none;stroke:#1d5a99;stroke-width:1.8}.trust p{margin:0;font-size:14px;line-height:1.5}
 #fNew .row{margin-top:8px}
-.mcard.has-flag{background:linear-gradient(90deg,rgba(2,26,48,.92) 0%,rgba(2,26,48,.8) 45%,rgba(2,26,48,.5) 100%),var(--flag) center/cover no-repeat,var(--deep)}
-.mcard.exec.has-flag{background:linear-gradient(90deg,rgba(14,10,0,.93) 0%,rgba(14,10,0,.8) 45%,rgba(14,10,0,.5) 100%),var(--flag) center/cover no-repeat,#0b0900}
 .mcard.has-flag::after{display:none}
 .mcard.has-flag .mname,.mcard.has-flag .memail,.mcard.has-flag .mgrid,.mcard.has-flag .repline{text-shadow:0 1px 3px rgba(0,0,0,.65)}
 .mcard.exec.has-flag .mname{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--gold-hi);text-shadow:0 0 1px #8a6210,0 2px 4px rgba(0,0,0,.8)}
-@media (max-width:600px){.mcard.has-flag{background:linear-gradient(180deg,rgba(2,26,48,.55) 0%,rgba(2,26,48,.82) 45%,rgba(2,26,48,.92) 100%),var(--flag) center/cover no-repeat,var(--deep)}
-  .mcard.exec.has-flag{background:linear-gradient(180deg,rgba(14,10,0,.55) 0%,rgba(14,10,0,.82) 45%,rgba(14,10,0,.93) 100%),var(--flag) center/cover no-repeat,#0b0900}}
 .repline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px;font-size:14px}
 .repline img{width:30px;height:22px;object-fit:cover;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.5)}
 .flagbtn{margin-left:auto;border:0;border-radius:999px;cursor:pointer;padding:8px 14px;font:800 11px "Archivo",sans-serif;letter-spacing:.12em;text-transform:uppercase;
@@ -147,10 +143,33 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
 .ft img{width:54px;height:40px;object-fit:cover;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
 .ft.on{background:#fff6dc;box-shadow:inset 0 0 0 2.5px var(--gold)}
 .chip.rsv{font-size:12px;padding:8px 12px}
+.mcard .fbg{position:absolute;inset:0;display:flex;z-index:0}
+.mcard .fbg span{flex:1;background-size:cover;background-position:center}
+.mcard .fbg.n2 span+span{clip-path:polygon(8% 0,100% 0,100% 100%,0 100%);margin-left:-4%}
+.mcard .fbg.n3 span+span{clip-path:polygon(8% 0,100% 0,100% 100%,0 100%);margin-left:-3%}
+.mcard .fbg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(2,26,48,.92) 0%,rgba(2,26,48,.8) 45%,rgba(2,26,48,.5) 100%)}
+.mcard.exec .fbg::after{background:linear-gradient(90deg,rgba(14,10,0,.93) 0%,rgba(14,10,0,.8) 45%,rgba(14,10,0,.5) 100%)}
+.mcard.has-flag{background:var(--deep)}.mcard.exec.has-flag{background:#0b0900}
+.mcard>*:not(.fbg){position:relative;z-index:1}
+@media (max-width:600px){.mcard .fbg::after{background:linear-gradient(180deg,rgba(2,26,48,.55) 0%,rgba(2,26,48,.82) 45%,rgba(2,26,48,.92) 100%)}
+  .mcard.exec .fbg::after{background:linear-gradient(180deg,rgba(14,10,0,.55) 0%,rgba(14,10,0,.82) 45%,rgba(14,10,0,.93) 100%)}}
+.minis{display:inline-flex;gap:4px;vertical-align:middle}.minis img{width:30px;height:22px;object-fit:cover;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.5)}
+.minis.sm img{width:20px;height:15px;box-shadow:0 0 0 1px rgba(0,0,0,.15)}.minis.sm{margin-right:6px}
+.ft{position:relative}.ord{position:absolute;top:6px;right:8px;font:900 12px "Archivo",sans-serif;font-style:normal;color:#7a4f00}
+.selbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.selchip{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:6px 10px;background:#fff6dc;box-shadow:inset 0 0 0 1.5px var(--gold);cursor:pointer;font:700 13px "Hepta Slab",Georgia,serif;color:var(--ink)}
+.selchip img{width:20px;height:15px;object-fit:cover;border-radius:3px}.selchip b{font-size:15px;color:#8f1220}
+.dstats{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;font-size:13px;color:#52637a}.dstats b{font:900 22px "Archivo",sans-serif;color:var(--navy)}.dstats i{font-style:normal}
+.dq{flex:1 1 200px;font:15px "Hepta Slab",Georgia,serif;padding:10px 12px;border-radius:12px;border:2px solid #d9d2c3;background:#fffdf8}
+.dsel{width:auto!important;padding:10px 12px!important;font-size:15px!important}
+.st-active-d{color:#1d7a45;font-weight:700}.st-past_due-d{color:#b76e00;font-weight:700}.st-canceled-d{color:#8f1220;font-weight:700}
+.brow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 0;border-top:1px solid #eee5d3}.brow:first-child{border-top:0}
+.brow>.minis{min-width:64px}
+.bwho{flex:1 1 220px;display:flex;flex-direction:column;gap:2px}.bwho b{font:900 16px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy)}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=ae611496"></script>
+<script src="../assets/vendor/qrcode.js?v=863b9b53"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -211,6 +230,14 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
       <p class="small" style="margin-top:14px">Show the QR code at the door. Screenshots work. If your phone is off, give your name or the 8-character code.</p></section>
     <section class="card" id="events"><h2>Get Tickets</h2><div id="evList"></div><div id="evMsg" class="msg" hidden></div></section>
     <section class="card" id="rsvp" hidden><h2>All Events · RSVPs</h2><p class="small" style="margin:-6px 0 12px">Board view. Tap an event to see everyone who has a ticket.</p><div id="rsvpList"></div></section>
+    <section class="card" id="dir" hidden><h2>Member Directory</h2><div id="dirStats" class="dstats"></div>
+      <div class="tools"><input id="dirQ" type="search" placeholder="Search name or email" aria-label="Search name or email" class="dq">
+        <select id="dirT" aria-label="Membership level" class="dsel"><option value="">All levels</option><option value="young">Young Leader</option><option value="member">Member</option><option value="patriot">Patriot</option><option value="embajador">Ambassador</option></select>
+        <button class="btn ghost sm" type="button" id="dirCsv">Download CSV</button></div>
+      <div style="overflow-x:auto"><table><thead><tr><th>Name</th><th class="hide-s">Email</th><th>Level</th><th>Status</th><th class="hide-s">Joined</th></tr></thead><tbody id="dirRows"></tbody></table></div>
+      <p class="small" style="margin-top:10px">Board view only. Please don't share member contact details outside the board.</p></section>
+    <section class="card" id="boardP" hidden><h2>Executive Board</h2><p class="small" style="margin:-6px 0 12px">Send a board member a sign-in email: new accounts get a "set your password" invite; existing accounts get a password-reset link.</p>
+      <div id="boardRows"></div><div id="boardMsg" class="msg" hidden></div></section>
     <section class="card" id="history"><h2>Events Attended</h2><div id="hist"></div></section>
   </div>
 </div></div>
@@ -241,7 +268,7 @@ function readLinkTokens(){
     if(h.length<2)continue;
     const p=new URLSearchParams(h.slice(1));
     if(p.get("access_token")){
-      if(p.get("type")==="recovery")window.__recovery=true;
+      if(p.get("type")==="recovery"||p.get("type")==="invite")window.__recovery=p.get("type");
       save({access_token:p.get("access_token"),refresh_token:p.get("refresh_token"),expires_at:Math.floor(Date.now()/1000)+(+p.get("expires_in")||3600)});
       try{w.history.replaceState(null,"",w.location.pathname+w.location.search);}catch(e){}
       return null;
@@ -328,7 +355,7 @@ $("bLink").addEventListener("click",async()=>{
 });
 /* new password: from the "forgot password" email, or Change password in the profile */
 let pwFromRecovery=false;
-function askNewPassword(fromRecovery){pwFromRecovery=fromRecovery;$("pwTitle").textContent=fromRecovery?"Set a new password":"Change password";
+function askNewPassword(fromRecovery){pwFromRecovery=fromRecovery;$("pwTitle").textContent=window.__recovery==="invite"?"Welcome! Set your password":fromRecovery?"Set a new password":"Change password";
   $("pw1").value=$("pw2").value="";$("newMsg").hidden=true;$("bNewCancel").hidden=fromRecovery;view("pw");setTimeout(()=>$("pw1").focus(),50);}
 $("bChg").addEventListener("click",()=>askNewPassword(false));
 $("bNewCancel").addEventListener("click",()=>view("in"));
@@ -357,18 +384,22 @@ async function fetchAll(){
     api("/rest/v1/members?select=*&email=eq."+encodeURIComponent(email)),
     api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents&owner_email=eq."+encodeURIComponent(email)+"&order=created_at.asc"),
     api("/rest/v1/events?select=*&order=starts_at.asc.nullslast"),
-    api("/rest/v1/admins?select=email,name,title&email=eq."+encodeURIComponent(email)),
+    api("/rest/v1/admins?select=email,name,title,role,subtitle&email=eq."+encodeURIComponent(email)),
     api("/rest/v1/comp_grants?select=*"),
   ]);
-  let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
-  data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,all:null,flag:prof&&prof.country_code?prof:null};
+  let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name,flags&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
+  data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,all:null,flags:prof?(prof.flags&&prof.flags.length?prof.flags:(prof.country_code?[prof.country_code]:[])):[]};
+  data.isFull=!!(data.exec&&data.exec.role==="full");
   /* first visit after joining: use the flag they tapped on the Join page */
-  if(!data.flag){try{const n=localStorage.getItem("lrc_flag");const c=n&&NAME_ISO[n];if(c){data.flag={country_code:c,country_name:n};saveFlag(c,n,true);}}catch(e){}}
-  if(data.isAdmin){
-    const [all,mem]=await Promise.all([
+  if(!data.flags.length){try{const n=localStorage.getItem("lrc_flag");const c=n&&NAME_ISO[n];if(c){data.flags=[c];saveFlags([c],true);}}catch(e){}}
+  if(data.isFull){
+    const [all,mem,profs,board]=await Promise.all([
       api("/rest/v1/tickets?select=id,event_id,owner_email,holder_name,kind,token,status,checked_in_at,price_cents,created_at&status=neq.void&order=created_at.asc"),
-      api("/rest/v1/members?select=email,name,tier,status")]);
-    data.all=all;data.mem=Object.fromEntries(mem.map(x=>[x.email,x]));
+      api("/rest/v1/members?select=email,name,tier,status,joined_at,renews_at&order=joined_at.desc"),
+      api("/rest/v1/profiles?select=email,flags,country_code"),
+      api("/rest/v1/admins?select=email,name,title,role,subtitle&order=name.asc")]);
+    data.all=all;data.mem=Object.fromEntries(mem.map(x=>[x.email,x]));data.memList=mem;data.board=board.filter(b=>b.title);
+    data.pflags=Object.fromEntries(profs.map(x=>[x.email,x.flags&&x.flags.length?x.flags:(x.country_code?[x.country_code]:[])]));
   }
 }
 function fmtDate(iso){if(!iso)return"";return new Date(iso).toLocaleDateString(L()==="es"?"es-US":"en-US",{year:"numeric",month:"long",day:"numeric"});}
@@ -386,40 +417,42 @@ const CLUB_ISO=Object.values(NAME_ISO);
 const FLAG_CODES="ad ae af ag ai al am ao ar as at au aw ax az ba bb bd be bf bg bh bi bj bl bm bn bo bq br bs bt bw by bz ca cc cd cf cg ch ci ck cl cm cn co cr cu cv cw cx cy cz de dj dk dm do dz ec ee eg eh er es et fi fj fk fm fo fr ga gb gd ge gf gg gh gi gl gm gn gp gq gr gt gu gw gy hk hn hr ht hu id ie il im in iq ir is it je jm jo jp ke kg kh ki km kn kp kr kw ky kz la lb lc li lk lr ls lt lu lv ly ma mc md me mf mg mh mk ml mm mn mo mp mq mr ms mt mu mv mw mx my mz na nc ne nf ng ni nl no np nr nu nz om pa pe pf pg ph pk pl pm pn pr ps pt pw py qa re ro rs ru rw sa sb sc sd se sg sh si sk sl sm sn so sr ss st sv sx sy sz tc td tg th tj tk tl tm tn to tr tt tv tw tz ua ug us uy uz va vc ve vg vi vn vu wf ws xk ye yt za zm zw".split(" ");
 function cName(code){try{return new Intl.DisplayNames([L()==="es"?"es":"en"],{type:"region"}).of(code);}catch(e){return code;}}
 const flagUrl=c=>"../assets/flags/"+String(c).toLowerCase()+".svg";
-function flagAttrs(){const f=data&&data.flag;return f?` has-flag" style="--flag:url('${flagUrl(f.country_code)}')`:"";}
-function flagLine(){const f=data.flag;
-  return `<div class="repline">${f?`<img src="${flagUrl(f.country_code)}" alt=""><span><span>Representing</span> <b>${esc(cName(f.country_code))}</b></span>`:`<span>Choose the flag you represent</span>`}
-    <button type="button" class="flagbtn" id="bFlag">${f?"Change flag":"Choose flag"}</button></div>`;}
-async function saveFlag(code,name,quiet){
+const MAXF=3;
+function flagAttrs(){return data&&data.flags.length?" has-flag":"";}
+function flagBg(){const f=data&&data.flags;if(!f||!f.length)return"";
+  return `<div class="fbg n${f.length}" aria-hidden="true">${f.map(c=>`<span style="background-image:url('${flagUrl(c)}')"></span>`).join("")}</div>`;}
+const andJoin=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+(L()==="es"?" y ":" & ")+a[a.length-1];
+const miniFlags=f=>f.map(c=>`<img src="${flagUrl(c)}" alt="">`).join("");
+function flagLine(){const f=data.flags;
+  return `<div class="repline">${f.length?`<span class="minis">${miniFlags(f)}</span><span><span>Representing</span> <b>${esc(andJoin(f.map(cName)))}</b></span>`:`<span>Choose the flag you represent</span>`}
+    <button type="button" class="flagbtn" id="bFlag">${f.length?"Change flag":"Choose flag"}</button></div>`;}
+async function saveFlags(list,quiet){
   try{await api("/rest/v1/profiles?on_conflict=email",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
-      body:JSON.stringify({country_code:code,country_name:(name||cName(code)).slice(0,60),updated_at:new Date().toISOString()})});return true;}
+      body:JSON.stringify({flags:list.length?list:null,country_code:list[0]||null,country_name:list[0]?cName(list[0]).slice(0,60):null,updated_at:new Date().toISOString()})});return true;}
   catch(e){if(!quiet)throw e;return false;}
 }
 function openFlagPicker(){
-  const cur=data.flag&&data.flag.country_code;
-  const tiles=CLUB_ISO.map(c=>`<button type="button" class="ft${c===cur?" on":""}" data-c="${c}" aria-pressed="${c===cur}"><img src="${flagUrl(c)}" alt=""><span>${esc(c==="US"?"USA":cName(c))}</span></button>`).join("");
+  let sel=[...data.flags];
   const opts=FLAG_CODES.filter(c=>!CLUB_ISO.includes(c.toUpperCase())).map(c=>[c.toUpperCase(),cName(c.toUpperCase())]).filter(x=>x[1]&&x[1]!==x[0]).sort((a,b)=>a[1].localeCompare(b[1]));
-  $("flagPick").innerHTML=`<h2>Choose your flag</h2><p class="small" style="margin:-6px 0 14px">Your flag shows behind your name on your profile.</p>
-    <div class="ftgrid">${tiles}</div>
-    <label for="otherC" style="margin-top:16px">Another country</label>
-    <select id="otherC"><option value="">Choose a country…</option>${opts.map(o=>`<option value="${o[0]}"${o[0]===cur?" selected":""}>${esc(o[1])}</option>`).join("")}</select>
-    <div class="row" style="margin-top:16px"><button class="btn" type="button" id="bFlagSave">Save flag</button><button class="btn ghost" type="button" id="bFlagCancel">Cancel</button>
-    ${cur?`<button class="link" type="button" id="bFlagNone" style="margin-left:auto">Remove flag</button>`:""}</div><div id="flagMsg" class="msg" hidden></div>`;
-  let sel=cur||"";
+  $("flagPick").innerHTML=`<h2>Choose your flag</h2><p class="small" style="margin:-6px 0 14px">Tap one flag, or up to three if your family comes from more than one place. They share the background behind your name.</p>
+    <div class="ftgrid">${CLUB_ISO.map(c=>`<button type="button" class="ft" data-c="${c}" aria-pressed="false"><img src="${flagUrl(c)}" alt=""><span>${esc(c==="US"?"USA":cName(c))}</span><i class="ord"></i></button>`).join("")}</div>
+    <label for="otherC" style="margin-top:16px">Add another country</label>
+    <select id="otherC"><option value="">Choose a country…</option>${opts.map(o=>`<option value="${o[0]}">${esc(o[1])}</option>`).join("")}</select>
+    <div class="selbar"><span class="small">Your flags:</span><span id="selChips"></span></div>
+    <div class="row" style="margin-top:14px"><button class="btn" type="button" id="bFlagSave">Save flags</button><button class="btn ghost" type="button" id="bFlagCancel">Cancel</button></div><div id="flagMsg" class="msg" hidden></div>`;
   const grid=$("flagPick").querySelector(".ftgrid");
-  grid.addEventListener("click",e=>{const b=e.target.closest(".ft");if(!b)return;sel=b.dataset.c;$("otherC").value="";
-    grid.querySelectorAll(".ft").forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",x===b);});});
-  $("otherC").addEventListener("change",()=>{if($("otherC").value){sel=$("otherC").value;grid.querySelectorAll(".ft").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-pressed","false");});}});
+  function paint(){grid.querySelectorAll(".ft").forEach(b=>{const k=sel.indexOf(b.dataset.c);b.classList.toggle("on",k>=0);b.setAttribute("aria-pressed",k>=0);b.querySelector(".ord").textContent=k>=0&&sel.length>1?k+1:"";});
+    $("selChips").innerHTML=sel.length?sel.map(c=>`<button type="button" class="selchip" data-x="${c}"><img src="${flagUrl(c)}" alt="">${esc(cName(c))}<b aria-label="Remove">×</b></button>`).join(""):`<i class="small">None</i>`;}
+  function toggle(c){const k=sel.indexOf(c);if(k>=0)sel.splice(k,1);else{if(sel.length>=MAXF){show($("flagMsg"),"err","Up to 3 flags. Remove one first.");return;}sel.push(c);}$("flagMsg").hidden=true;paint();}
+  grid.addEventListener("click",e=>{const b=e.target.closest(".ft");if(b)toggle(b.dataset.c);});
+  $("selChips").addEventListener("click",e=>{const b=e.target.closest(".selchip");if(b)toggle(b.dataset.x);});
+  $("otherC").addEventListener("change",()=>{const v=$("otherC").value;if(v&&!sel.includes(v))toggle(v);$("otherC").value="";});
   $("bFlagCancel").onclick=()=>{$("flagPick").hidden=true;};
-  $("bFlagSave").onclick=async()=>{if(!sel){show($("flagMsg"),"err","Tap a flag or choose a country.");return;}
-    $("bFlagSave").disabled=true;
-    try{await saveFlag(sel,cName(sel));data.flag={country_code:sel,country_name:cName(sel)};try{localStorage.setItem("lrc_flag",Object.keys(NAME_ISO).find(k=>NAME_ISO[k]===sel)||"");}catch(e){}
-      $("flagPick").hidden=true;render();jump("mcard");}
+  $("bFlagSave").onclick=async()=>{$("bFlagSave").disabled=true;
+    try{await saveFlags(sel);data.flags=[...sel];$("flagPick").hidden=true;render();jump("mcard");}
     catch(e){show($("flagMsg"),"err","We couldn't save your flag. Please try again.");}
     $("bFlagSave").disabled=false;};
-  if($("bFlagNone"))$("bFlagNone").onclick=async()=>{try{await api("/rest/v1/profiles?email=eq."+encodeURIComponent(data.email),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({country_code:null,country_name:null,updated_at:new Date().toISOString()})});
-    data.flag=null;try{localStorage.removeItem("lrc_flag");}catch(e){}$("flagPick").hidden=true;render();}catch(e){show($("flagMsg"),"err","We couldn't save your flag. Please try again.");}};
-  $("flagPick").hidden=false;jump("flagPick");
+  paint();$("flagPick").hidden=false;jump("flagPick");
 }
 document.addEventListener("click",e=>{if(e.target.closest("#bFlag"))openFlagPicker();});
 
@@ -428,23 +461,24 @@ function render(){
   const d=data,m=d.member,es=L()==="es";
   $("whoEm").textContent=d.email;
   $("adminLink").hidden=!d.isAdmin;
+  $("dir").hidden=$("boardP").hidden=!d.isFull;if(d.isFull){renderDir();renderBoard();}
   /* membership */
   const name=m&&m.name||(d.user.user_metadata&&d.user.user_metadata.name)||"";
   if(d.exec&&d.exec.title){
     const ex=d.exec;
-    $("mcard").innerHTML=`<div class="mcard exec${flagAttrs()}"><div class="mtop"><div><div class="mname">${esc(ex.name||name||"")}</div><div class="memail">${esc(d.email)}</div></div>
+    $("mcard").innerHTML=`<div class="mcard exec${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(ex.name||name||"")}</div><div class="memail">${esc(d.email)}</div></div>
       <span class="tier gold-x">${esc(ex.title)}</span></div>
-      <div class="mgrid"><div><span>Status</span><b class="st-active">Active</b></div><div><span>Role</span><b>Executive Board</b></div>
-      <div><span>Access</span><b>Full access</b></div>${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div>${flagLine()}</div>`;
+      <div class="mgrid"><div><span>Status</span><b class="st-active">Active</b></div><div><span>Board</span><b>${esc(ex.subtitle||"Executive Board")}</b></div>
+      <div><span>Access</span><b>${ex.role==="full"?"Full access":"Door check-in & tickets"}</b></div>${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div>${flagLine()}</div>`;
   }else if(m){
-    $("mcard").innerHTML=`<div class="mcard${flagAttrs()}"><div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div></div>
+    $("mcard").innerHTML=`<div class="mcard${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div></div>
       <span class="tier">${esc(TIER[m.tier]||m.tier)}</span></div>
       <div class="mgrid"><div><span>Status</span><b class="st-${esc(m.status)}">${esc(STATUS[m.status]||m.status)}</b></div>
       <div><span>Member since</span><b>${esc(fmtDate(m.joined_at))}</b></div>
       ${m.renews_at?`<div><span>Renews</span><b>${esc(fmtDate(m.renews_at))}</b></div>`:""}</div>
       ${flagLine()}${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Renew membership</a>`:""}</div>`;
   }else{
-    $("mcard").innerHTML=`<div class="mcard${flagAttrs()}"><div class="mtop"><div><div class="mname">${esc(name||"Welcome")}</div><div class="memail">${esc(d.email)}</div></div><span class="tier none">Not a member yet</span></div>
+    $("mcard").innerHTML=`<div class="mcard${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(name||"Welcome")}</div><div class="memail">${esc(d.email)}</div></div><span class="tier none">Not a member yet</span></div>
       <p style="margin:18px 0 0;line-height:1.55;opacity:.9">We didn't find a membership for this email. If you joined with a different email, sign in with that one.</p>
       ${flagLine()}<a class="btn gold" href="../join/" target="_top">Join the club</a></div>`;
   }
@@ -548,10 +582,42 @@ $("rsvpList").addEventListener("click",e=>{
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download=ev.slug+"-rsvps.csv";document.body.appendChild(a);a.click();a.remove();
 });
 async function enter(){view("load");try{await reload();view("in");return true;}catch(e){save(null);view("out");return false;}}
+/* board: member directory */
+function renderDir(){
+  const d=data,q=($("dirQ").value||"").trim().toLowerCase(),t=$("dirT").value;
+  const act=d.memList.filter(m=>m.status==="active");
+  const by=k=>act.filter(m=>m.tier===k).length;
+  $("dirStats").innerHTML=`<span><b>${act.length}</b> <i>active members</i></span><span><b>${by("young")}</b> <i>Young Leader</i></span><span><b>${by("member")}</b> <i>Member</i></span><span><b>${by("patriot")}</b> <i>Patriot</i></span><span><b>${by("embajador")}</b> <i>Ambassador</i></span>`;
+  const rows=d.memList.filter(m=>(!t||m.tier===t)&&(!q||((m.name||"")+" "+m.email).toLowerCase().includes(q)));
+  $("dirRows").innerHTML=rows.length?rows.map(m=>{const f=d.pflags[m.email]||[];
+    return `<tr><td><span class="minis sm">${miniFlags(f)}</span>${esc(m.name||"")}<span class="em2"><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></span></td><td class="hide-s"><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></td>
+      <td>${esc(TIER[m.tier]||m.tier)}</td><td><span class="st-${esc(m.status)}-d">${esc(STATUS[m.status]||m.status)}</span></td><td class="hide-s">${esc(fmtDate(m.joined_at))}</td></tr>`;}).join("")
+    :`<tr><td colspan="5"><span>No members yet.</span></td></tr>`;
+}
+["dirQ","dirT"].forEach(id=>$(id).addEventListener("input",()=>data&&renderDir()));
+$("dirCsv").addEventListener("click",()=>{const d=data;
+  const rows=[["Name","Email","Level","Status","Joined","Renews","Flags"]].concat(d.memList.map(m=>[m.name||"",m.email,TIER[m.tier]||m.tier,m.status,m.joined_at||"",m.renews_at||"",(d.pflags[m.email]||[]).join(" ")]));
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download="club-members.csv";document.body.appendChild(a);a.click();a.remove();});
+/* board: list + invites */
+function renderBoard(){
+  const d=data;
+  $("boardRows").innerHTML=d.board.map(b=>{const f=d.pflags[b.email]||[];const me=b.email===d.email;
+    return `<div class="brow"><span class="minis">${miniFlags(f)}</span><div class="bwho"><b>${esc(b.name||b.email)}</b><span class="small">${esc(b.title||"")} · ${b.role==="full"?"<span>Full access</span>":"<span>Door check-in & tickets</span>"}</span><span class="small">${esc(b.email)}</span></div>
+      ${me?`<span class="chip">You</span>`:`<button class="btn ghost sm" type="button" data-inv="${esc(b.email)}">Send sign-in email</button>`}</div>`;}).join("");
+}
+$("boardRows").addEventListener("click",async e=>{const b=e.target.closest("button[data-inv]");if(!b)return;b.disabled=true;const m=$("boardMsg");
+  try{const r=await api("/functions/v1/board-invite",{method:"POST",body:JSON.stringify({emails:[b.dataset.inv],return_url:pageUrl()})});
+    const v=(r.results||{})[b.dataset.inv]||"";
+    show(m,/^(invited|reset_sent)$/.test(v)?"ok":"err",v==="invited"?"Invite sent. They'll get an email to set their password.":v==="reset_sent"?"They already have an account, so we sent a set-new-password email.":"Couldn't send that email. Please try again later.");}
+  catch(err){show(m,"err","Couldn't send that email. Please try again later.");}
+  b.disabled=false;});
 async function reload(){await fetchAll();render();}
 addEventListener("lrc-lang",render);
 
 (async function start(){
+  /* personal setup links: ?email=…&setup=1 opens "Create account" with the email filled in */
+  try{const q=new URLSearchParams(topWin.location.search);const em=q.get("email");if(em&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){$("em").value=em.toLowerCase();if(q.get("setup")==="1")setMode("up");}}catch(e){}
   const linkErr=readLinkTokens();
   session=session||load();
   if(!session){view("out");if(linkErr)show($("inMsg"),"err",linkErr==="expired"?"That sign-in link expired. Enter your email for a new one.":"That sign-in link didn't work. Enter your email for a new one.");return;}
@@ -583,5 +649,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=ae611496"></script><script src="../assets/i18n.js?v=ae611496"></script>
+</script><script src="../assets/i18n-es.js?v=863b9b53"></script><script src="../assets/i18n.js?v=863b9b53"></script>
 </body></html>

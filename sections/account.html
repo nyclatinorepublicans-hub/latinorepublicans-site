@@ -51,6 +51,9 @@ input[type=email]:focus,select:focus{border-color:var(--gold);outline:0}
 .st-active{color:#8ee3ad}.st-past_due{color:#ffd27a}.st-canceled,.st-lapsed{color:#ff9aa5}
 .paywarn{margin:0 0 12px;padding:12px 14px;border-radius:14px;background:#fff1cf;border:1.5px solid #e0a400;color:#5c4100;font-size:15px;line-height:1.45}.paywarn .btn{margin-left:6px;vertical-align:middle}
 .paywarn.off{background:#fde8ea;border-color:#d51b2f;color:#7a0f1a}.sponnote{margin:10px 0 0;font-size:13px;line-height:1.45;color:#dfe7f2;opacity:.9}
+.partner{margin:12px 0 0;padding:12px 14px;border-radius:12px;border:1px solid rgba(245,208,102,.4);background:rgba(255,255,255,.06)}.partner .pt{display:block;color:#f5d066;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.partner form{display:flex;flex-wrap:wrap;gap:8px}.partner input{flex:1 1 160px;min-width:0;padding:9px 11px;border-radius:9px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.95);color:#0d2238;font:inherit;font-size:14px}
+.partner .pm{margin:6px 0 0;font-size:13px}.partner .pm.err{color:#ffb3bb}.partner .who{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px}
 .mbtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.mbtns .flagbtn{margin:0;text-decoration:none}
 .mcard .btn{margin-top:20px}
 
@@ -312,7 +315,7 @@ body.gated #contactCard{display:none!important}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=25d22535"></script>
+<script src="../assets/vendor/qrcode.js?v=91db7586"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -469,7 +472,7 @@ const SB_KEY="sb_publishable_nzBBd1P7v-mVTbbjfd8JSw_i0FXzcZm"; /* public key: th
 const JOIN_BONUS={cutoff:Date.parse("2027-01-01T05:00:00Z"),patriot:2,embajador:4};
 const TIER={young:"Young Leader",member:"Member",patriot:"Patriot",embajador:"Ambassador",corporate:"Corporate Sponsor"};
 const STATUS={active:"Active",past_due:"Payment due",canceled:"Canceled",lapsed:"Lapsed"};
-const BILL={month:"Monthly",quarter:"Quarterly",semiannual:"Every 6 months",year:"Annual"};
+const BILL={sponsor:"Covered by sponsorship",month:"Monthly",quarter:"Quarterly",semiannual:"Every 6 months",year:"Annual"};
 const PORTAL="https://billing.stripe.com/p/login/test_aFacN5bkpcSn0ZC4Rl7N600"; /* Stripe billing page (TEST MODE): swap for the live link when you go live */
 const portalUrl=()=>PORTAL+"?prefilled_email="+encodeURIComponent(data.email);
 const SKEY="lrc_session";
@@ -611,7 +614,7 @@ async function fetchAll(){
     api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents,owner_email,holder_name,shared_by,shared_at,gift,gift_note,gift_opened_at&or=(owner_email.eq."+encodeURIComponent(email)+",shared_by.eq."+encodeURIComponent(email)+")&order=created_at.asc"),
     api("/rest/v1/events?select=*&order=starts_at.asc.nullslast"),
     api("/rest/v1/admins?select=email,name,title,role,subtitle,advisory_title&email=eq."+encodeURIComponent(email)),
-    api("/rest/v1/comp_grants?select=*"),
+    api("/rest/v1/comp_grants?select=*&email=eq."+encodeURIComponent(email)),
   ]);
   let qa=[];try{qa=await api("/rest/v1/qa_accounts?select=email&email=eq."+encodeURIComponent(email));}catch(e){}
   let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name,flags,name,phone,program_listing,notif_hidden,welcome_seen_at&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
@@ -833,7 +836,15 @@ document.addEventListener("click",e=>{const b=e.target.closest("button[data-edit
 const UPPER=["patriot","embajador","corporate"];
 function perkLevel(){const m=data.member;return !!(m&&m.status==="active"&&UPPER.includes(m.tier));}
 function earlyOK(){return data.isBoard||perkLevel();}
-function isAmb(){const m=data.member;return !!(m&&m.status==="active"&&m.tier==="embajador");}
+async function rpc(fn,args){const t=await token();const r=await fetch(SB_URL+"/rest/v1/rpc/"+fn,{method:"POST",headers:{apikey:SB_KEY,Authorization:"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify(args||{})});const j=await r.json().catch(()=>null);if(!r.ok)throw new Error((j&&j.message)||"Something went wrong");return j;}
+async function renderPartner(){const box=$("partnerBody");if(!box)return;const active=data.member.status==="active";let p=null;try{p=await rpc("my_sponsor_partner");}catch(e){}
+  if(p&&p.email){box.innerHTML=`<div class="who"><span>★ <b>${esc(p.name)}</b> · ${esc(p.email)}</span><button type="button" class="flagbtn" id="bPartnerRm">Remove</button></div><p class="pm"><span>They sign in with this email to get their Ambassador profile.</span></p>`;
+    $("bPartnerRm").onclick=async()=>{if(!confirm(L()==="es"?"¿Quitar la membresía de esta persona?":"Remove this person's membership?"))return;try{await rpc("remove_sponsor_partner");renderPartner();}catch(e){alert(e.message);}};return;}
+  if(!active){box.innerHTML=`<p class="pm"><span>Available while your sponsorship is active.</span></p>`;return;}
+  box.innerHTML=`<form id="partnerForm"><input id="pName" placeholder="Full name" autocomplete="off" required><input id="pEmail" type="email" placeholder="Their email" autocomplete="off" required><button class="btn sm gold" type="submit">Add</button></form><p class="pm" id="pMsg"><span>Add your spouse or partner to give them their own Ambassador membership.</span></p>`;
+  $("partnerForm").onsubmit=async e=>{e.preventDefault();const msg=$("pMsg");msg.className="pm";msg.textContent=L()==="es"?"Guardando…":"Saving…";
+    try{await rpc("set_sponsor_partner",{p_email:$("pEmail").value,p_name:$("pName").value});renderPartner();}catch(err){msg.className="pm err";msg.textContent=err.message;}};}
+function isAmb(){const m=data.member;return !!(m&&m.status==="active"&&(m.tier==="embajador"||m.tier==="corporate"));}
 function foundingCutoff(){const g=(data.events||[]).find(e=>e.slug==="gala-2027"&&e.starts_at);return g?Date.parse(g.starts_at):Date.parse("2027-02-01T05:00:00Z");}
 function isFounding(){const m=data.member;return data.isBoard||!!(m&&UPPER.includes(m.tier)&&m.joined_at&&Date.parse(m.joined_at)<foundingCutoff());}
 function badges(){return isFounding()?`<span class="fbadge">★ <span>Founding Member</span></span>`:"";}
@@ -890,9 +901,10 @@ function render(){
       <div class="mgrid"><div><span>Status</span><b class="st-${esc(m.status)}">${esc(STATUS[m.status]||m.status)}</b></div>
       <div><span>${m.tier==="corporate"?"Sponsor since":"Member since"}</span><b>${esc(fmtDate(m.joined_at))}</b></div>
       ${m.billing_interval?`<div><span>Billing</span><b>${esc(BILL[m.billing_interval]||m.billing_interval)}</b></div>`:""}
-      ${m.renews_at?`<div><span>${m.status==="active"?"Next payment":"Paid through"}</span><b>${esc(fmtDate(m.renews_at))}</b></div>`:""}</div>
-      ${m.tier==="corporate"?`<p class="sponnote">Business sponsorship: not a club membership and no voting rights. Your team members can join the club on their own.</p>`:""}
-      ${flagLine()}<div class="mbtns">${perkLevel()?`<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button>`:""}${m.stripe_customer||m.billing_interval?`<a class="flagbtn" href="${esc(portalUrl())}" target="_blank" rel="noopener">Manage billing</a>`:""}<button class="flagbtn" type="button" id="bGetApp"${perkLevel()&&!isStandalone()?"":" hidden"}>📱 Get the app</button></div>${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Rejoin the club</a>`:""}</div>`;
+      ${m.renews_at?`<div><span>${m.linked_to?"Covered through":m.status==="active"?"Next payment":"Paid through"}</span><b>${esc(fmtDate(m.renews_at))}</b></div>`:""}</div>
+      ${m.tier==="corporate"?`<p class="sponnote"><span>Your sponsorship includes full Ambassador membership, with voting rights, for you and one spouse or partner. Other owners and employees of the business are not members; they can join on their own.</span></p><div class="partner" id="partnerBox"><b class="pt">Spouse / partner membership</b><div id="partnerBody"><span class="muted">Loading…</span></div></div>`:""}${m.linked_to?`<p class="sponnote"><span>Your Ambassador membership is included with a corporate sponsorship.</span></p>`:""}
+      ${flagLine()}<div class="mbtns">${perkLevel()?`<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button>`:""}${(m.stripe_customer||m.billing_interval)&&!m.linked_to?`<a class="flagbtn" href="${esc(portalUrl())}" target="_blank" rel="noopener">Manage billing</a>`:""}<button class="flagbtn" type="button" id="bGetApp"${perkLevel()&&!isStandalone()?"":" hidden"}>📱 Get the app</button></div>${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Rejoin the club</a>`:""}</div>`;
+    if(m.tier==="corporate")renderPartner();
     if(m.status==="active"&&m.grace_until){$("mcard").insertAdjacentHTML("afterbegin",`<div class="paywarn" role="alert"><b>Your last payment didn't go through.</b> <span>Update your card by</span> ${esc(fmtDate(m.grace_until))} <span>to keep your member benefits.</span> <a class="btn sm gold" href="${esc(portalUrl())}" target="_blank" rel="noopener">Update card</a></div>`);}
     else if(m.status==="lapsed"||m.status==="canceled"){$("mcard").insertAdjacentHTML("afterbegin",`<div class="paywarn off" role="status"><b>Your membership has lapsed.</b> <span>Member benefits are paused until you rejoin. Your profile, tickets you bought and event history stay here.</span></div>`);}
   }else{
@@ -1576,5 +1588,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=25d22535"></script><script src="../assets/i18n.js?v=25d22535"></script>
+</script><script src="../assets/i18n-es.js?v=91db7586"></script><script src="../assets/i18n.js?v=91db7586"></script>
 </body></html>

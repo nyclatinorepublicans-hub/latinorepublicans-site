@@ -926,6 +926,21 @@ window.LRC_ES={
 "Welcome from the Chairman": "Bienvenida del Presidente",
 "A message for our members": "Un mensaje para nuestros miembros",
 "A short video from Chairman Elijah Diaz.": "Un video corto del Presidente Elijah Diaz.",
-"Watch the welcome video": "Ver el video de bienvenida"
+"Watch the welcome video": "Ver el video de bienvenida",
+"Ambassador membership for you and your spouse or partner:": "Membresía de Embajador para usted y su cónyuge o pareja:",
+"every Ambassador benefit, with full voting rights": "todos los beneficios de Embajador, con pleno derecho a voto",
+"Who becomes a member.": "Quién se vuelve miembro.",
+"The sponsorship includes Ambassador membership, with voting rights, for the person who pays it (the principal) and one spouse or partner. It does not make anyone else at the business (other owners, employees or members) part of the club; they can join on their own.": "El patrocinio incluye membresía de Embajador, con derecho a voto, para la persona que lo paga (el titular) y un cónyuge o pareja. No convierte a nadie más de la empresa (otros dueños, empleados o miembros) en parte del club; pueden unirse por su cuenta.",
+"Corporate Sponsorship is $2,500 a year, or pay every 6 months, quarterly or monthly. It includes Ambassador membership, with voting rights, for the principal who pays it and one spouse or partner. Other owners and employees of the business are not members; they can join on their own.": "El Patrocinio Corporativo cuesta $2,500 al año, o puede pagar cada 6 meses, cada trimestre o cada mes. Incluye membresía de Embajador, con derecho a voto, para el titular que lo paga y un cónyuge o pareja. Otros dueños y empleados de la empresa no son miembros; pueden unirse por su cuenta.",
+"Sponsor recognition is a thank-you acknowledgment of support. It is not advertising, a marketing service, an endorsement by the club or a comparison with other businesses. Only the paying principal and one spouse or partner become members; the business itself does not vote. Paid for by NYC Latino Republican Club Inc.": "El reconocimiento a patrocinadores es un agradecimiento por su apoyo. No es publicidad, un servicio de mercadeo, un respaldo del club ni una comparación con otras empresas. Solo el titular que paga y un cónyuge o pareja se vuelven miembros; la empresa en sí no vota. Pagado por NYC Latino Republican Club Inc.",
+"Your sponsorship includes full Ambassador membership, with voting rights, for you and one spouse or partner. Other owners and employees of the business are not members; they can join on their own.": "Su patrocinio incluye membresía completa de Embajador, con derecho a voto, para usted y un cónyuge o pareja. Otros dueños y empleados de la empresa no son miembros; pueden unirse por su cuenta.",
+"Spouse / partner membership": "Membresía de cónyuge / pareja",
+"Your Ambassador membership is included with a corporate sponsorship.": "Su membresía de Embajador está incluida con un patrocinio corporativo.",
+"They sign in with this email to get their Ambassador profile.": "Inician sesión con este correo para ver su perfil de Embajador.",
+"Available while your sponsorship is active.": "Disponible mientras su patrocinio esté activo.",
+"Add your spouse or partner to give them their own Ambassador membership.": "Agregue a su cónyuge o pareja para darle su propia membresía de Embajador.",
+"Covered by sponsorship": "Cubierto por el patrocinio",
+"Their email": "Su correo",
+"Covered through": "Cubierto hasta"
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

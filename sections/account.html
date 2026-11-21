@@ -114,6 +114,22 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;p
 th{font:800 11px "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#52637a;border-top:0}
 .in{color:#1d7a45;font-weight:700}.em2{display:none;font-size:12px;color:#5b6b7e;word-break:break-all}
 @media (max-width:600px){.hide-s{display:none}.em2{display:block}}
+.tabs{display:flex;gap:6px;background:#f4efe4;border-radius:999px;padding:5px;margin-bottom:16px}
+.tabs .tab{flex:1;border:0;border-radius:999px;padding:11px 10px;cursor:pointer;background:transparent;font:800 13px "Archivo",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#52637a}
+.tabs .tab.on{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(5,42,75,.12)}
+#fPw label,#fNew label{margin-top:12px}
+.pwbox{position:relative}.pwbox input{width:100%;font:16px "Hepta Slab",Georgia,serif;padding:13px 48px 13px 14px;border-radius:12px;border:2px solid #d9d2c3;background:#fffdf8;color:var(--ink)}
+input[type=password]{width:100%;font:16px "Hepta Slab",Georgia,serif;padding:13px 14px;border-radius:12px;border:2px solid #d9d2c3;background:#fffdf8;color:var(--ink)}
+input[type=password]:focus{border-color:var(--gold);outline:0}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:transparent;cursor:pointer;padding:8px;line-height:0}
+.eye svg{width:22px;height:22px;fill:none;stroke:#52637a;stroke-width:1.8}.eye[aria-pressed=true] svg{stroke:var(--gold)}
+.pwrules{font-size:13px;color:#5b6b7e;margin-top:6px}
+.btn.wide{width:100%;margin-top:18px}
+.alt{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;font-size:14px;color:#9aa6b4}
+.link{border:0;background:none;padding:0;cursor:pointer;font:inherit;color:var(--navy);text-decoration:underline;text-underline-offset:3px}
+.trust{display:flex;gap:12px;align-items:flex-start;margin-top:18px;padding:14px;border-radius:14px;background:#eef3fa;color:#163b63}
+.trust svg{flex:none;width:26px;height:26px;fill:none;stroke:#1d5a99;stroke-width:1.8}.trust p{margin:0;font-size:14px;line-height:1.5}
+#fNew .row{margin-top:8px}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
@@ -129,14 +145,37 @@ th{font:800 11px "Archivo",sans-serif;letter-spacing:.14em;text-transform:upperc
 
   <!-- signed out -->
   <section id="vOut" class="card" hidden>
-    <h2>Sign in</h2>
-    <p class="small">Enter the email you used to join or buy tickets. We will email you a secure sign-in link. No password needed.</p>
-    <form id="fIn" class="row" novalidate>
-      <div class="grow"><label for="em">Email</label><input id="em" type="email" autocomplete="email" required placeholder="you@example.com"></div>
-      <button class="btn" id="bIn" type="submit">Email me a link</button>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" class="tab on" data-mode="in" aria-selected="true">Sign in</button>
+      <button type="button" role="tab" class="tab" data-mode="up" aria-selected="false">Create account</button>
+    </div>
+    <p class="small" id="authHint">Use the email you joined or bought tickets with, so your membership and tickets load automatically.</p>
+    <form id="fPw" novalidate>
+      <label for="em">Email</label><input id="em" type="email" autocomplete="email" required placeholder="you@example.com">
+      <div class="pwrow"><label for="pw">Password</label>
+        <div class="pwbox"><input id="pw" type="password" autocomplete="current-password" required minlength="8">
+        <button type="button" class="eye" id="eye" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+        <div class="pwrules" id="pwRules" hidden>At least 8 characters.</div>
+      </div>
+      <button class="btn wide" id="bPw" type="submit">Sign in</button>
     </form>
+    <div class="alt"><button type="button" class="link" id="bForgot">Forgot password?</button><span>·</span><button type="button" class="link" id="bLink">Email me a sign-in link instead</button></div>
     <div id="inMsg" class="msg" hidden></div>
-    <p class="small" style="margin-top:16px">Not a member yet? <a href="../join/" target="_top">Join the club</a>.</p>
+    <div class="trust"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5-3.4 9.4-8 11-4.6-1.6-8-6-8-11V5z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>
+      <p><b>Your profile is private.</b> Only you and the club's Executive Board can see it. Passwords are encrypted and never visible to anyone, including the club. Card payments are handled by Stripe; we never see your card number.</p></div>
+    <p class="small" style="margin-top:14px">Not a member yet? <a href="../join/" target="_top">Join the club</a>.</p>
+  </section>
+
+  <!-- set a new password (after "forgot password" link, or from the profile) -->
+  <section id="vPw" class="card" hidden>
+    <h2 id="pwTitle">Set a new password</h2>
+    <form id="fNew" novalidate>
+      <label for="pw1">New password</label><input id="pw1" type="password" autocomplete="new-password" minlength="8" required>
+      <label for="pw2" style="margin-top:12px">Confirm new password</label><input id="pw2" type="password" autocomplete="new-password" minlength="8" required>
+      <p class="small">At least 8 characters.</p>
+      <div class="row"><button class="btn" type="submit" id="bNew">Save password</button><button class="btn ghost" type="button" id="bNewCancel">Cancel</button></div>
+    </form>
+    <div id="newMsg" class="msg" hidden></div>
   </section>
 
   <div id="vLoad" class="card" style="text-align:center"><span class="spin"></span></div>
@@ -145,6 +184,7 @@ th{font:800 11px "Archivo",sans-serif;letter-spacing:.14em;text-transform:upperc
   <div id="vIn" hidden>
     <div class="bar"><span class="who"><span>Signed in as</span> <b id="whoEm"></b></span>
       <span><a id="adminLink" class="btn gold sm" href="../checkin/" target="_top" hidden>Door check-in</a>
+      <button class="btn ghost sm" id="bChg" type="button">Change password</button>
       <button class="btn ghost sm" id="bOut" type="button">Sign out</button></span></div>
     <div id="paidMsg" class="msg info" hidden></div>
     <div id="mcard"></div>
@@ -183,6 +223,7 @@ function readLinkTokens(){
     if(h.length<2)continue;
     const p=new URLSearchParams(h.slice(1));
     if(p.get("access_token")){
+      if(p.get("type")==="recovery")window.__recovery=true;
       save({access_token:p.get("access_token"),refresh_token:p.get("refresh_token"),expires_at:Math.floor(Date.now()/1000)+(+p.get("expires_in")||3600)});
       try{w.history.replaceState(null,"",w.location.pathname+w.location.search);}catch(e){}
       return null;
@@ -214,25 +255,79 @@ async function api(path,opt={}){
   return j;
 }
 
-/* 2) sign in by email link */
-$("fIn").addEventListener("submit",async e=>{
-  e.preventDefault();const em=$("em").value.trim().toLowerCase(),m=$("inMsg"),b=$("bIn");
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){show(m,"err","Please enter a valid email.");return;}
+/* 2) sign in: password (default), email link (backup), forgot password */
+let mode="in";
+const AUTH=(path,body)=>fetch(SB_URL+"/auth/v1/"+path,{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});
+const emailOk=em=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
+function setMode(m){mode=m;document.querySelectorAll(".tabs .tab").forEach(b=>{const on=b.dataset.mode===m;b.classList.toggle("on",on);b.setAttribute("aria-selected",on);});
+  $("bPw").textContent=m==="up"?"Create account":"Sign in";$("pwRules").hidden=m!=="up";$("bForgot").hidden=m==="up";
+  $("pw").setAttribute("autocomplete",m==="up"?"new-password":"current-password");$("inMsg").hidden=true;}
+document.querySelector(".tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b)setMode(b.dataset.mode);});
+$("eye").addEventListener("click",()=>{const on=$("pw").type==="password";$("pw").type=on?"text":"password";$("eye").setAttribute("aria-pressed",on);$("eye").setAttribute("aria-label",on?"Hide password":"Show password");});
+$("fPw").addEventListener("submit",async e=>{
+  e.preventDefault();const em=$("em").value.trim().toLowerCase(),pw=$("pw").value,m=$("inMsg"),b=$("bPw");
+  if(!emailOk(em)){show(m,"err","Please enter a valid email.");return;}
+  if(pw.length<8){show(m,"err","Password must be at least 8 characters.");return;}
   b.disabled=true;
   try{
-    const r=await fetch(SB_URL+"/auth/v1/otp?redirect_to="+encodeURIComponent(pageUrl()),{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({email:em,create_user:true})});
+    if(mode==="in"){
+      const r=await AUTH("token?grant_type=password",{email:em,password:pw});const j=await r.json().catch(()=>({}));
+      if(r.ok){save({access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600)});$("pw").value="";await enter();}
+      else if(r.status===429)show(m,"err","Too many tries. Please wait a minute and try again.");
+      else if(/confirm/i.test(j.error_description||j.msg||j.error_code||""))show(m,"err","Please confirm your email first. Check your inbox for the confirmation link.");
+      else show(m,"err","Wrong email or password. If you have never set a password, choose Create account or Forgot password.");
+    }else{
+      const r=await fetch(SB_URL+"/auth/v1/signup?redirect_to="+encodeURIComponent(pageUrl()),{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({email:em,password:pw})});
+      const j=await r.json().catch(()=>({}));
+      if(r.ok&&j.access_token){save({access_token:j.access_token,refresh_token:j.refresh_token,expires_at:j.expires_at||Math.floor(Date.now()/1000)+(j.expires_in||3600)});$("pw").value="";await enter();}
+      else if(r.ok)show(m,"ok","Almost done. We sent a confirmation link to your email. Click it once and you are in. No email after a few minutes? You may already have an account: use Forgot password.");
+      else if(r.status===429)show(m,"err","Too many tries. Please wait a minute and try again.");
+      else if(/weak|short|characters/i.test(j.msg||j.error_description||""))show(m,"err","Please choose a stronger password: at least 8 characters, not a common word.");
+      else if(/registered|exists/i.test(j.msg||j.error_description||j.error_code||""))show(m,"err","This email already has an account. Choose Sign in, or Forgot password to set one.");
+      else show(m,"err","We couldn't create the account. Please try again or email contact@latinorepublicans.org.");
+    }
+  }catch(err){show(m,"err","No connection. Please try again.");}
+  b.disabled=false;
+});
+$("bForgot").addEventListener("click",async()=>{
+  const em=$("em").value.trim().toLowerCase(),m=$("inMsg");
+  if(!emailOk(em)){show(m,"err","Enter your email above first, then press Forgot password.");$("em").focus();return;}
+  try{const r=await fetch(SB_URL+"/auth/v1/recover?redirect_to="+encodeURIComponent(pageUrl()),{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({email:em})});
+    show(m,r.status===429?"err":"ok",r.status===429?"Too many tries. Please wait a minute and try again.":"If that email has an account, a link to set a new password is on its way. It works once, for one hour.");}
+  catch(e){show(m,"err","No connection. Please try again.");}
+});
+$("bLink").addEventListener("click",async()=>{
+  const em=$("em").value.trim().toLowerCase(),m=$("inMsg");
+  if(!emailOk(em)){show(m,"err","Enter your email above first.");$("em").focus();return;}
+  try{
+    const r=await AUTH("otp?redirect_to="+encodeURIComponent(pageUrl()),{email:em,create_user:true});
     if(r.status===429)show(m,"err","Too many tries. Please wait a minute and try again.");
     else if(!r.ok)show(m,"err","We couldn't send the link. Please try again or email contact@latinorepublicans.org.");
     else show(m,"ok","Check your email for your sign-in link. It may take a minute; check spam too.");
   }catch(err){show(m,"err","We couldn't send the link. Please try again or email contact@latinorepublicans.org.");}
-  b.disabled=false;
+});
+/* new password: from the "forgot password" email, or Change password in the profile */
+let pwFromRecovery=false;
+function askNewPassword(fromRecovery){pwFromRecovery=fromRecovery;$("pwTitle").textContent=fromRecovery?"Set a new password":"Change password";
+  $("pw1").value=$("pw2").value="";$("newMsg").hidden=true;$("bNewCancel").hidden=fromRecovery;view("pw");setTimeout(()=>$("pw1").focus(),50);}
+$("bChg").addEventListener("click",()=>askNewPassword(false));
+$("bNewCancel").addEventListener("click",()=>view("in"));
+$("fNew").addEventListener("submit",async e=>{
+  e.preventDefault();const a=$("pw1").value,b2=$("pw2").value,m=$("newMsg");
+  if(a.length<8){show(m,"err","Password must be at least 8 characters.");return;}
+  if(a!==b2){show(m,"err","The two passwords don't match.");return;}
+  $("bNew").disabled=true;
+  try{await api("/auth/v1/user",{method:"PUT",body:JSON.stringify({password:a})});show(m,"ok","Password saved. Next time, sign in with your email and this password.");
+    setTimeout(()=>{data?view("in"):enter();},1400);}
+  catch(err){show(m,"err",/same|different/i.test((err.body&&(err.body.msg||err.body.error_description))||"")?"Choose a password different from your current one.":"We couldn't save it. Please try again.");}
+  $("bNew").disabled=false;
 });
 function show(el,kind,txt){el.className="msg "+kind;el.hidden=false;el.textContent=txt;}
 $("bOut").addEventListener("click",async()=>{
   try{const t=session&&session.access_token;if(t)await fetch(SB_URL+"/auth/v1/logout",{method:"POST",headers:{apikey:SB_KEY,Authorization:"Bearer "+t}});}catch(e){}
   save(null);data=null;view("out");
 });
-function view(v){$("vOut").hidden=v!=="out";$("vIn").hidden=v!=="in";$("vLoad").hidden=v!=="load";}
+function view(v){$("vOut").hidden=v!=="out";$("vIn").hidden=v!=="in";$("vLoad").hidden=v!=="load";$("vPw").hidden=v!=="pw";}
 
 /* 3) load my profile */
 async function fetchAll(){
@@ -378,6 +473,7 @@ $("rsvpList").addEventListener("click",e=>{
   const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download=ev.slug+"-rsvps.csv";document.body.appendChild(a);a.click();a.remove();
 });
+async function enter(){view("load");try{await reload();view("in");return true;}catch(e){save(null);view("out");return false;}}
 async function reload(){await fetchAll();render();}
 addEventListener("lrc-lang",render);
 
@@ -385,7 +481,8 @@ addEventListener("lrc-lang",render);
   const linkErr=readLinkTokens();
   session=session||load();
   if(!session){view("out");if(linkErr)show($("inMsg"),"err",linkErr==="expired"?"That sign-in link expired. Enter your email for a new one.":"That sign-in link didn't work. Enter your email for a new one.");return;}
-  try{await reload();view("in");}catch(e){save(null);view("out");return;}
+  if(window.__recovery){askNewPassword(true);return;}
+  if(!(await enter()))return;
   /* back from Stripe checkout: tickets/membership arrive a few seconds later */
   let paid=false;try{paid=new URLSearchParams(topWin.location.search).get("paid")==="1";}catch(e){}
   if(paid){

@@ -97,6 +97,23 @@ input[type=email]:focus,select:focus{border-color:var(--gold);outline:0}
 .zoom svg{width:100%;height:auto;display:block}
 .zoom h3{margin:0 0 6px;font:900 18px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy)}
 .zoom .btn{margin-top:14px}
+.mcard.exec{background:radial-gradient(120% 140% at 100% 0%,#3a2a05 0%,#1a1402 50%,#0b0900 100%);box-shadow:0 0 0 2px var(--gold),0 14px 34px rgba(120,85,10,.35)}
+.mcard.exec::after{border-color:rgba(245,208,102,.45)}
+.mcard.exec .mname{background:linear-gradient(180deg,#fff3c4,var(--gold-hi) 45%,#c8952f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tier.gold-x{font-size:15px;padding:9px 18px;background:linear-gradient(180deg,#fff1b8,var(--gold-hi) 40%,var(--gold) 70%,#a8771c);box-shadow:0 0 0 2px rgba(255,241,184,.5),0 6px 18px rgba(214,168,68,.45)}
+.rv{border-top:1px solid #eee5d3}.rv:first-child{border-top:0}
+.rv summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;padding:14px 0}
+.rv summary::-webkit-details-marker{display:none}
+.rv h3{margin:0 0 3px;font:900 17px "Archivo",sans-serif;font-stretch:88%;text-transform:uppercase;color:var(--navy)}
+.rv h3::before{content:"▸ ";color:var(--gold)}.rv[open] h3::before{content:"▾ "}
+.rv .meta{font-size:13px;color:#5b6b7e}
+.nums{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:#52637a}.nums b{font:900 18px "Archivo",sans-serif;color:var(--navy)}.nums i{font-style:normal}
+.rvb{padding:0 0 16px}.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.btn.navy{background:var(--navy);box-shadow:none}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 6px;border-top:1px solid #eee5d3}
+th{font:800 11px "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#52637a;border-top:0}
+.in{color:#1d7a45;font-weight:700}.em2{display:none;font-size:12px;color:#5b6b7e;word-break:break-all}
+@media (max-width:600px){.hide-s{display:none}.em2{display:block}}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
@@ -135,6 +152,7 @@ input[type=email]:focus,select:focus{border-color:var(--gold);outline:0}
     <section class="card" id="tickets"><h2>My Tickets</h2><div id="tkList"></div>
       <p class="small" style="margin-top:14px">Show the QR code at the door. Screenshots work. If your phone is off, give your name or the 8-character code.</p></section>
     <section class="card" id="events"><h2>Get Tickets</h2><div id="evList"></div><div id="evMsg" class="msg" hidden></div></section>
+    <section class="card" id="rsvp" hidden><h2>All Events · RSVPs</h2><p class="small" style="margin:-6px 0 12px">Board view. Tap an event to see everyone who has a ticket.</p><div id="rsvpList"></div></section>
     <section class="card" id="history"><h2>Events Attended</h2><div id="hist"></div></section>
   </div>
 </div></div>
@@ -222,12 +240,18 @@ async function fetchAll(){
   const email=(user.email||"").toLowerCase();
   const [members,tickets,events,admins,grants]=await Promise.all([
     api("/rest/v1/members?select=*&email=eq."+encodeURIComponent(email)),
-    api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents&order=created_at.asc"),
+    api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents&owner_email=eq."+encodeURIComponent(email)+"&order=created_at.asc"),
     api("/rest/v1/events?select=*&order=starts_at.asc.nullslast"),
-    api("/rest/v1/admins?select=email&email=eq."+encodeURIComponent(email)),
+    api("/rest/v1/admins?select=email,name,title&email=eq."+encodeURIComponent(email)),
     api("/rest/v1/comp_grants?select=*")
   ]);
-  data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,grants};
+  data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,all:null};
+  if(data.isAdmin){
+    const [all,mem]=await Promise.all([
+      api("/rest/v1/tickets?select=id,event_id,owner_email,holder_name,kind,token,status,checked_in_at,price_cents,created_at&status=neq.void&order=created_at.asc"),
+      api("/rest/v1/members?select=email,name,tier,status")]);
+    data.all=all;data.mem=Object.fromEntries(mem.map(x=>[x.email,x]));
+  }
 }
 function fmtDate(iso){if(!iso)return"";return new Date(iso).toLocaleDateString(L()==="es"?"es-US":"en-US",{year:"numeric",month:"long",day:"numeric"});}
 function evWhen(ev){if(!ev)return"";if(ev.starts_at)return new Date(ev.starts_at).toLocaleString(L()==="es"?"es-US":"en-US",{weekday:"short",month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"});
@@ -243,7 +267,13 @@ function render(){
   $("adminLink").hidden=!d.isAdmin;
   /* membership */
   const name=m&&m.name||(d.user.user_metadata&&d.user.user_metadata.name)||"";
-  if(m){
+  if(d.exec&&d.exec.title){
+    const ex=d.exec;
+    $("mcard").innerHTML=`<div class="mcard exec"><div class="mtop"><div><div class="mname">${esc(ex.name||name||"")}</div><div class="memail">${esc(d.email)}</div></div>
+      <span class="tier gold-x">${esc(ex.title)}</span></div>
+      <div class="mgrid"><div><span>Status</span><b class="st-active">Active</b></div><div><span>Role</span><b>Executive Board</b></div>
+      <div><span>Access</span><b>Full access</b></div>${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div></div>`;
+  }else if(m){
     $("mcard").innerHTML=`<div class="mcard"><div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div></div>
       <span class="tier">${esc(TIER[m.tier]||m.tier)}</span></div>
       <div class="mgrid"><div><span>Status</span><b class="st-${esc(m.status)}">${esc(STATUS[m.status]||m.status)}</b></div>
@@ -261,7 +291,7 @@ function render(){
   let promo="";
   const star=`<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#d6a844" d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z"/></svg>`;
   if(grant)promo=`<div class="promo">${star}<div><b class="t">Gala bonus unlocked</b><p><span>Your free gala tickets:</span> <b>${grant.tickets}</b>. <span>They are in My Tickets below.</span></p></div></div>`;
-  else if(before&&(!m||m.tier!=="embajador"))promo=`<div class="promo">${star}<div><b class="t">Gala bonus</b><p>Join or upgrade before December 31: Patriot members get 2 free gala tickets and Ambassador members get 4.</p>
+  else if(before&&!d.exec&&(!m||m.tier!=="embajador"))promo=`<div class="promo">${star}<div><b class="t">Gala bonus</b><p>Join or upgrade before December 31: Patriot members get 2 free gala tickets and Ambassador members get 4.</p>
     <a class="btn sm" style="margin-top:10px" href="../join/" target="_top">See memberships</a></div></div>`;
   $("promo").innerHTML=promo;
   /* tickets */
@@ -275,7 +305,7 @@ function render(){
       ${used?'<span class="chip used">Checked in</span>':'<span class="chip">Valid</span>'}</div></div>`;}).join("")}</div>`
     :`<div class="empty">No tickets yet. Get tickets below.</div>`;
   /* events */
-  const isMem=m&&m.status==="active";
+  const isMem=(m&&m.status==="active")||d.isAdmin;
   const open=d.events.filter(e=>e.sales_open);
   $("evList").innerHTML=open.length?open.map(ev=>{const p=isMem?ev.price_member_cents:ev.price_guest_cents;const mine=live.filter(t=>t.event_id===ev.id).length;
     const opts=[1,2,3,4].map(n=>`<option value="${n}">${n}</option>`).join("");
@@ -285,6 +315,7 @@ function render(){
       <div class="act">${p?"":`<select id="q-${ev.id}" aria-label="Quantity">${opts}</select>`}
       <button class="btn sm" type="button" data-ev="${ev.id}">${p?"Buy tickets":"Reserve"}</button></div></div>`;}).join("")
     :`<div class="empty">No events open right now.</div>`;
+  renderRsvp(byId);
   /* history */
   const att=d.tickets.filter(t=>t.status==="used").sort((a,b)=>(b.checked_in_at||"").localeCompare(a.checked_in_at||""));
   const seen=new Set();const rows=att.filter(t=>!seen.has(t.event_id)&&seen.add(t.event_id));
@@ -322,6 +353,31 @@ addEventListener("keydown",e=>{if(e.key==="Escape")$("zoom").hidden=true;});
 function jump(id){const el=$(id);if(!el)return;try{const f=window.frameElement;
   if(f){const hb=topWin.document.querySelector("#s-top");const y=f.getBoundingClientRect().top+topWin.scrollY+el.getBoundingClientRect().top-((hb&&hb.offsetHeight)||0)-12;topWin.scrollTo({top:y,behavior:"smooth"});}
   else el.scrollIntoView({behavior:"smooth"});}catch(e){el.scrollIntoView();}}
+/* board: every event's RSVPs */
+function renderRsvp(byId){
+  const box=$("rsvp");if(!data.isAdmin||!data.all){box.hidden=true;return;}
+  box.hidden=false;const d=data;
+  const nm=t=>t.holder_name||(d.mem[t.owner_email]&&d.mem[t.owner_email].name)||"";
+  $("rsvpList").innerHTML=d.events.map(ev=>{
+    const ts=d.all.filter(t=>t.event_id===ev.id),inN=ts.filter(t=>t.status==="used").length,comp=ts.filter(t=>t.kind==="comp").length;
+    const rev=ts.reduce((a,t)=>a+(t.price_cents||0),0),people=new Set(ts.map(t=>t.owner_email)).size;
+    const rows=[...ts].sort((a,b)=>(nm(a)||a.owner_email).localeCompare(nm(b)||b.owner_email)).map(t=>{const mm=d.mem[t.owner_email];
+      return `<tr><td>${esc(nm(t))}<span class="em2">${esc(t.owner_email)}</span></td><td class="hide-s">${esc(t.owner_email)}</td><td>${mm&&mm.status==="active"?esc(TIER[mm.tier]||mm.tier):"<span>Guest</span>"}</td>
+      <td>${t.kind==="comp"?"<span>Complimentary</span>":t.price_cents?money(t.price_cents):"<span>Free</span>"}</td><td>${t.status==="used"?"<span class=\"in\">✓</span>":"<span>Not yet</span>"}</td></tr>`;}).join("");
+    return `<details class="rv"><summary><div><h3>${esc(evTitle(ev))}</h3><div class="meta">${esc(evWhen(ev))}${ev.location?" · "+esc(ev.location):""}</div></div>
+      <div class="nums"><span><b>${ts.length}</b>${ev.capacity?` / ${ev.capacity}`:""} <i>RSVPs</i></span><span><b>${people}</b> <i>people</i></span><span><b>${inN}</b> <i>checked in</i></span><span><b>${comp}</b> <i>comp</i></span><span><b>${money(rev)}</b> <i>sales</i></span></div></summary>
+      <div class="rvb"><div class="tools"><a class="btn sm navy" href="../checkin/?event=${encodeURIComponent(ev.slug)}" target="_top">Open check-in</a><button class="btn ghost sm" type="button" data-csv="${ev.id}">Download CSV</button></div>
+      ${ts.length?`<div style="overflow-x:auto"><table><thead><tr><th>Name</th><th class="hide-s">Email</th><th>Membership</th><th>Ticket</th><th>Checked in</th></tr></thead><tbody>${rows}</tbody></table></div>`:`<div class="empty">No RSVPs yet.</div>`}</div></details>`;
+  }).join("");
+}
+$("rsvpList").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-csv]");if(!b)return;const d=data,ev=d.events.find(x=>x.id===b.dataset.csv);
+  const nm=t=>t.holder_name||(d.mem[t.owner_email]&&d.mem[t.owner_email].name)||"";
+  const rows=[["Name","Email","Membership","Type","Paid","Code","Checked in"]].concat(d.all.filter(t=>t.event_id===ev.id).map(t=>{const mm=d.mem[t.owner_email];
+    return [nm(t),t.owner_email,mm&&mm.status==="active"?mm.tier:"guest",t.kind,(t.price_cents/100).toFixed(2),t.token.slice(0,8).toUpperCase(),t.checked_in_at||""];}));
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download=ev.slug+"-rsvps.csv";document.body.appendChild(a);a.click();a.remove();
+});
 async function reload(){await fetchAll();render();}
 addEventListener("lrc-lang",render);
 

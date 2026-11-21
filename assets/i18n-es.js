@@ -429,6 +429,21 @@ window.LRC_ES={
 "Allow camera access, or type the code.": "Permite el acceso a la cámara o escribe el código.",
 "Please sign in again on My Profile.": "Vuelve a iniciar sesión en Mi perfil.",
 "Couldn't load the list. Check your connection and press Refresh.": "No se pudo cargar la lista. Revisa tu conexión y presiona Actualizar.",
-"Club Profile | NYC Latino Republican Club": "Mi perfil | NYC Latino Republican Club"
+"Club Profile | NYC Latino Republican Club": "Mi perfil | NYC Latino Republican Club",
+"Role": "Cargo",
+"Executive Board": "Junta Directiva",
+"Access": "Acceso",
+"Full access": "Acceso total",
+"All Events · RSVPs": "Todos los eventos · Confirmaciones",
+"Board view. Tap an event to see everyone who has a ticket.": "Vista de la directiva. Toca un evento para ver a todos los que tienen entrada.",
+"RSVPs": "confirmaciones",
+"people": "personas",
+"checked in": "registrados",
+"comp": "cortesía",
+"sales": "ventas",
+"Open check-in": "Abrir registro",
+"Guest": "Invitado",
+"Ticket": "Entrada",
+"No RSVPs yet.": "Aún no hay confirmaciones."
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

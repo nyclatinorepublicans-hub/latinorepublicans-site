@@ -220,7 +220,8 @@ function fillEvents(){$("evSel").innerHTML=events.map(e=>`<option value="${e.id}
     if(!ad.length){$("vNo").hidden=false;$("noTxt").textContent=(L()==="es"?"Esta cuenta no es de la directiva: ":"This account is not on the board list: ")+me;return;}
     events=await api("/rest/v1/events?select=*&order=starts_at.asc.nullslast");
     fillEvents();
-    const gala=events.find(e=>e.is_gala);if(gala)$("evSel").value=gala.id;
+    let want=null;try{want=new URLSearchParams(window.top.location.search).get("event");}catch(e){}
+    const pick=events.find(e=>e.slug===want)||events.find(e=>e.is_gala);if(pick)$("evSel").value=pick.id;
     $("vYes").hidden=false;await loadList();
   }catch(e){$("vNo").hidden=false;}
 })();

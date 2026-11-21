@@ -189,10 +189,23 @@ td.acts{white-space:nowrap;text-align:right}td.acts .link{font-size:13px;margin-
 .evedit label{margin-top:10px}.egrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:0 14px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.chk2{display:flex;gap:16px;align-items:flex-end;padding-top:24px}.chk2 label{display:flex;gap:6px;align-items:center;text-transform:none;letter-spacing:0;font:600 14px "Hepta Slab",Georgia,serif;color:var(--ink)}
 textarea.tin{resize:vertical}
+.bm{border-radius:16px;background:#fff;box-shadow:inset 0 0 0 2px #eadfc8;padding:16px;margin-bottom:14px}.bm-x{opacity:.6}
+.bmtop{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}.bm h3{margin:6px 0 2px;font:900 18px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy)}
+.plat{display:flex;align-items:center;gap:8px;font:800 12px "Archivo",sans-serif;letter-spacing:.1em;text-transform:uppercase;padding:6px 6px 6px 12px;border-radius:999px;background:#eef3fa;color:#163b63}
+.plat-whatsapp{background:#e3f6ea;color:#0f6b36}.plat-zoom{background:#e6efff;color:#1b4fbf}.plat-google_meet{background:#e9f5ee;color:#16683b}
+.agenda pre{white-space:pre-wrap;font:14px/1.5 "Hepta Slab",Georgia,serif;margin:4px 0 8px;background:#faf6ec;border-radius:10px;padding:10px 12px}
+.rsvpb{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}.absent{margin:6px 0 10px}
+.quor{margin:8px 0;padding:8px 12px;border-radius:10px;font-size:14px}.q-ok{background:#e6f4ec;color:#145a33}.q-no{background:#fff4dc;color:#6a4a07}
+.roster{list-style:none;margin:8px 0 0;padding:0}.roster li{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 0;border-top:1px solid #eee5d3}.roster li p{flex-basis:100%;margin:0}
+.rs-attending,.rs-remote{color:#1d7a45}.rs-absent{color:#8f1220}.rs-none{color:#8a97a8;font-weight:400}
+.nok{color:#1d7a45;font-weight:700}.nwarn{color:#b76e00;font-weight:700}
+.chk2.col{flex-direction:column;align-items:flex-start;gap:8px;padding-top:6px}
+.docs{list-style:none;margin:0;padding:0}.docs li{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0;border-top:1px solid #eee5d3}.docs li:first-child{border-top:0}
+.docs li div{display:flex;flex-direction:column;gap:2px}.docs li .chip{align-self:flex-start}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=4fa28402"></script>
+<script src="../assets/vendor/qrcode.js?v=9934670f"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -281,6 +294,19 @@ textarea.tin{resize:vertical}
       <p class="small" style="margin-top:10px">Board view only. Please don't share member contact details outside the board.</p></section>
     <section class="card" id="boardP" hidden><h2>Executive Board</h2><p class="small" style="margin:-6px 0 12px">Send a board member a sign-in email: new accounts get a "set your password" invite; existing accounts get a password-reset link.</p>
       <div id="boardRows"></div><div id="boardMsg" class="msg" hidden></div></section>
+    <section class="card" id="bmCard" hidden><div class="evhead"><h2>Board Meetings</h2><button class="btn sm" type="button" id="bNewBm">+ Schedule meeting</button></div>
+      <p class="small" style="margin:-6px 0 12px">Executive Board only. Notice: 7 days for regular meetings, 48 hours for special meetings (Bylaws Art. V §4). Remote attendance by video or phone counts (§7.1). Board members can't vote by proxy (§7.2).</p>
+      <div id="bmEdit" class="evedit" hidden></div><div id="bmList"></div><div id="bmMsg" class="msg" hidden></div></section>
+    <section class="card" id="npCard" hidden><h2>Board Notice Preferences</h2>
+      <p class="small" style="margin:-6px 0 12px">Under Bylaws Art. V §4, meeting notices can go by email or other electronic means only to board members who agree to receive them that way.</p>
+      <div class="chk2 col"><label><input type="checkbox" id="np_email"> Email me board meeting notices</label><label><input type="checkbox" id="np_text"> Text me board meeting notices <span class="small" id="npPhone"></span></label><label><input type="checkbox" id="np_whatsapp"> Notify me in the board WhatsApp group</label></div>
+      <button class="btn sm" type="button" id="bNpSave" style="margin-top:12px">Save preferences</button><div id="npMsg" class="msg" hidden></div></section>
+    <section class="card" id="docCard" hidden><h2>Board Documents</h2><div id="docList"></div>
+      <details class="about" style="margin-top:12px"><summary>Add a document</summary><div class="abody">
+        <label for="docTitle">Title</label><input class="tin" id="docTitle" maxlength="120">
+        <label for="docUrl" style="margin-top:10px">Link (Google Drive, Docs, etc.)</label><input class="tin" id="docUrl" placeholder="https://">
+        <label for="docFile" style="margin-top:10px">Or upload a file (PDF, Word, image; up to 5 MB)</label><input id="docFile" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+        <div class="row" style="margin-top:12px"><button class="btn sm" type="button" id="bDocAdd">Add document</button></div><div id="docMsg" class="msg" hidden></div></div></details></section>
     <section class="card" id="history"><h2>Events Attended</h2><div id="hist"></div></section>
   </div>
 </div></div>
@@ -439,6 +465,16 @@ async function fetchAll(){
   const out=tickets.filter(t=>t.owner_email!==email);tickets=tickets.filter(t=>t.owner_email===email);
   data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,out,prof:prof||{},all:null,flags:prof?(prof.flags&&prof.flags.length?prof.flags:(prof.country_code?[prof.country_code]:[])):[]};
   data.isFull=!!(data.exec&&data.exec.role==="full");data.isQA=qa.length>0;
+  data.isBoard=!!(data.exec&&data.exec.title);
+  if(data.isBoard){
+    const [mt,rs,ct,docs,me]=await Promise.all([
+      api("/rest/v1/board_meetings?select=*&order=starts_at.desc&limit=60"),
+      api("/rest/v1/board_rsvps?select=*"),
+      api("/rest/v1/rpc/board_notice_contacts",{method:"POST",body:"{}"}),
+      api("/rest/v1/board_documents?select=id,title,filename,mime,url,pinned,uploaded_by,uploaded_at,size_bytes&order=pinned.desc,uploaded_at.desc"),
+      api("/rest/v1/admins?select=notify_email,notify_text,notify_whatsapp,notice_consent_at&email=eq."+encodeURIComponent(email))]);
+    data.bm=mt;data.brs=rs;data.bcontacts=ct;data.bdocs=docs;data.myPrefs=me[0]||{};
+  }
   /* name/phone given at sign-up: copy them onto the profile the first time */
   const md=user.user_metadata||{};
   if(!data.prof.name&&md.name){data.prof.name=md.name;data.prof.phone=data.prof.phone||md.phone||null;saveDetails(md.name,md.phone||null,true);}
@@ -603,6 +639,7 @@ function render(){
     $("qa").querySelectorAll("button[data-lv]").forEach(b=>{const on=b.dataset.lv===cur;b.classList.toggle("on",on);b.setAttribute("aria-pressed",on);});$("qaSt").value=st;}
   $("adminLink").hidden=!d.isAdmin;
   $("dir").hidden=$("boardP").hidden=!d.isFull;if(d.isFull){renderDir();renderBoard();}
+  $("bmCard").hidden=$("npCard").hidden=$("docCard").hidden=!d.isBoard;if(d.isBoard){renderBm();renderNp();renderDocs();}
   /* membership */
   const name=(m&&m.tier==="corporate"&&m.name)||d.prof.name||(m&&m.name)||(d.user.user_metadata&&d.user.user_metadata.name)||"";
   if(d.exec&&d.exec.title){
@@ -822,6 +859,172 @@ $("outList").addEventListener("click",async e=>{const b=e.target.closest("button
   catch(err){show(m,"err","Something went wrong. Please try again.");}
   b.disabled=false;});
 
+/* ===================== EXECUTIVE BOARD ===================== */
+const PLAT={whatsapp:"WhatsApp",google_meet:"Google Meet",zoom:"Zoom",phone:"Phone call",in_person:"In person"};
+const boardList=()=>(data.bcontacts||[]).slice().sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+const nameOfB=e=>{const b=(data.bcontacts||[]).find(x=>x.email===e);return b?(b.name||e):e;};
+function quorum(m){
+  const bl=boardList(),need=Math.floor(bl.length/2)+1,rs=data.brs.filter(r=>r.meeting_id===m.id&&r.response!=="absent");
+  const ok=rs.map(r=>r.email),lead=bl.filter(b=>/^(Chairman|Vice-Chair)$/.test(b.title||"")&&ok.includes(b.email));
+  return {need,have:ok.length,lead:lead.length>0,met:ok.length>=need&&lead.length>0};
+}
+function noticeStatus(m){
+  const log=m.notice_log||[];if(!log.length)return `<span class="nwarn">Notice not sent yet</span>`;
+  const first=log.reduce((a,b)=>a.at<b.at?a:b),lead=(Date.parse(m.starts_at)-Date.parse(first.at))/36e5,req=m.kind==="special"?48:168;
+  const chans=[...new Set(log.map(x=>x.channel))].join(", ");
+  return `<span class="${lead>=req?"nok":"nwarn"}">Notice sent ${esc(new Date(first.at).toLocaleDateString(loc(),{timeZone:NY,month:"short",day:"numeric"}))} by ${esc(chans)} · ${lead>=req?"meets":"does NOT meet"} the ${m.kind==="special"?"48-hour":"7-day"} rule</span>`;
+}
+function noticeText(m){
+  const when=nyDate(m.starts_at)+", "+nyTime(m.starts_at)+(m.ends_at?" – "+nyTime(m.ends_at):"")+" (New York time)";
+  const where=PLAT[m.platform]+(m.join_link?": "+m.join_link:"")+(m.location?" · "+m.location:"");
+  return `NOTICE OF ${m.kind==="special"?"SPECIAL":"REGULAR"} EXECUTIVE BOARD MEETING${m.executive_session?" (EXECUTIVE SESSION)":""}
+NYC Latino Republican Club Inc.
+
+${m.title}
+When: ${when}
+Where: ${where}
+${m.purpose?"Purpose: "+m.purpose+"\n":""}${m.agenda?"Agenda:\n"+m.agenda+"\n":""}Called by: ${(m.called_by||[]).map(nameOfB).join(", ")}
+
+RSVP and details (board login): ${pageUrl()}#bmCard
+You may attend by video or phone (Bylaws Art. V §7.1). Board members may not vote by proxy (Art. V §7.2).`;
+}
+function smsHref(nums,body){const iOS=/iP(hone|ad|od)/.test(navigator.userAgent);
+  return iOS?`sms:/open?addresses=${nums.join(",")}&body=${encodeURIComponent(body)}`:`sms:${nums.join(",")}?body=${encodeURIComponent(body)}`;}
+const e164=p=>{const d=String(p||"").replace(/\D/g,"");return d.length===10?"+1"+d:d.length===11&&d[0]==="1"?"+"+d:d?"+"+d:"";};
+function renderBm(){
+  const now=Date.now(),list=data.bm||[];
+  const up=list.filter(m=>!m.canceled_at&&Date.parse(m.ends_at||m.starts_at)>=now-36e5*3).sort((a,b)=>a.starts_at.localeCompare(b.starts_at));
+  const past=list.filter(m=>m.canceled_at||Date.parse(m.ends_at||m.starts_at)<now-36e5*3);
+  const card=m=>{
+    const q=quorum(m),mine=data.brs.find(r=>r.meeting_id===m.id&&r.email===data.email),pastM=Date.parse(m.ends_at||m.starts_at)<now;
+    const roster=boardList().map(b=>{const r=data.brs.find(x=>x.meeting_id===m.id&&x.email===b.email);
+      return `<li><span>${esc(b.name||b.email)} <i class="small">${esc(b.title||"")}</i></span><b class="rs-${r?r.response:"none"}">${r?{attending:"Attending",remote:"Attending remotely",absent:"Can't attend"}[r.response]:"No reply"}</b>${r&&r.note?`<p class="small">“${esc(r.note)}”</p>`:""}</li>`;}).join("");
+    const contacts=data.bcontacts||[],em=contacts.filter(c=>c.notify_email).map(c=>c.email),ph=contacts.filter(c=>c.notify_text&&c.phone).map(c=>e164(c.phone)).filter(Boolean);
+    const txt=noticeText(m),subj=`Notice: ${m.kind==="special"?"Special":"Regular"} Executive Board Meeting · ${nyDate(m.starts_at)}`;
+    return `<article class="bm${m.canceled_at?" bm-x":""}" id="bm-${m.id}">
+      <div class="bmtop"><div><span class="chip ${m.kind==="special"?"comp":""}">${m.kind==="special"?"Special meeting":"Regular meeting"}</span>${m.executive_session?' <span class="chip void">Executive session</span>':""}${m.canceled_at?' <span class="chip void">Canceled</span>':""}
+        <h3>${esc(m.title)}</h3><div class="meta">${esc(nyDate(m.starts_at))} · ${esc(nyTime(m.starts_at))}${m.ends_at?" – "+esc(nyTime(m.ends_at)):""}</div></div>
+        <div class="plat plat-${m.platform}">${esc(PLAT[m.platform])}${m.join_link&&!m.canceled_at?`<a class="btn sm" href="${esc(m.join_link)}" target="_blank" rel="noopener">Join</a>`:""}</div></div>
+      ${m.location?`<p class="small">📍 ${esc(m.location)} · <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(m.location)}" target="_blank" rel="noopener">Directions</a></p>`:""}
+      ${m.purpose?`<p><b>Purpose:</b> ${esc(m.purpose)}</p>`:""}${m.agenda?`<div class="agenda"><b>Agenda</b><pre>${esc(m.agenda)}</pre></div>`:""}
+      <p class="small">Called by ${esc((m.called_by||[]).map(nameOfB).join(", "))} · ${noticeStatus(m)}</p>
+      ${!m.canceled_at&&!pastM?`<div class="rsvpb"><span class="small">Your RSVP:</span>
+        ${["attending","remote","absent"].map(k=>`<button type="button" class="btn sm ${mine&&mine.response===k?"":"ghost"}" data-rsvp="${m.id}" data-r="${k}">${{attending:"Attending",remote:"Attending remotely",absent:"Can't attend"}[k]}</button>`).join("")}</div>
+        <div class="absent" id="ab-${m.id}" ${mine&&mine.response==="absent"?"":"hidden"}><p class="small">Board members can't vote by proxy (Bylaws Art. V §7.2). If you can, join by video or phone instead (§7.1). You can leave comments for the board below; they don't count as a vote.</p>
+          <textarea class="tin" rows="2" maxlength="2000" id="abn-${m.id}" placeholder="Comments for the board (optional)">${esc(mine&&mine.note||"")}</textarea><button class="btn sm ghost" type="button" data-abn="${m.id}" style="margin-top:6px">Send comments</button></div>`:""}
+      <div class="quor ${q.met?"q-ok":"q-no"}"><b>Quorum:</b> ${q.have} of ${q.need} needed${q.lead?" · Chairman or Vice-Chair confirmed":" · needs Chairman or Vice-Chair"} ${q.met?"✓":""}</div>
+      <details class="about"><summary>Attendance (${data.brs.filter(r=>r.meeting_id===m.id).length} replies)</summary><ul class="roster">${roster}</ul></details>
+      ${!m.canceled_at&&!pastM?`<details class="about"><summary>Send notice</summary><div class="abody">
+        <p class="small">Sends this notice through your own phone or email. Email and text only go to board members who agreed to get notices that way (Art. V §4). Each send is logged as proof of notice.</p>
+        <div class="alinks"><a class="btn sm" data-ch="WhatsApp" data-m="${m.id}" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">WhatsApp group</a>
+        ${em.length?`<a class="btn sm ghost" data-ch="email" data-m="${m.id}" href="mailto:?bcc=${encodeURIComponent(em.join(","))}&subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(txt)}">Email (${em.length})</a>`:`<span class="small">No one has agreed to email notices yet.</span>`}
+        ${ph.length?`<a class="btn sm ghost" data-ch="text" data-m="${m.id}" href="${smsHref(ph,txt)}">Text (${ph.length})</a>`:`<span class="small">No one has agreed to text notices yet (or no phone on file).</span>`}
+        <button class="btn sm ghost" type="button" data-bics="${m.id}">Calendar invite (.ics)</button><button class="btn sm ghost" type="button" data-copy="${m.id}">Copy notice</button></div></div></details>
+        <div class="alinks"><button class="link" type="button" data-bmedit="${m.id}">Edit</button><button class="link" type="button" data-bmcancel="${m.id}">Cancel meeting</button></div>`:""}
+      ${pastM&&!m.canceled_at?`<details class="about"><summary>Minutes</summary><div class="abody"><textarea class="tin" rows="5" maxlength="20000" id="min-${m.id}" placeholder="The Secretary records minutes and every vote by name (Art. IV §4).">${esc(m.minutes||"")}</textarea><button class="btn sm" type="button" data-min="${m.id}" style="margin-top:8px">Save minutes</button></div></details>`:""}
+    </article>`;};
+  $("bmList").innerHTML=(up.length?up.map(card).join(""):`<div class="empty">No upcoming board meetings. The board meets at least monthly (Art. V §1).</div>`)
+    +(past.length?`<details class="about" style="margin-top:14px"><summary>Past and canceled meetings (${past.length})</summary>${past.map(card).join("")}</details>`:"");
+}
+async function bmPatch(id,body){await api("/rest/v1/board_meetings?id=eq."+id,{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});}
+$("bmList").addEventListener("click",async e=>{
+  const t=e.target.closest("[data-rsvp],[data-abn],[data-ch],[data-bics],[data-copy],[data-bmedit],[data-bmcancel],[data-min]");if(!t)return;const m=$("bmMsg");
+  try{
+    if(t.dataset.rsvp){const r=t.dataset.r,id=t.dataset.rsvp;
+      await api("/rest/v1/board_rsvps?on_conflict=meeting_id,email",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({meeting_id:id,response:r,updated_at:new Date().toISOString()})});
+      await reload();if(r==="absent")$("ab-"+id).hidden=false;return;}
+    if(t.dataset.abn){const id=t.dataset.abn;await api("/rest/v1/board_rsvps?meeting_id=eq."+id+"&email=eq."+encodeURIComponent(data.email),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({note:$("abn-"+id).value.trim()||null,updated_at:new Date().toISOString()})});show(m,"ok","Comments sent to the board.");await reload();return;}
+    if(t.dataset.ch){const mt=data.bm.find(x=>x.id===t.dataset.m);const log=(mt.notice_log||[]).concat([{channel:t.dataset.ch,at:new Date().toISOString(),by:data.email}]);
+      bmPatch(mt.id,{notice_log:log}).then(reload).catch(()=>{});return;}
+    if(t.dataset.bics){const mt=data.bm.find(x=>x.id===t.dataset.bics);
+      const ics=icsFor({id:mt.id,starts_at:mt.starts_at,ends_at:mt.ends_at,title_en:mt.title,venue_name:PLAT[mt.platform],address:mt.join_link||mt.location||"",about_en:noticeText(mt)});
+      const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar"}));a.download="board-meeting.ics";document.body.appendChild(a);a.click();a.remove();return;}
+    if(t.dataset.copy){const mt=data.bm.find(x=>x.id===t.dataset.copy);await navigator.clipboard.writeText(noticeText(mt));show(m,"ok","Notice copied. Paste it anywhere.");return;}
+    if(t.dataset.bmedit){openBmEditor(data.bm.find(x=>x.id===t.dataset.bmedit));return;}
+    if(t.dataset.bmcancel){await bmPatch(t.dataset.bmcancel,{canceled_at:new Date().toISOString()});show(m,"ok","Meeting canceled. Remember to tell the board in WhatsApp.");await reload();return;}
+    if(t.dataset.min){await bmPatch(t.dataset.min,{minutes:$("min-"+t.dataset.min).value.trim()||null});show(m,"ok","Minutes saved.");return;}
+  }catch(err){show(m,"err","Something went wrong. Please try again.");}
+});
+function openBmEditor(mt){
+  const n=!mt;mt=mt||{kind:"regular",platform:"whatsapp",called_by:[data.email]};
+  const s1=mt.starts_at?nyParts(mt.starts_at):{date:"",time:""},e1=mt.ends_at?nyParts(mt.ends_at):{time:""},v=x=>esc(x==null?"":x);
+  $("bmEdit").innerHTML=`<h3>${n?"Schedule a board meeting":"Edit board meeting"}</h3><form id="fBm" novalidate><div class="egrid">
+    <div><label>Type</label><select class="tin" id="b_kind"${n?"":" disabled"}><option value="regular"${mt.kind==="regular"?" selected":""}>Regular (7 days' notice)</option><option value="special"${mt.kind==="special"?" selected":""}>Special (48 hours' notice)</option></select></div>
+    <div><label>Title</label><input class="tin" id="b_title" maxlength="120" value="${v(mt.title||(n?"Monthly Executive Board Meeting":""))}"></div>
+    <div><label>Date</label><input class="tin" id="b_date" type="date" value="${s1.date}"></div>
+    <div class="two"><div><label>Starts</label><input class="tin" id="b_start" type="time" value="${s1.time}"></div><div><label>Ends</label><input class="tin" id="b_end" type="time" value="${e1.time}"></div></div>
+    <div><label>Platform</label><select class="tin" id="b_platform">${Object.entries(PLAT).map(([k,l])=>`<option value="${k}"${mt.platform===k?" selected":""}>${l}</option>`).join("")}</select></div>
+    <div><label>Meeting link</label><input class="tin" id="b_link" value="${v(mt.join_link)}" placeholder="WhatsApp group, Meet or Zoom link (https://)"></div>
+    <div><label>Address (in person)</label><input class="tin" id="b_loc" value="${v(mt.location)}" maxlength="200"></div>
+    <div class="chk2"><label><input type="checkbox" id="b_exec"${mt.executive_session?" checked":""}> Executive session (closed, Art. III §5)</label></div></div>
+    ${n?`<label>Called by</label><div class="chk2 col">${boardList().map(b=>`<label><input type="checkbox" class="b_call" value="${esc(b.email)}"${(mt.called_by||[]).includes(b.email)?" checked":""}> ${esc(b.name||b.email)} <span class="small">${esc(b.title||"")}</span></label>`).join("")}</div>
+      <p class="small">A special meeting must be called by the Chairman or any two board members (Art. V §1).</p>`:""}
+    <label>Purpose${n?" (required for special meetings)":""}</label><input class="tin" id="b_purpose" maxlength="500" value="${v(mt.purpose)}">
+    <label>Agenda</label><textarea class="tin" id="b_agenda" rows="5" maxlength="4000" placeholder="1. Call to order&#10;2. Approval of minutes&#10;3. Treasurer's report&#10;4. Old business&#10;5. New business&#10;6. Adjournment">${v(mt.agenda)}</textarea>
+    <div class="row" style="margin-top:12px"><button class="btn" type="submit" id="bBmSave">${n?"Schedule meeting":"Save changes"}</button><button class="btn ghost" type="button" id="bBmCancel">Cancel</button></div></form><div id="bmEditMsg" class="msg" hidden></div>`;
+  $("bmEdit").hidden=false;jump("bmEdit");
+  $("bBmCancel").onclick=()=>{$("bmEdit").hidden=true;};
+  $("fBm").onsubmit=async ev=>{ev.preventDefault();const g=id=>$(id).value.trim(),m=$("bmEditMsg");
+    const kind=g("b_kind"),d=g("b_date"),st=g("b_start"),en=g("b_end");
+    if(g("b_title").length<3){show(m,"err","Please enter a title.");return;}
+    if(!d||!st){show(m,"err","Please choose a date and start time.");return;}
+    const startISO=nyISO(d,st),endISO=en?nyISO(d,en):null;
+    if(endISO&&endISO<=startISO){show(m,"err","The end time must be after the start time.");return;}
+    const link=g("b_link");if(link&&!/^https:\/\//.test(link)){show(m,"err","The meeting link must start with https://");return;}
+    const plat=g("b_platform");if(plat!=="in_person"&&plat!=="phone"&&!link){show(m,"err","Add the "+PLAT[plat]+" link so the board can join.");return;}
+    if(plat==="in_person"&&!g("b_loc")){show(m,"err","Add the address for an in-person meeting.");return;}
+    const body={title:g("b_title"),starts_at:startISO,ends_at:endISO,platform:plat,join_link:link||null,location:g("b_loc")||null,executive_session:$("b_exec").checked,purpose:g("b_purpose")||null,agenda:g("b_agenda")||null};
+    if(n){
+      const callers=[...document.querySelectorAll(".b_call:checked")].map(x=>x.value);
+      const hours=(Date.parse(startISO)-Date.now())/36e5,chair=boardList().find(b=>b.title==="Chairman");
+      if(!callers.length){show(m,"err","Choose who is calling the meeting.");return;}
+      if(kind==="regular"&&hours<168){show(m,"err","Regular meetings need at least 7 days' notice (Art. V §4). Pick a later date, or schedule a special meeting.");return;}
+      if(kind==="special"&&hours<48){show(m,"err","Special meetings need at least 48 hours' notice (Art. V §4).");return;}
+      if(kind==="special"&&!(callers.length>=2||(chair&&callers.includes(chair.email)))){show(m,"err","A special meeting must be called by the Chairman or any two board members (Art. V §1).");return;}
+      if(kind==="special"&&!body.purpose){show(m,"err","Please state the purpose of the special meeting.");return;}
+      Object.assign(body,{kind,called_by:callers});
+    }
+    $("bBmSave").disabled=true;
+    try{if(n)await api("/rest/v1/board_meetings",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});else await bmPatch(mt.id,body);
+      $("bmEdit").hidden=true;await reload();show($("bmMsg"),"ok",n?"Meeting scheduled. Now open \"Send notice\" to notify the board.":"Meeting updated. Send an updated notice if the time or place changed.");jump("bmCard");}
+    catch(err){show(m,"err","We couldn't save the meeting. Please try again.");}
+    $("bBmSave").disabled=false;};
+}
+$("bNewBm").addEventListener("click",()=>openBmEditor(null));
+/* notice preferences */
+function renderNp(){const p=data.myPrefs||{};$("np_email").checked=!!p.notify_email;$("np_text").checked=!!p.notify_text;$("np_whatsapp").checked=!!p.notify_whatsapp;
+  $("npPhone").textContent=data.prof.phone?"("+data.prof.phone+")":"(add your phone with Edit details)";}
+$("bNpSave").addEventListener("click",async()=>{const m=$("npMsg");
+  if($("np_text").checked&&!data.prof.phone){show(m,"err","Add your phone number with Edit details first.");return;}
+  try{await api("/rest/v1/admins?email=eq."+encodeURIComponent(data.email),{method:"PATCH",headers:{Prefer:"return=minimal"},
+      body:JSON.stringify({notify_email:$("np_email").checked,notify_text:$("np_text").checked,notify_whatsapp:$("np_whatsapp").checked,notice_consent_at:new Date().toISOString()})});
+    show(m,"ok","Saved. Your consent is recorded with today's date.");await reload();}
+  catch(err){show(m,"err","We couldn't save. Please try again.");}});
+/* documents */
+function renderDocs(){
+  $("docList").innerHTML=(data.bdocs||[]).length?`<ul class="docs">${data.bdocs.map(d=>`<li><div><b>${esc(d.title)}</b>${d.pinned?' <span class="chip comp">Official</span>':""}<span class="small">${esc(nameOfB(d.uploaded_by))} · ${esc(fmtDate(d.uploaded_at))}</span></div>
+    <span>${d.url?`<a class="btn sm ghost" href="${esc(d.url)}" target="_blank" rel="noopener">Open</a>`:`<button class="btn sm ghost" type="button" data-doc="${d.id}">Open</button>`}
+    ${!d.pinned&&(d.uploaded_by===data.email||data.isFull)?`<button class="link" type="button" data-docdel="${d.id}">Remove</button>`:""}</span></li>`).join("")}</ul>`:`<div class="empty">No documents yet.</div>`;
+}
+$("docList").addEventListener("click",async e=>{const b=e.target.closest("[data-doc],[data-docdel]");if(!b)return;
+  try{if(b.dataset.doc){const r=await api("/rest/v1/board_documents?select=data,mime,filename&id=eq."+b.dataset.doc);const d=r[0];
+      const hex=String(d.data||"").replace(/^\\x/,"");const bytes=new Uint8Array(hex.length/2);for(let i=0;i<bytes.length;i++)bytes[i]=parseInt(hex.substr(i*2,2),16);
+      const url=URL.createObjectURL(new Blob([bytes],{type:d.mime}));const a=document.createElement("a");a.href=url;a.download=d.filename||"document";document.body.appendChild(a);a.click();a.remove();}
+    else{await api("/rest/v1/board_documents?id=eq."+b.dataset.docdel,{method:"DELETE",headers:{Prefer:"return=minimal"}});await reload();}}
+  catch(err){show($("docMsg"),"err","Something went wrong. Please try again.");}});
+$("bDocAdd").addEventListener("click",async()=>{const m=$("docMsg"),title=$("docTitle").value.trim(),url=$("docUrl").value.trim(),f=$("docFile").files[0];
+  if(title.length<2){show(m,"err","Please enter a title.");return;}
+  if(!url&&!f){show(m,"err","Add a link or choose a file.");return;}
+  if(url&&!/^https:\/\//.test(url)){show(m,"err","The link must start with https://");return;}
+  if(f&&f.size>5*1024*1024){show(m,"err","That file is over 5 MB. Put it in Google Drive and add the link instead.");return;}
+  $("bDocAdd").disabled=true;
+  try{let body={title,url:url||null,mime:f?f.type||"application/octet-stream":"text/html",filename:f?f.name:null,size_bytes:f?f.size:null};
+    if(f){const buf=new Uint8Array(await f.arrayBuffer());let hex="";for(const x of buf)hex+=x.toString(16).padStart(2,"0");body.data="\\x"+hex;body.url=null;}
+    await api("/rest/v1/board_documents",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});
+    $("docTitle").value=$("docUrl").value="";$("docFile").value="";show(m,"ok","Document added.");await reload();}
+  catch(err){show(m,"err","We couldn't add the document. Please try again.");}
+  $("bDocAdd").disabled=false;});
+
 async function reload(){await fetchAll();render();}
 addEventListener("lrc-lang",render);
 
@@ -859,5 +1062,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=4fa28402"></script><script src="../assets/i18n.js?v=4fa28402"></script>
+</script><script src="../assets/i18n-es.js?v=9934670f"></script><script src="../assets/i18n.js?v=9934670f"></script>
 </body></html>

@@ -308,10 +308,11 @@ body.gated #contactCard{display:none!important}
 .mn{padding-right:40px}.mnx{all:unset;cursor:pointer;position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:700 20px/1 Arial,sans-serif;color:#5a6b80}
 .mnx:hover,.mnx:focus-visible{background:rgba(5,42,75,.08);color:#0b2a4a}.mn.gone{opacity:0;transform:translateX(30px);transition:all .2s}
 .mnclear{margin:10px 14px 0 0;font:800 12px "Archivo",sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.mn-welcome{background:linear-gradient(100deg,#eef3fb,#fff 70%);border-color:#c9d6e6}.mn-welcome .link{justify-self:start;margin-top:4px;font-weight:800}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=7e28c6ea"></script>
+<script src="../assets/vendor/qrcode.js?v=25d22535"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -613,7 +614,7 @@ async function fetchAll(){
     api("/rest/v1/comp_grants?select=*"),
   ]);
   let qa=[];try{qa=await api("/rest/v1/qa_accounts?select=email&email=eq."+encodeURIComponent(email));}catch(e){}
-  let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name,flags,name,phone,program_listing,notif_hidden&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
+  let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name,flags,name,phone,program_listing,notif_hidden,welcome_seen_at&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
   const out=tickets.filter(t=>t.owner_email!==email);tickets=tickets.filter(t=>t.owner_email===email);
   data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,out,prof:prof||{},all:null,flags:prof?(prof.flags&&prof.flags.length?prof.flags:(prof.country_code?[prof.country_code]:[])):[]};
   data.isFull=!!(data.exec&&data.exec.role==="full");data.isQA=qa.length>0;
@@ -864,7 +865,8 @@ function render(){
   $("dir").hidden=$("boardP").hidden=!d.isFull;if(d.isFull){renderDir();renderBoard();}
   $("bmCard").hidden=$("npCard").hidden=$("docCard").hidden=$("myEv").hidden=$("actCard").hidden=!d.isBoard;if(d.isBoard){renderBm();renderNp();renderDocs();renderMyEv();renderAct();}
   $("btabs").hidden=$("checklist").hidden=!d.isBoard;document.body.classList.toggle("bview",!!d.isBoard);
-  $("notifications").hidden=false;$("contactCard").hidden=false;renderContact();renderGift();$("boardNotif").hidden=!d.isBoard;$("earlyNow").hidden=true;renderMemberNotif();
+  $("notifications").hidden=false;$("contactCard").hidden=false;renderContact();renderGift();
+  if(d.member&&!d.prof.welcome_seen_at&&!document.body.classList.contains("gated")&&!window.__lrcWelcomeShown){window.__lrcWelcomeShown=true;setTimeout(openWelcome,900);}$("boardNotif").hidden=!d.isBoard;$("earlyNow").hidden=true;renderMemberNotif();
   if(d.isBoard){setCat(curCat);renderNotif();renderChecklist();}
   renderApp();
   $("progCard").hidden=!isAmb();if(isAmb())$("progOpt").checked=!!d.prof.program_listing;
@@ -1352,6 +1354,40 @@ function renderContact(){const nm=(data.exec&&data.exec.name)||data.prof.name||(
     <a class="ct" href="mailto:${CLUB.email}?subject=${encodeURIComponent("Member question - "+(nm||data.email))}" target="_top">${ICO.mail}<span>Email</span></a>
     <a class="ct" href="${CLUB.ig}" target="_blank" rel="noopener">${ICO.ig}<span>Instagram</span></a><a class="ct" href="${CLUB.x}" target="_blank" rel="noopener">${ICO.x}<span>X</span></a>
     <a class="ct" href="${CLUB.fb}" target="_blank" rel="noopener">${ICO.fb}<span>Facebook</span></a><a class="ct" href="${CLUB.yt}" target="_blank" rel="noopener">${ICO.yt}<span>YouTube</span></a>`;}
+/* ===== welcome video: a pop-up over the whole page, always landscape (16:9). On phones it offers full screen and
+   asks the phone to turn sideways (Android locks to landscape; iPhone rotates when the phone is turned). ===== */
+const WELCOME_VIDEO={src:"../assets/welcome.mp4",poster:"../assets/welcome-poster.jpg"};
+function openWelcome(){const T=topWin,doc=T.document,es=L()==="es";if(doc.getElementById("lrcWelcome"))return;
+  if(!doc.getElementById("lrcWelcomeCss")){const st=doc.createElement("style");st.id="lrcWelcomeCss";st.textContent=`
+  #lrcWelcome{position:fixed;inset:0;z-index:2147483000;background:rgba(2,18,34,.92);display:flex;align-items:center;justify-content:center;padding:max(14px,env(safe-area-inset-top)) 14px max(14px,env(safe-area-inset-bottom));animation:lrcwIn .25s ease}
+  @keyframes lrcwIn{from{opacity:0}to{opacity:1}}
+  #lrcWelcome .w{width:min(96vw,calc((100svh - 150px) * 16 / 9));max-width:1100px}
+  #lrcWelcome .h{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;color:#fff;font:900 13px Archivo,Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase}
+  #lrcWelcome .h b{color:#f5d066}#lrcWelcome .x{all:unset;cursor:pointer;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);color:#fff;font:700 24px/1 Arial,sans-serif}
+  #lrcWelcome .x:focus-visible,#lrcWelcome .fs:focus-visible{outline:3px solid #f5d066;outline-offset:2px}
+  #lrcWelcome .v{position:relative;aspect-ratio:16/9;width:100%;background:#000;border-radius:14px;overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.8)}
+  #lrcWelcome video{width:100%;height:100%;object-fit:contain;display:block;background:#000}
+  #lrcWelcome .f{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;color:#c9d6e6;font:400 14px/1.4 Georgia,serif}
+  #lrcWelcome .fs{all:unset;cursor:pointer;padding:9px 14px;border-radius:999px;background:#f5d066;color:#052a4b;font:900 12px Archivo,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+  #lrcWelcome .rot{display:none}@media (orientation:portrait) and (max-width:820px){#lrcWelcome .rot{display:block}}`;doc.head.appendChild(st);}
+  const abs=u=>new URL(u,location.href).href;
+  const ov=doc.createElement("div");ov.id="lrcWelcome";ov.setAttribute("role","dialog");ov.setAttribute("aria-modal","true");ov.setAttribute("aria-label",es?"Video de bienvenida":"Welcome video");
+  ov.innerHTML=`<div class="w"><div class="h"><span>🎬 <b>${es?"Bienvenido al club":"Welcome to the club"}</b></span><button type="button" class="x" aria-label="${es?"Cerrar":"Close"}">×</button></div>
+    <div class="v"><video controls playsinline preload="metadata" poster="${abs(WELCOME_VIDEO.poster)}" src="${abs(WELCOME_VIDEO.src)}"></video></div>
+    <div class="f"><span class="rot">📱↻ ${es?"Gira tu teléfono de lado para verlo en grande.":"Turn your phone sideways for the full picture."}</span><span></span><button type="button" class="fs">⤢ ${es?"Pantalla completa":"Full screen"}</button></div></div>`;
+  doc.body.appendChild(ov);const v=ov.querySelector("video"),prevOverflow=doc.documentElement.style.overflow;doc.documentElement.style.overflow="hidden";
+  const lock=()=>{try{T.screen.orientation&&T.screen.orientation.lock&&T.screen.orientation.lock("landscape").catch(()=>{});}catch(e){}};
+  const full=()=>{try{if(v.requestFullscreen)v.requestFullscreen().then(lock).catch(()=>{if(v.webkitEnterFullscreen)v.webkitEnterFullscreen();});else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen();}catch(e){}};
+  const close=()=>{try{v.pause();}catch(e){}try{T.screen.orientation&&T.screen.orientation.unlock&&T.screen.orientation.unlock();}catch(e){}ov.remove();doc.documentElement.style.overflow=prevOverflow;doc.removeEventListener("keydown",esc_);};
+  const esc_=e=>{if(e.key==="Escape"&&!doc.fullscreenElement)close();};
+  ov.querySelector(".x").addEventListener("click",close);ov.addEventListener("click",e=>{if(e.target===ov)close();});doc.addEventListener("keydown",esc_);
+  ov.querySelector(".fs").addEventListener("click",full);
+  v.addEventListener("play",()=>{if(T.matchMedia("(orientation: portrait) and (max-width: 820px)").matches)full();},{once:true});
+  ov.querySelector(".x").focus();
+  if(!data.prof.welcome_seen_at){data.prof.welcome_seen_at=new Date().toISOString();renderMemberNotif();
+    api("/rest/v1/profiles?on_conflict=email",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({welcome_seen_at:data.prof.welcome_seen_at,updated_at:data.prof.welcome_seen_at})}).catch(()=>{});}}
+document.addEventListener("click",e=>{if(e.target.closest("[data-welcome]")){e.preventDefault();openWelcome();}});
+
 /* ===== gift-wrapped tickets: shown wrapped, with the note, the first time the recipient opens their profile ===== */
 function renderGift(){const mine=(data.tickets||[]).filter(t=>t.gift&&!t.gift_opened_at&&t.owner_email===data.email&&t.status!=="void");
   const box=$("giftBox");if(!mine.length){box.hidden=true;return;}
@@ -1387,6 +1423,8 @@ function renderMemberNotif(){const d=data,now=Date.now(),win=NOTIF_DAYS*864e5,es
     html:`<span class="ntag">${e.is_monthly_meeting?"★ ":""}<span>New event</span></span><b>${esc(title(e))}</b>${e.starts_at?`<div>${esc(when(e.starts_at))}</div>`:""}<a href="#events" data-jump="events">Get tickets</a>`}));
   (d.tickets||[]).filter(t=>t.shared_by&&t.status!=="void"&&fresh(t.shared_at||t.created_at)).forEach(t=>{const e=(d.events||[]).find(x=>x.id===t.event_id);items.push({k:"tk",key:"tk:"+t.id,at:Date.parse(t.shared_at||t.created_at),
     html:`<span class="ntag"><span>Ticket for you</span></span><b>${esc(e?title(e):"Event")}</b><div><span>Shared with you by</span> ${esc(t.shared_by)}</div><a href="#tickets" data-jump="tickets">See ticket</a>`});});
+  if((d.member||d.isBoard)&&(!d.prof.welcome_seen_at||fresh(d.prof.welcome_seen_at)))items.push({k:"welcome",key:"welcome",at:d.prof.welcome_seen_at?Date.parse(d.prof.welcome_seen_at):now+1,
+    html:`<span class="ntag gold">🎬 <span>Welcome from the Chairman</span></span><b>A message for our members</b><div><span>A short video from Chairman Elijah Diaz.</span></div><button type="button" class="link" data-welcome>▶ <span>Watch the welcome video</span></button>`});
   const hid=new Set((d.prof&&d.prof.notif_hidden)||[]);const all=items.length;
   for(let i=items.length-1;i>=0;i--)if(items[i].key&&hid.has(items[i].key))items.splice(i,1);
   items.sort((a,b)=>(a.k==="warn"?-2:a.k==="early"?-1:0)-(b.k==="warn"?-2:b.k==="early"?-1:0)||b.at-a.at);
@@ -1538,5 +1576,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=7e28c6ea"></script><script src="../assets/i18n.js?v=7e28c6ea"></script>
+</script><script src="../assets/i18n-es.js?v=25d22535"></script><script src="../assets/i18n.js?v=25d22535"></script>
 </body></html>

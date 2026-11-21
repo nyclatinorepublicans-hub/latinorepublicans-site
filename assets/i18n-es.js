@@ -922,6 +922,10 @@ window.LRC_ES={
 "Gift": "Regalo",
 "Clear all": "Borrar todo",
 "Show hidden": "Mostrar ocultas",
-"Automatic upgrades: every new club app feature, portal tool and partner benefit as it launches": "Mejoras automáticas: cada nueva función de la app, herramienta del portal y beneficio de socios del club en cuanto se lance"
+"Automatic upgrades: every new club app feature, portal tool and partner benefit as it launches": "Mejoras automáticas: cada nueva función de la app, herramienta del portal y beneficio de socios del club en cuanto se lance",
+"Welcome from the Chairman": "Bienvenida del Presidente",
+"A message for our members": "Un mensaje para nuestros miembros",
+"A short video from Chairman Elijah Diaz.": "Un video corto del Presidente Elijah Diaz.",
+"Watch the welcome video": "Ver el video de bienvenida"
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

@@ -281,10 +281,34 @@ body.gated #mcard,body.gated #btabs,body.gated section.card,body.gated #promo,bo
 @media (max-width:560px){.ct span{display:none}.ct{padding:9px}.ct.wa span{display:inline}}
 td.qc{white-space:nowrap}.qb{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;border-radius:50%;background:#eef1f6;color:#0b2a4a;margin-right:4px}.qb svg{width:17px;height:17px}.qb.wa{background:#25d366;color:#fff}.qb:hover{filter:brightness(.92)}
 body.gated #contactCard{display:none!important}
+.chip.gift{background:#fde8f0;color:#8a1040}
+.giftw{margin:0 0 16px;padding:22px 18px 26px;border-radius:22px;text-align:center;background:radial-gradient(circle at 50% 0,#163f6e,#052a4b 70%);color:#fff;position:relative;overflow:hidden;box-shadow:0 18px 40px -20px rgba(5,42,75,.8)}
+.gk{margin:0 0 14px;font:900 13px "Archivo",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#f5d066}
+.gpres{all:unset;cursor:pointer;position:relative;display:block;width:170px;height:170px;margin:0 auto;-webkit-tap-highlight-color:transparent}
+.gpres:focus-visible{outline:3px solid #f5d066;outline-offset:6px;border-radius:12px}
+.gbody{position:absolute;left:15px;right:15px;bottom:0;height:110px;border-radius:8px;background:linear-gradient(90deg,transparent 43%,#f5d066 43%,#f5d066 57%,transparent 57%),linear-gradient(#d51b2f,#a3101f);box-shadow:inset 0 -10px 0 rgba(0,0,0,.12)}
+.glid{position:absolute;left:5px;right:5px;top:38px;height:32px;border-radius:7px;background:linear-gradient(90deg,transparent 43%,#f5d066 43%,#f5d066 57%,transparent 57%),linear-gradient(#e8283c,#c01526);z-index:2;transition:transform .7s cubic-bezier(.3,1.4,.5,1),opacity .7s}
+.gbow{position:absolute;left:50%;top:-26px;width:60px;height:30px;transform:translateX(-50%)}
+.gbow::before,.gbow::after{content:"";position:absolute;top:2px;width:30px;height:24px;border:6px solid #f5d066;border-radius:50% 50% 10% 50%}.gbow::before{left:-2px;transform:rotate(-20deg)}.gbow::after{right:-2px;transform:rotate(20deg) scaleX(-1)}
+.gtag{position:absolute;right:-48px;top:70px;z-index:3;width:104px;padding:8px 8px 9px;background:#fffaf0;color:#0d2238;border-radius:6px 14px 14px 6px;transform:rotate(9deg);box-shadow:0 6px 14px -6px rgba(0,0,0,.6);text-align:left}
+.gtag::before{content:"";position:absolute;left:-14px;top:12px;width:16px;height:2px;background:#f5d066}
+.gtag-h{display:block;font:800 10px "Archivo",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#a0721e}.gtag-n{display:block;font:italic 700 15px "Hepta Slab",Georgia,serif;line-height:1.2;margin-top:2px}
+.gpres:not(:disabled):hover .glid{transform:translateY(-4px) rotate(-2deg)}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}.giftw:not(.open) .gpres{animation:wiggle 1.4s ease-in-out infinite;animation-delay:1s}
+.ghint{margin:14px 0 0;font-size:14px;color:#c9d6e6}
+.greveal{display:none}
+.giftw.open .glid{transform:translate(40px,-110px) rotate(28deg);opacity:0}.giftw.open .gtag{opacity:0;transition:opacity .3s}.giftw.open .gbody{transform:scale(.0);transition:transform .45s .35s ease-in}
+.giftw.open .gpres{height:0;transition:height .3s .7s;animation:none}.giftw.open .ghint{display:none}
+.giftw.open .greveal{display:block;animation:rise .6s .75s both}
+@keyframes rise{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+.gnote{margin:6px 0 4px;font:italic 700 26px "Hepta Slab",Georgia,serif;color:#f5d066}.greveal h3{margin:4px 0 6px;font:900 22px "Archivo",sans-serif;text-transform:uppercase}.greveal .small{color:#c9d6e6}.greveal .btn{margin-top:10px}
+.gconf{position:absolute;inset:0;pointer-events:none}.gconf i{position:absolute;left:50%;top:40%;width:8px;height:12px;background:hsl(calc(var(--i)*40),85%,60%);opacity:0;animation:conf 1.4s calc(.7s + var(--i)*.02s) ease-out forwards}
+@keyframes conf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(calc((var(--i) - 9)*22px),calc(-60px + var(--i)*9px)) rotate(calc(var(--i)*60deg))}}
+@media (prefers-reduced-motion:reduce){.giftw *{animation:none!important;transition:none!important}}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=77ffabdb"></script>
+<script src="../assets/vendor/qrcode.js?v=7cc5b66b"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -362,6 +386,7 @@ body.gated #contactCard{display:none!important}
       <div id="detMsg" class="msg" hidden></div></section>
     <section class="card" id="flagPick" hidden></section>
     <section id="progCard" class="card slim" hidden><label class="chkline"><input type="checkbox" id="progOpt"> <span><b>Event programs:</b> list my name as an Ambassador in printed event programs</span></label><div id="progMsg" class="msg" hidden></div></section>
+    <section id="giftBox" class="giftw" hidden aria-live="polite"></section>
     <section id="earlyNow" class="earlynow" hidden></section>
     <section id="appGate" class="appgate" hidden><img src="../assets/app-192.png" alt="" width="72" height="72"><h2>The club app is a Patriot and Ambassador benefit</h2>
       <p>Your membership level doesn't include the app. You can still use your full profile and tickets in your phone's web browser, or upgrade to Patriot to unlock the app.</p>
@@ -579,7 +604,7 @@ async function fetchAll(){
   const email=(user.email||"").toLowerCase();
   let [members,tickets,events,admins,grants]=await Promise.all([
     api("/rest/v1/members?select=*&email=eq."+encodeURIComponent(email)),
-    api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents,owner_email,holder_name,shared_by,shared_at&or=(owner_email.eq."+encodeURIComponent(email)+",shared_by.eq."+encodeURIComponent(email)+")&order=created_at.asc"),
+    api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents,owner_email,holder_name,shared_by,shared_at,gift,gift_note,gift_opened_at&or=(owner_email.eq."+encodeURIComponent(email)+",shared_by.eq."+encodeURIComponent(email)+")&order=created_at.asc"),
     api("/rest/v1/events?select=*&order=starts_at.asc.nullslast"),
     api("/rest/v1/admins?select=email,name,title,role,subtitle,advisory_title&email=eq."+encodeURIComponent(email)),
     api("/rest/v1/comp_grants?select=*"),
@@ -836,7 +861,7 @@ function render(){
   $("dir").hidden=$("boardP").hidden=!d.isFull;if(d.isFull){renderDir();renderBoard();}
   $("bmCard").hidden=$("npCard").hidden=$("docCard").hidden=$("myEv").hidden=$("actCard").hidden=!d.isBoard;if(d.isBoard){renderBm();renderNp();renderDocs();renderMyEv();renderAct();}
   $("btabs").hidden=$("checklist").hidden=!d.isBoard;document.body.classList.toggle("bview",!!d.isBoard);
-  $("notifications").hidden=false;$("contactCard").hidden=false;renderContact();$("boardNotif").hidden=!d.isBoard;$("earlyNow").hidden=true;renderMemberNotif();
+  $("notifications").hidden=false;$("contactCard").hidden=false;renderContact();renderGift();$("boardNotif").hidden=!d.isBoard;$("earlyNow").hidden=true;renderMemberNotif();
   if(d.isBoard){setCat(curCat);renderNotif();renderChecklist();}
   renderApp();
   $("progCard").hidden=!isAmb();if(isAmb())$("progOpt").checked=!!d.prof.program_listing;
@@ -888,7 +913,7 @@ function render(){
       <button class="qr" type="button" data-i="${d.tickets.indexOf(t)}" aria-label="Enlarge QR code">${qrSvg("lrc:"+t.token)}</button>
       <div class="code">${esc(t.token.slice(0,8).toUpperCase())}</div>
       <div class="chips">${t.kind==="comp"?'<span class="chip comp">Complimentary</span>':(t.price_cents?'<span class="chip">Paid</span>':'<span class="chip">Reserved</span>')}
-      ${used?'<span class="chip used">Checked in</span>':'<span class="chip">Valid</span>'}${isAmb()?'<span class="chip comp">★ Preferred seating</span>':""}</div>
+      ${used?'<span class="chip used">Checked in</span>':'<span class="chip">Valid</span>'}${isAmb()?'<span class="chip comp">★ Preferred seating</span>':""}${t.gift?`<span class="chip gift">🎁 <span>Gift</span>${t.gift_note?" · "+esc(t.gift_note):""}</span>`:""}</div>
       ${t.shared_by?`<div class="small" style="margin-top:6px"><span>Shared with you by</span> ${esc(t.shared_by)}</div>`:""}
       ${t.status==="valid"?`<button class="btn ghost sm" type="button" data-share="${t.id}" style="margin-top:10px">Share ticket</button>`:""}</div>`;}).join("")}</div>`
     :(data.isBoard?`<div class="empty">No tickets yet. Get tickets in the Events tab.</div>`:`<div class="empty">No tickets yet. Get tickets below.</div>`);
@@ -1324,6 +1349,22 @@ function renderContact(){const nm=(data.exec&&data.exec.name)||data.prof.name||(
     <a class="ct" href="mailto:${CLUB.email}?subject=${encodeURIComponent("Member question - "+(nm||data.email))}" target="_top">${ICO.mail}<span>Email</span></a>
     <a class="ct" href="${CLUB.ig}" target="_blank" rel="noopener">${ICO.ig}<span>Instagram</span></a><a class="ct" href="${CLUB.x}" target="_blank" rel="noopener">${ICO.x}<span>X</span></a>
     <a class="ct" href="${CLUB.fb}" target="_blank" rel="noopener">${ICO.fb}<span>Facebook</span></a><a class="ct" href="${CLUB.yt}" target="_blank" rel="noopener">${ICO.yt}<span>YouTube</span></a>`;}
+/* ===== gift-wrapped tickets: shown wrapped, with the note, the first time the recipient opens their profile ===== */
+function renderGift(){const mine=(data.tickets||[]).filter(t=>t.gift&&!t.gift_opened_at&&t.owner_email===data.email&&t.status!=="void");
+  const box=$("giftBox");if(!mine.length){box.hidden=true;return;}
+  const note=mine[0].gift_note||"",ev=(data.events||[]).find(e=>e.id===mine[0].event_id),evName=ev?(L()==="es"&&ev.title_es?ev.title_es:ev.title_en):"";
+  box.hidden=false;box.classList.remove("open");
+  box.innerHTML=`<p class="gk">🎁 <span>You have a gift</span></p>
+   <button type="button" class="gpres" id="bGift" aria-label="Open your gift"><span class="glid"><span class="gbow"></span></span><span class="gbody"></span>
+     <span class="gtag"><span class="gtag-h">To: ${esc((data.prof.name||(data.member&&data.member.name)||"").split(" ")[0]||"you")}</span><span class="gtag-n">${esc(note)}</span></span></button>
+   <p class="ghint">Tap the gift to open it</p>
+   <div class="greveal"><div class="gconf" aria-hidden="true">${Array.from({length:18},(_,i)=>`<i style="--i:${i}"></i>`).join("")}</div>
+     <p class="gnote">“${esc(note)}”</p><h3>${mine.length} <span>${mine.length===1?"ticket":"tickets"} to the</span> ${esc(evName)}</h3>
+     <p class="small">They're in My Tickets with your QR codes. Share one with a guest anytime.</p><a class="btn gold" href="#tickets" data-jump="tickets">See my tickets</a></div>`;
+  setTimeout(()=>jump("giftBox"),400);}
+document.addEventListener("click",async e=>{if(!e.target.closest("#bGift"))return;const box=$("giftBox");if(box.classList.contains("open"))return;
+  box.classList.add("open");try{await api("/rest/v1/rpc/open_gift",{method:"POST",body:"{}"});(data.tickets||[]).forEach(t=>{if(t.gift&&!t.gift_opened_at)t.gift_opened_at=new Date().toISOString();});}catch(err){}});
+
 /* ===== member notifications: early access (with countdown), Chairman's Insider, new events, shared tickets, payment problems.
    Each one clears on its own 5 days after it was posted; early access also clears when sign-ups open to everyone. ===== */
 const NOTIF_DAYS=5;
@@ -1482,5 +1523,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=77ffabdb"></script><script src="../assets/i18n.js?v=77ffabdb"></script>
+</script><script src="../assets/i18n-es.js?v=7cc5b66b"></script><script src="../assets/i18n.js?v=7cc5b66b"></script>
 </body></html>

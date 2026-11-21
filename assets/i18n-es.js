@@ -912,6 +912,13 @@ window.LRC_ES={
 "Ticket for you": "Entrada para ti",
 "See ticket": "Ver entrada",
 "You're all caught up.": "Estás al día.",
-"Contact the club": "Contacta al club"
+"Contact the club": "Contacta al club",
+"You have a gift": "Tienes un regalo",
+"Tap the gift to open it": "Toca el regalo para abrirlo",
+"tickets to the": "entradas para la",
+"ticket to the": "entrada para la",
+"They're in My Tickets with your QR codes. Share one with a guest anytime.": "Están en Mis Entradas con tus códigos QR. Comparte una con un invitado cuando quieras.",
+"See my tickets": "Ver mis entradas",
+"Gift": "Regalo"
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

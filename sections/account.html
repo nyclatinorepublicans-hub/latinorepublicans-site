@@ -315,7 +315,7 @@ body.gated #contactCard{display:none!important}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=91db7586"></script>
+<script src="../assets/vendor/qrcode.js?v=dff4a010"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -1435,6 +1435,9 @@ function renderMemberNotif(){const d=data,now=Date.now(),win=NOTIF_DAYS*864e5,es
     html:`<span class="ntag">${e.is_monthly_meeting?"★ ":""}<span>New event</span></span><b>${esc(title(e))}</b>${e.starts_at?`<div>${esc(when(e.starts_at))}</div>`:""}<a href="#events" data-jump="events">Get tickets</a>`}));
   (d.tickets||[]).filter(t=>t.shared_by&&t.status!=="void"&&fresh(t.shared_at||t.created_at)).forEach(t=>{const e=(d.events||[]).find(x=>x.id===t.event_id);items.push({k:"tk",key:"tk:"+t.id,at:Date.parse(t.shared_at||t.created_at),
     html:`<span class="ntag"><span>Ticket for you</span></span><b>${esc(e?title(e):"Event")}</b><div><span>Shared with you by</span> ${esc(t.shared_by)}</div><a href="#tickets" data-jump="tickets">See ticket</a>`});});
+  {const g={};(d.tickets||[]).filter(t=>t.gift&&t.status!=="void"&&(!t.gift_opened_at||fresh(t.gift_opened_at))).forEach(t=>{(g[t.event_id]=g[t.event_id]||[]).push(t);});
+   Object.entries(g).forEach(([eid,ts])=>{const e=(d.events||[]).find(x=>x.id===eid),t=ts[0];items.push({k:"gift",key:"gift:"+eid,at:Date.parse(t.created_at),
+    html:`<span class="ntag gold">🎁 <span>A gift for you</span></span><b>${ts.length} ${ts.length===1?`<span>ticket</span>`:`<span>tickets</span>`}: ${esc(e?title(e):"Event")}</b>${t.gift_note?`<div>“${esc(t.gift_note)}”</div>`:""}<a href="#tickets" data-jump="tickets">See tickets</a>`});});}
   if((d.member||d.isBoard)&&(!d.prof.welcome_seen_at||fresh(d.prof.welcome_seen_at)))items.push({k:"welcome",key:"welcome",at:d.prof.welcome_seen_at?Date.parse(d.prof.welcome_seen_at):now+1,
     html:`<span class="ntag gold">🎬 <span>Welcome from the Chairman</span></span><b>A message for our members</b><div><span>A short video from Chairman Elijah Diaz.</span></div><button type="button" class="link" data-welcome>▶ <span>Watch the welcome video</span></button>`});
   const hid=new Set((d.prof&&d.prof.notif_hidden)||[]);const all=items.length;
@@ -1588,5 +1591,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=91db7586"></script><script src="../assets/i18n.js?v=91db7586"></script>
+</script><script src="../assets/i18n-es.js?v=dff4a010"></script><script src="../assets/i18n.js?v=dff4a010"></script>
 </body></html>

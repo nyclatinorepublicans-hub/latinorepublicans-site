@@ -372,8 +372,8 @@ window.LRC_ES={
 "· members": "· miembros",
 "Free": "Gratis",
 "You have": "Tienes",
-"ticket": "entrada",
-"tickets": "entradas",
+"ticket": "boleto",
+"tickets": "boletos",
 "Quantity": "Cantidad",
 "Buy tickets": "Comprar entradas",
 "Reserve": "Reservar",
@@ -941,6 +941,8 @@ window.LRC_ES={
 "Add your spouse or partner to give them their own Ambassador membership.": "Agregue a su cónyuge o pareja para darle su propia membresía de Embajador.",
 "Covered by sponsorship": "Cubierto por el patrocinio",
 "Their email": "Su correo",
-"Covered through": "Cubierto hasta"
+"Covered through": "Cubierto hasta",
+"A gift for you": "Un regalo para ti",
+"See tickets": "Ver boletos"
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

@@ -232,6 +232,8 @@ window.LRC_ES={
 "Two tickets to our annual gala": "Dos entradas para nuestra gala anual",
 "A sponsor spotlight on our Instagram, X, Facebook and YouTube": "Una publicación destacada en nuestro Instagram, X, Facebook y YouTube",
 "Table or display space at one club event": "Una mesa o espacio de exhibición en un evento del club",
+"Sponsors": "Patrocinadores",
+"See our sponsors →": "Ver nuestros patrocinadores →",
 "Sample page": "Página de muestra",
 "These sponsors are fictional placeholders to preview the layout. They are not real organizations and do not sponsor the club.": "Estos patrocinadores son ejemplos ficticios para previsualizar el diseño. No son organizaciones reales y no patrocinan al club.",
 "Corporate sponsors": "Patrocinadores corporativos",

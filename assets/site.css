@@ -4,12 +4,15 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{margin:0;background:#021a30}
-.sec{display:block;scroll-margin-top:var(--hdr)}
+body{margin:0;background:#021a30;padding-bottom:env(safe-area-inset-bottom,0px)}
+.sec{display:block;scroll-margin-top:calc(var(--hdr) + env(safe-area-inset-top,0px))}
 .sec iframe{display:block;width:100%;border:0;height:700px;background:transparent}
-#s-top{position:sticky;top:0;z-index:50;box-shadow:0 6px 18px -8px rgba(0,0,0,.6)}
+#s-top{position:sticky;top:0;z-index:50;box-shadow:0 6px 18px -8px rgba(0,0,0,.6);
+  /* newer iPhones draw the page under the status bar / camera island: push the menu below it.
+     env() is 0 on older iPhones and in landscape here, so nothing changes there. */
+  padding-top:env(safe-area-inset-top,0px);background:#0b3d6b}
 #s-top iframe{height:var(--hdr)}
-#s-home iframe{height:clamp(600px,calc(100svh - var(--hdr)),760px)}
+#s-home iframe{height:clamp(600px,calc(100svh - var(--hdr) - env(safe-area-inset-top,0px)),760px)}
 @media (max-width:860px){#s-home iframe{height:800px}}
 .skip{position:absolute;left:-9999px;top:8px;z-index:99;background:#f5d066;color:#021a30;padding:10px 14px;border-radius:8px;font:700 14px system-ui,sans-serif}
 .skip:focus{left:8px}

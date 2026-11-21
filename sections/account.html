@@ -258,7 +258,7 @@ details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;f
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=466331f9"></script>
+<script src="../assets/vendor/qrcode.js?v=da6f21ce"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -804,7 +804,7 @@ function render(){
       <span class="tier gold-x">${esc(ex.title)}</span></div>
       <div class="mgrid"><div><span>Status</span><b class="st-active">Active</b></div>
       ${ex.advisory_title?`<div><span>Executive Board</span><b>${esc(ex.title)}</b></div><div><span>Advisory Board</span><b>${esc(ex.advisory_title)}</b></div>`:`<div><span>Board</span><b>${esc(ex.subtitle||"Executive Board")}</b></div>`}
-      <div><span>Access</span><b>${ex.role==="full"?"Full access":(dirNames().length?"Door check-in, tickets & the "+esc(dirNames().join(", "))+" committee":"Door check-in & tickets")}</b></div>${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div>${flagLine()}<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button></div>`;
+      ${ex.role==="full"?`<div><span>Access</span><b>Full access</b></div>`:""}${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div>${flagLine()}<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button></div>`;
   }else if(m){
     $("mcard").innerHTML=`<div class="mcard${m.tier==="embajador"&&m.status==="active"?" exec amb":""}${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div>${badges()}</div>
       <span class="tier${m.tier==="embajador"&&m.status==="active"?" gold-x":""}">${m.tier==="embajador"&&m.status==="active"?"★ ":""}${esc(TIER[m.tier]||m.tier)}</span></div>
@@ -1373,5 +1373,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=466331f9"></script><script src="../assets/i18n.js?v=466331f9"></script>
+</script><script src="../assets/i18n-es.js?v=da6f21ce"></script><script src="../assets/i18n.js?v=da6f21ce"></script>
 </body></html>

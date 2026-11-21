@@ -39,7 +39,10 @@
   function goToHash(){
     const id=decodeURIComponent(location.hash.slice(1));if(!id)return;
     const t=document.getElementById('s-'+id)||document.getElementById(id);
-    if(t)t.scrollIntoView({behavior:'auto',block:'start'});
+    if(t){t.scrollIntoView({behavior:'auto',block:'start'});return;}
+    /* the target may be inside a section, e.g. /join/#sponsor */
+    for(const f of frames){try{const el=f.contentDocument&&f.contentDocument.getElementById(id);
+      if(el){const y=f.getBoundingClientRect().top+scrollY+el.getBoundingClientRect().top-(hdr()+12);scrollTo({top:y,behavior:'auto'});return;}}catch(e){}}
   }
   function scrollToId(id){
     if(id==='home'||id==='top'){scrollTo({top:0,behavior:reduce?'auto':'smooth'});history.replaceState(null,'',location.pathname+location.search);return true;}

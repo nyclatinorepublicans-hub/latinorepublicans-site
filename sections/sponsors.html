@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,600..900&display=swap">
+<style>
+:root{--navy:#052a4b;--navy2:#0b3d6b;--deep:#021a30;--gold:#d6a844;--gold-hi:#f5d066;--gold-lo:#b68323;--red:#d51b2f;--cream:#fffaf1;--ink:#0d2238}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;max-width:100%;overflow-x:hidden}
+body{background:#f4efe4;color:var(--ink);font-family:"Hepta Slab",Georgia,serif}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{padding:clamp(28px,5vw,64px) clamp(14px,4vw,40px) clamp(48px,6vw,80px)}
+.inner{max-width:1120px;margin:0 auto}
+
+/* sample notice */
+.sample{display:flex;align-items:flex-start;gap:12px;margin:0 auto clamp(22px,3vw,32px);padding:14px 16px;border-radius:14px;
+  background:repeating-linear-gradient(135deg,#fff3d6 0 14px,#ffeec4 14px 28px);box-shadow:inset 0 0 0 2px #e0b44f;font-size:14px;line-height:1.5;color:#5a3d06}
+.sample b{font-family:"Archivo",sans-serif;font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-size:12px;color:#8a5a06;display:block;margin-bottom:2px}
+.sample svg{flex:none;width:22px;height:22px;margin-top:2px}
+
+/* heading */
+.head{text-align:center;margin-bottom:clamp(26px,4vw,40px)}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-family:"Archivo",sans-serif;font-weight:800;letter-spacing:.3em;text-transform:uppercase;font-size:13px;color:#b0402f}
+.eyebrow::before,.eyebrow::after{content:"";width:28px;height:2px;background:var(--gold)}
+h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stretch:78%;text-transform:uppercase;line-height:.95;font-size:clamp(40px,7vw,78px);color:var(--navy);
+  text-shadow:-2px -2px 0 var(--gold),2px -2px 0 var(--gold),-2px 2px 0 var(--gold),2px 2px 0 var(--gold),0 -2px 0 var(--gold),0 2px 0 var(--gold),-2px 0 0 var(--gold),2px 0 0 var(--gold),0 4px 0 #c99a3a,0 5px 0 #a87a22,0 6px 0 #7a5310,0 14px 20px rgba(5,42,75,.3)}
+.sub{margin:0 auto;max-width:620px;font-style:italic;font-size:clamp(15px,1.8vw,18px);line-height:1.5;color:#3b4d62}
+
+/* groups */
+.group{margin-top:clamp(28px,4vw,44px)}
+.gh{display:flex;align-items:center;gap:14px;margin:0 0 16px}
+.gh .ic{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,var(--gold-hi),var(--gold) 55%,var(--gold-lo));box-shadow:0 3px 0 #7a5310}
+.gh .ic svg{width:22px;height:22px;fill:var(--deep)}
+.gh h2{margin:0;font:900 clamp(22px,3vw,30px)/1 "Archivo",sans-serif;font-stretch:80%;text-transform:uppercase;letter-spacing:.03em;color:var(--navy)}
+.gh::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(14px,2vw,22px)}
+
+/* profile card */
+.card{position:relative;display:flex;flex-direction:column;background:var(--cream);border-radius:22px;overflow:hidden;
+  box-shadow:0 0 0 2px #e4d7bd,0 6px 0 #d9c8a4,0 24px 40px -24px rgba(5,42,75,.45)}
+.top{display:flex;align-items:center;gap:16px;padding:20px 20px 16px;color:#fff;background:linear-gradient(135deg,var(--c1),var(--c2))}
+.logo{flex:none;width:86px;height:86px;border-radius:18px;background:#fff;display:grid;place-items:center;box-shadow:0 6px 14px -4px rgba(0,0,0,.45),inset 0 0 0 1px rgba(0,0,0,.06)}
+.logo svg{width:74px;height:74px}
+.top h3{margin:0;font:900 clamp(20px,2.4vw,25px)/1.05 "Archivo",sans-serif;font-stretch:82%;letter-spacing:.01em}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{padding:4px 9px;border-radius:999px;font:800 10.5px "Archivo",sans-serif;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+.tag.s{background:var(--gold);color:var(--deep);box-shadow:none}
+.body{flex:1;display:flex;flex-direction:column;padding:16px 20px 20px}
+.desc{margin:0 0 14px;font-size:14.5px;line-height:1.55;color:#33465c}
+dl{margin:0 0 16px;display:grid;grid-template-columns:auto 1fr;gap:7px 12px;font-size:14px}
+dt{font:800 11px "Archivo",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#8a6418;padding-top:2px}
+dd{margin:0;color:var(--ink);overflow-wrap:anywhere}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;border-radius:999px;padding:11px 16px;font:900 12.5px "Archivo",sans-serif;font-stretch:88%;letter-spacing:.1em;text-transform:uppercase;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.p{background:var(--navy);color:#fff;box-shadow:0 3px 0 var(--deep)}
+.btn.o{color:var(--navy);box-shadow:inset 0 0 0 2px var(--navy)}
+.btn svg{width:15px;height:15px;fill:currentColor}
+
+/* call to action */
+.cta{margin-top:clamp(34px,5vw,56px);text-align:center;border-radius:26px;padding:clamp(24px,4vw,40px) 20px;color:#fff;
+  background:radial-gradient(80% 90% at 50% 0%,rgba(245,208,102,.18),transparent 60%),linear-gradient(160deg,#0b3d6b,#052a4b 60%,#021a30);box-shadow:0 0 0 2px var(--gold),0 8px 0 #7a5310}
+.cta h2{margin:0 0 8px;font:900 clamp(26px,4vw,40px)/1 "Archivo",sans-serif;font-stretch:80%;text-transform:uppercase}
+.cta p{margin:0 auto 18px;max-width:520px;font-style:italic;color:#dfe8f4}
+.cta .btn{background:linear-gradient(180deg,#ec3346,var(--red) 55%,#b3121f);color:#fff;padding:15px 24px;font-size:14px;box-shadow:0 0 0 2px var(--gold),0 4px 0 2px #7a0d17}
+.fine{margin:16px 0 0;font-size:12px;color:#6a7889;text-align:center}
+@media (max-width:820px){.cards{grid-template-columns:1fr}}
+@media (max-width:420px){.top{flex-direction:column;align-items:flex-start}.logo{width:72px;height:72px}.logo svg{width:62px;height:62px}}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="inner">
+  <div class="sample" role="note"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#e0b44f"/><path d="M12 6.5v7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17" r="1.5" fill="#fff"/></svg>
+    <div><b>Sample page</b>These sponsors are fictional placeholders to preview the layout. They are not real organizations and do not sponsor the club.</div></div>
+
+  <div class="head">
+    <span class="eyebrow">Corporate sponsors</span>
+    <h1>Our Sponsors</h1>
+    <p class="sub">Thank you to the parties, organizations and businesses that stand with New York’s Latino community.</p>
+  </div>
+
+  <div id="groups"></div>
+
+  <div class="cta">
+    <h2>Become a Sponsor</h2>
+    <p>Corporate Sponsorship is $1,000 for 12 months of recognition.</p>
+    <a class="btn" id="ctaBtn" href="../join/#sponsor" target="_top">See sponsorship benefits →</a>
+  </div>
+  <p class="fine">Sponsor recognition is an acknowledgment of support, not an endorsement by the club. Paid for by NYC Latino Republican Club Inc.</p>
+</div></div>
+<script>
+/* =====================================================================
+   SPONSORS: one entry per sponsor. Replace the SAMPLE entries with real
+   sponsors once they pay (and remove the sample notice at the top).
+   ===================================================================== */
+const GROUPS = [
+ { title:"Political Parties & Committees", icon:"star", sponsors:[
+   { name:"Five Boroughs Victory Committee", type:"Political committee", since:"2026", c1:"#0b3d6b", c2:"#c8102e", logo:{shape:"shield",text:"FBV",fg:"#0b3d6b",accent:"#c8102e"},
+     desc:"A citywide political committee supporting civic engagement and voter outreach across all five boroughs.",
+     address:"100 Example Avenue, Suite 4, Bronx, NY 10451", phone:"(212) 555-0141", email:"info@example.org", website:"https://example.org", social:"@sample_fbvc",
+     extra:[["Treasurer","Jane Sample"],["Filer ID","SAMPLE-0001"]] },
+   { name:"Liberty Harbor Civic PAC", type:"Political action committee", since:"2026", c1:"#021a30", c2:"#2f6bff", logo:{shape:"torch",text:"LH",fg:"#021a30",accent:"#d6a844"},
+     desc:"A political action committee focused on small-business, public-safety and education policy in New York City.",
+     address:"250 Sample Street, Floor 2, Brooklyn, NY 11201", phone:"(718) 555-0172", email:"hello@example.org", website:"https://example.org", social:"@sample_libertyharbor",
+     extra:[["Treasurer","John Example"],["Filer ID","SAMPLE-0002"]] }
+ ]},
+ { title:"Organizations & Nonprofits", icon:"hands", sponsors:[
+   { name:"Puente Community Alliance", type:"Nonprofit organization", since:"2026", c1:"#0f6b5c", c2:"#1fa34a", logo:{shape:"bridge",text:"PCA",fg:"#0f6b5c",accent:"#d6a844"},
+     desc:"A community nonprofit offering citizenship classes, small-business workshops and family resources in Queens.",
+     address:"45 Example Boulevard, Jackson Heights, NY 11372", phone:"(347) 555-0118", email:"contact@example.org", website:"https://example.org", social:"@sample_puente",
+     extra:[["Founded","2012 (sample)"]] },
+   { name:"Nuevo Horizonte Youth Foundation", type:"Youth foundation", since:"2026", c1:"#5b2a86", c2:"#d6a844", logo:{shape:"sun",text:"NH",fg:"#5b2a86",accent:"#f5a73a"},
+     desc:"A youth foundation that connects high school and college students with mentors, internships and civic programs.",
+     address:"18 Sample Plaza, Washington Heights, NY 10032", phone:"(646) 555-0190", email:"programs@example.org", website:"https://example.org", social:"@sample_nuevohorizonte",
+     extra:[["Founded","2018 (sample)"]] }
+ ]},
+ { title:"Businesses", icon:"store", sponsors:[
+   { name:"Cafetería La Estrella", type:"Restaurant", since:"2026", c1:"#8a1c1c", c2:"#f5a73a", logo:{shape:"cup",text:"LE",fg:"#8a1c1c",accent:"#d6a844"},
+     desc:"A family-owned café serving Caribbean and Latin American breakfast, lunch and catering in the Bronx.",
+     address:"77 Example Road, Bronx, NY 10458", phone:"(718) 555-0133", email:"orders@example.com", website:"https://example.com", social:"@sample_laestrella",
+     extra:[["Hours","Mon–Sat, 7am–7pm"]] },
+   { name:"Borough Builders & Supply Co.", type:"Construction", since:"2026", c1:"#2b3442", c2:"#d6a844", logo:{shape:"house",text:"BB",fg:"#2b3442",accent:"#d6a844"},
+     desc:"A construction and building-supply company serving homeowners and contractors on Staten Island and in Brooklyn.",
+     address:"300 Sample Avenue, Staten Island, NY 10301", phone:"(929) 555-0107", email:"sales@example.com", website:"https://example.com", social:"@sample_boroughbuilders",
+     extra:[["Licensed","NYC DOB (sample)"]] }
+ ]}
+];
+/* ===================================================================== */
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ICONS={
+  star:'<path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z"/>',
+  hands:'<path d="M12 21s-8-4.6-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6.4-8 11-8 11z"/>',
+  store:'<path d="M3 9l1.5-5h15L21 9a3 3 0 0 1-5 2.2A3 3 0 0 1 12 12a3 3 0 0 1-4-.8A3 3 0 0 1 3 9zm2 4.5V21h14v-7.5a4.8 4.8 0 0 1-3-.7 4.8 4.8 0 0 1-4 .9 4.8 4.8 0 0 1-4-.9 4.8 4.8 0 0 1-3 .7zM10 21v-5h4v5z"/>'
+};
+/* simple made-up logos, drawn in code */
+function logoSVG(l){
+  const f=l.fg,a=l.accent,t=esc(l.text),fs=t.length>2?22:28;
+  const shapes={
+    shield:'<path d="M50 6l36 12v26c0 24-16 40-36 50C30 84 14 68 14 44V18z" fill="'+f+'"/><path d="M50 14l28 9v21c0 19-12 32-28 41-16-9-28-22-28-41V23z" fill="none" stroke="'+a+'" stroke-width="3"/>',
+    torch:'<circle cx="50" cy="50" r="44" fill="'+f+'"/><path d="M44 74h12l-2-30h-8z" fill="'+a+'"/><path d="M50 18c8 8 10 14 6 22-2 4-10 4-12 0-4-8-2-14 6-22z" fill="#f5d066"/>',
+    bridge:'<rect x="6" y="6" width="88" height="88" rx="22" fill="'+f+'"/><path d="M14 58c12-22 60-22 72 0" fill="none" stroke="'+a+'" stroke-width="5"/><path d="M22 58v12M78 58v12M50 42v28M36 46v24M64 46v24" stroke="#fff" stroke-width="3"/><path d="M10 72h80" stroke="#fff" stroke-width="4"/><text x="50" y="88" text-anchor="middle" font-family="Archivo,Arial Narrow,sans-serif" font-weight="900" font-size="13" fill="#fff" letter-spacing="2">'+t+'</text>',
+    sun:'<circle cx="50" cy="50" r="44" fill="'+f+'"/><circle cx="50" cy="58" r="18" fill="'+a+'"/><path d="M14 66h72" stroke="#fff" stroke-width="4"/><g stroke="'+a+'" stroke-width="4" stroke-linecap="round"><path d="M50 22v8M26 34l6 6M74 34l-6 6"/></g>',
+    cup:'<circle cx="50" cy="50" r="44" fill="'+f+'"/><path d="M30 44h34v10c0 12-8 20-17 20s-17-8-17-20z" fill="#fff"/><path d="M64 48h6a7 7 0 0 1 0 14h-7" fill="none" stroke="#fff" stroke-width="4"/><path d="M50 14l3 7 7 .6-5.4 4.6 1.7 7L50 29.6 43.7 33l1.7-7L40 21.6l7-.6z" fill="'+a+'"/>',
+    house:'<rect x="6" y="6" width="88" height="88" rx="16" fill="'+f+'"/><path d="M20 52L50 26l30 26" fill="none" stroke="'+a+'" stroke-width="6" stroke-linejoin="round"/><path d="M30 48v28h40V48" fill="none" stroke="#fff" stroke-width="5"/>'
+  };
+  const label=(l.shape==='torch'||l.shape==='cup'||l.shape==='sun'||l.shape==='bridge')?'':'<text x="50" y="'+(l.shape==='shield'?60:(l.shape==='house'?72:84))+'" text-anchor="middle" font-family="Archivo,Arial Narrow,sans-serif" font-weight="900" font-size="'+(l.shape==='house'?16:fs)+'" fill="#fff" letter-spacing="1">'+t+'</text>';
+  return '<svg viewBox="0 0 100 100" role="img" aria-label="Logo">'+(shapes[l.shape]||shapes.shield)+label+'</svg>';
+}
+document.getElementById('groups').innerHTML=GROUPS.map(g=>
+ '<section class="group"><div class="gh"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true">'+ICONS[g.icon]+'</svg></span><h2>'+esc(g.title)+'</h2></div><div class="cards">'+
+ g.sponsors.map(s=>'<article class="card" style="--c1:'+s.c1+';--c2:'+s.c2+'">'+
+   '<div class="top"><div class="logo">'+logoSVG(s.logo)+'</div><div><h3>'+esc(s.name)+'</h3><div class="tags"><span class="tag">'+esc(s.type)+'</span><span class="tag s">Sponsor since '+esc(s.since)+'</span><span class="tag">Sample</span></div></div></div>'+
+   '<div class="body"><p class="desc">'+esc(s.desc)+'</p><dl>'+
+   '<dt>Address</dt><dd>'+esc(s.address)+'</dd><dt>Phone</dt><dd>'+esc(s.phone)+'</dd><dt>Email</dt><dd>'+esc(s.email)+'</dd><dt>Social</dt><dd>'+esc(s.social)+'</dd>'+
+   (s.extra||[]).map(x=>'<dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd>').join('')+'</dl>'+
+   '<div class="acts"><a class="btn p" href="'+esc(s.website)+'" target="_blank" rel="noopener sponsored">Visit website <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7h-2V6.4l-8.3 8.3-1.4-1.4L17.6 5H14zM5 5h6v2H7v10h10v-4h2v6H5z"/></svg></a>'+
+   '<a class="btn o" href="mailto:'+esc(s.email)+'" target="_top">Contact</a></div></div></article>').join('')+
+ '</div></section>').join('');
+</script>
+<script>
+/* site helper: links to other parts of the site open in the main window; pop-ups open where the visitor is looking */
+(function(){
+  if(window.parent===window) return;
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href]'); if(!a||e.defaultPrevented) return;
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;
+    var u; try{u=new URL(a.getAttribute('href'),location.href);}catch(err){return;}
+    if(u.origin!==location.origin) return;            /* Stripe, socials, email: leave alone */
+    e.preventDefault(); e.stopPropagation(); parent.postMessage({lrc:'go',href:u.href},'*');
+  },true);
+  addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
+    var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
+})();
+</script><script src="../assets/i18n-es.js"></script><script src="../assets/i18n.js"></script>
+</body></html>

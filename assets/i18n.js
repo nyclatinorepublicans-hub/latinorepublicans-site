@@ -18,6 +18,7 @@
     [/^Join as (.+) for (\$\d+) a year$/, function(m){return 'Únete como '+(D[m[1]]||m[1])+' por '+m[2]+' al año';}],
     [/^¡Exacto! That's (.+)\.$/, function(m){return '¡Exacto! Es '+country(m[1])+'.';}],
     [/^Close! That one is (.+)\.$/, function(m){return '¡Casi! Esa es '+country(m[1])+'.';}],
+    [/^Sponsor since (\d{4})$/, function(m){return 'Patrocinador desde '+m[1];}],
     [/^© (\d{4}) (.+)$/, function(m){return '© '+m[1]+' '+(D[m[2]]||m[2]);}]
   ];
   function tr(s){if(Object.prototype.hasOwnProperty.call(D,s))return D[s];

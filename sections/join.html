@@ -85,6 +85,15 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
 .rp[aria-checked="true"]{background:#fff7e4;box-shadow:0 0 0 3px var(--gold),0 4px 0 var(--gold-lo);color:var(--navy)}
 
 .other{max-width:420px;margin:10px 0 0}
+.ow{position:relative}
+.field .ow input{padding-left:66px}
+.of{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:48px;height:32px;border-radius:5px;overflow:hidden;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--navy),var(--navy2));color:var(--gold-hi);font:900 16px "Archivo",sans-serif;box-shadow:0 2px 5px rgba(0,0,0,.25)}
+.of img,.rp .f img,.rep .f img{display:block;width:100%;height:100%;object-fit:cover}
+.of.pop,.rp .f.q.pop{animation:flagpop .45s cubic-bezier(.2,1.6,.4,1)}
+@keyframes flagpop{from{transform:translateY(-50%) scale(.4)}}
+.rp .f.q.pop{animation-name:flagpop2}@keyframes flagpop2{from{transform:scale(.4)}}
+@media (prefers-reduced-motion:reduce){.of.pop,.rp .f.q.pop{animation:none}}
 .field label{display:block;margin:0 0 6px;font-family:"Archivo",sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:11.5px;color:#4a5b70}
 .field input,.field select{width:100%;height:50px;border-radius:12px;border:2px solid #dccfb2;background:#fff;color:var(--ink);padding:0 14px;font:16px "Hepta Slab",Georgia,serif;appearance:none;-webkit-appearance:none}
 .field select{background-image:linear-gradient(45deg,transparent 50%,#052a4b 50%),linear-gradient(135deg,#052a4b 50%,transparent 50%);background-position:calc(100% - 20px) 21px,calc(100% - 14px) 21px;background-size:6px 6px;background-repeat:no-repeat;padding-right:36px}
@@ -153,7 +162,7 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
   <form class="panel" id="form" novalidate>
     <p class="lbl"><i>1</i>Where are you representing?</p>
     <div class="reps" id="reps" role="radiogroup" aria-label="Where are you representing?"></div>
-    <div class="field other" id="f-other" hidden><label for="otherIn">Which country are you representing?</label><input id="otherIn" maxlength="40" autocomplete="country-name" placeholder="Type your country"><p class="err" id="e-other"></p></div>
+    <div class="field other" id="f-other" hidden><label for="otherIn">Which country are you representing?</label><div class="ow"><span class="of" id="otherFlag" aria-hidden="true">?</span><input id="otherIn" maxlength="40" autocomplete="off" list="countries" placeholder="Type your country"></div><datalist id="countries"></datalist><p class="err" id="e-other"></p></div>
     <p class="err" id="e-her"></p>
 
     <p class="lbl" style="margin-top:14px"><i>2</i>Your info</p>
@@ -294,13 +303,56 @@ const stepsEl=[...document.querySelectorAll('.steps li')];
 function step(n){stepsEl.forEach((li,i)=>{li.classList.toggle('on',i===n-1);li.classList.toggle('done',i<n-1);});}
 document.getElementById('form').addEventListener('focusin',e=>{if(e.target.closest('.tiers'))step(2);});
 
+/* "Other": any country in the world, typed in English or Spanish, gets its flag (images from flagcdn.com) */
+const COUNTRY=(function(){
+  const skip=new Set(['EU','EZ','UN','ZZ','QO','XA','XB','AQ','BV','HM','UM','TF','IO','CP','DG','EA','IC','AC','TA','CQ','SU','AN']);
+  const norm=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/g,'');
+  const map={},names=[];let en,es;
+  try{en=new Intl.DisplayNames(['en'],{type:'region'});es=new Intl.DisplayNames(['es'],{type:'region'});}catch(e){}
+  if(en){const A='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    for(const a of A)for(const b of A){const c=a+b;if(skip.has(c))continue;let n;try{n=en.of(c);}catch(e){continue;}
+      if(!n||n===c)continue;const sp=es?es.of(c):'';map[norm(n)]=c;if(sp)map[norm(sp)]=c;names.push(n);}}
+  const alias={usa:'US',us:'US',unitedstatesofamerica:'US',america:'US',estadosunidos:'US',eeuu:'US',uk:'GB',greatbritain:'GB',britain:'GB',
+    england:'GB-ENG',inglaterra:'GB-ENG',scotland:'GB-SCT',escocia:'GB-SCT',wales:'GB-WLS',gales:'GB-WLS',holland:'NL',holanda:'NL',
+    korea:'KR',southkorea:'KR',coreadelsur:'KR',northkorea:'KP',czechrepublic:'CZ',ivorycoast:'CI',costademarfil:'CI',capeverde:'CV',
+    burma:'MM',turkey:'TR',turquia:'TR',turkiye:'TR',palestine:'PS',vatican:'VA',macedonia:'MK',swaziland:'SZ',drc:'CD',congo:'CG',
+    russia:'RU',rusia:'RU',iran:'IR',syria:'SY',vietnam:'VN',laos:'LA',bolivia:'BO',venezuela:'VE',tanzania:'TZ',moldova:'MD',
+    puertorico:'PR',dominicanrepublic:'DO',republicadominicana:'DO',rd:'DO',salvador:'SV',trinidad:'TT',tobago:'TT',stlucia:'LC',
+    saintlucia:'LC',stkitts:'KN',stvincent:'VC',micronesia:'FM',hongkong:'HK',macau:'MO',kosovo:'XK'};
+  if(en&&!names.includes('Kosovo')){map.kosovo='XK';names.push('Kosovo');}
+  for(const k in alias)map[k]=alias[k];
+  names.sort((a,b)=>a.localeCompare(b));
+  return {find:v=>{const n=norm(v||'');return n.length>1?map[n]||null:null;},names};
+})();
+document.getElementById('countries').innerHTML=COUNTRY.names.map(n=>'<option value="'+esc(n)+'">').join('');
+function flagURL(code){return 'https://flagcdn.com/w160/'+code.toLowerCase()+'.png';}
+let otherCode=null;
+function flagImgHTML(code,label){return '<img src="'+flagURL(code)+'" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode(\'?\'))">';}
+function updateOtherFlag(){
+  const code=COUNTRY.find(document.getElementById('otherIn').value),of=document.getElementById('otherFlag'),tile=document.querySelector('.rp[data-n="Other"] .f');
+  if(code===otherCode)return; otherCode=code;
+  if(code){of.innerHTML=flagImgHTML(code);tile.innerHTML=flagImgHTML(code);}
+  else{of.textContent='?';tile.textContent='?';}
+  const lab=document.querySelector('.rp[data-n="Other"] span:last-child');if(lab)lab.textContent=code?document.getElementById('otherIn').value.trim().slice(0,14):'Other';
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){[of,tile].forEach(el=>{el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');});}
+  showRep();
+}
+document.getElementById('otherIn').addEventListener('input',updateOtherFlag);
+/* typed one of the flags already on the page? select that flag instead */
+const ISO_TILE={US:'United States',MX:'Mexico',GT:'Guatemala',SV:'El Salvador',HN:'Honduras',NI:'Nicaragua',CR:'Costa Rica',PA:'Panama',CU:'Cuba',
+  DO:'Dominican Republic',PR:'Puerto Rico',HT:'Haiti',CO:'Colombia',VE:'Venezuela',EC:'Ecuador',PE:'Peru',BO:'Bolivia',CL:'Chile',AR:'Argentina',
+  UY:'Uruguay',PY:'Paraguay',BR:'Brazil',ES:'Spain'};
+document.getElementById('otherIn').addEventListener('change',()=>{updateOtherFlag();const t=otherCode&&ISO_TILE[otherCode];
+  if(t&&REPS.includes(t)){document.getElementById('otherIn').value='';otherCode=null;updateOtherFlag();pick(t,true);document.querySelector('.rp[aria-checked="true"]').focus();}});
+
 /* banner under the title */
 function repName(){if(chosen==='Other')return document.getElementById('otherIn').value.trim();return chosen;}
 function showRep(){
   const r=document.getElementById('rep'),n=repName();
   if(!n){r.classList.remove('show');return;}
-  document.getElementById('repFlag').innerHTML=chosen==='Other'?'':repSVG(chosen);
-  document.getElementById('repFlag').style.display=chosen==='Other'?'none':'';
+  const rf=document.getElementById('repFlag');
+  if(chosen==='Other'){rf.innerHTML=otherCode?flagImgHTML(otherCode):'';rf.style.display=otherCode?'':'none';}
+  else{rf.innerHTML=repSVG(chosen);rf.style.display='';}
   document.getElementById('repText').textContent='Representing '+(n==='Dominican Republic'||n==='United States'?'the '+n:n);
   r.classList.add('show');
 }
@@ -332,7 +384,7 @@ function checkout(){
   step(3);
   const t=tier(),soon=document.getElementById('soon');
   if(!t.link){soon.innerHTML='Online dues open soon. To join today, email <a href="mailto:'+CONTACT+'?subject='+encodeURIComponent('Membership: '+t.name)+'" target="_top">'+CONTACT+'</a> and we’ll get you set up.';soon.classList.add('show');return;}
-  const code=chosen==='United States'?'USA':chosen==='Other'?'Other-'+h.replace(/[^A-Za-z]+/g,'').slice(0,24):ABBR[chosen];
+  const code=chosen==='United States'?'USA':chosen==='Other'?'Other-'+(otherCode?otherCode.replace(/[^A-Z]/g,''):'')+'-'+h.replace(/[^A-Za-z]+/g,'').slice(0,24):ABBR[chosen];
   const ref=[t.id,boro,code].join('_');
   const u=t.link+(t.link.includes('?')?'&':'?')+'prefilled_email='+encodeURIComponent(email)+'&client_reference_id='+encodeURIComponent(ref);
   document.querySelectorAll('.pay').forEach(x=>x.setAttribute('aria-busy','true'));

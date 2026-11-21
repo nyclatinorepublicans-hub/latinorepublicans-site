@@ -130,6 +130,22 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
 .trust{display:flex;gap:12px;align-items:flex-start;margin-top:18px;padding:14px;border-radius:14px;background:#eef3fa;color:#163b63}
 .trust svg{flex:none;width:26px;height:26px;fill:none;stroke:#1d5a99;stroke-width:1.8}.trust p{margin:0;font-size:14px;line-height:1.5}
 #fNew .row{margin-top:8px}
+.mcard.has-flag{background:linear-gradient(90deg,rgba(2,26,48,.92) 0%,rgba(2,26,48,.8) 45%,rgba(2,26,48,.5) 100%),var(--flag) center/cover no-repeat,var(--deep)}
+.mcard.exec.has-flag{background:linear-gradient(90deg,rgba(14,10,0,.93) 0%,rgba(14,10,0,.8) 45%,rgba(14,10,0,.5) 100%),var(--flag) center/cover no-repeat,#0b0900}
+.mcard.has-flag::after{display:none}
+.mcard.has-flag .mname,.mcard.has-flag .memail,.mcard.has-flag .mgrid,.mcard.has-flag .repline{text-shadow:0 1px 3px rgba(0,0,0,.65)}
+.mcard.exec.has-flag .mname{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:var(--gold-hi);text-shadow:0 0 1px #8a6210,0 2px 4px rgba(0,0,0,.8)}
+@media (max-width:600px){.mcard.has-flag{background:linear-gradient(180deg,rgba(2,26,48,.55) 0%,rgba(2,26,48,.82) 45%,rgba(2,26,48,.92) 100%),var(--flag) center/cover no-repeat,var(--deep)}
+  .mcard.exec.has-flag{background:linear-gradient(180deg,rgba(14,10,0,.55) 0%,rgba(14,10,0,.82) 45%,rgba(14,10,0,.93) 100%),var(--flag) center/cover no-repeat,#0b0900}}
+.repline{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px;font-size:14px}
+.repline img{width:30px;height:22px;object-fit:cover;border-radius:4px;box-shadow:0 0 0 1px rgba(255,255,255,.5)}
+.flagbtn{margin-left:auto;border:0;border-radius:999px;cursor:pointer;padding:8px 14px;font:800 11px "Archivo",sans-serif;letter-spacing:.12em;text-transform:uppercase;
+  color:#fff;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 1.5px rgba(245,208,102,.7);text-shadow:none}
+.flagbtn:hover{background:rgba(245,208,102,.25)}
+.ftgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
+.ft{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border-radius:12px;border:0;cursor:pointer;background:#f8f4ea;box-shadow:inset 0 0 0 2px transparent;font:700 12px "Hepta Slab",Georgia,serif;color:var(--ink);text-align:center;line-height:1.2}
+.ft img{width:54px;height:40px;object-fit:cover;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.ft.on{background:#fff6dc;box-shadow:inset 0 0 0 2.5px var(--gold)}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
@@ -188,6 +204,7 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
       <button class="btn ghost sm" id="bOut" type="button">Sign out</button></span></div>
     <div id="paidMsg" class="msg info" hidden></div>
     <div id="mcard"></div>
+    <section class="card" id="flagPick" hidden></section>
     <div id="promo"></div>
     <section class="card" id="tickets"><h2>My Tickets</h2><div id="tkList"></div>
       <p class="small" style="margin-top:14px">Show the QR code at the door. Screenshots work. If your phone is off, give your name or the 8-character code.</p></section>
@@ -340,9 +357,12 @@ async function fetchAll(){
     api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents&owner_email=eq."+encodeURIComponent(email)+"&order=created_at.asc"),
     api("/rest/v1/events?select=*&order=starts_at.asc.nullslast"),
     api("/rest/v1/admins?select=email,name,title&email=eq."+encodeURIComponent(email)),
-    api("/rest/v1/comp_grants?select=*")
+    api("/rest/v1/comp_grants?select=*"),
   ]);
-  data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,all:null};
+  let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
+  data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,all:null,flag:prof&&prof.country_code?prof:null};
+  /* first visit after joining: use the flag they tapped on the Join page */
+  if(!data.flag){try{const n=localStorage.getItem("lrc_flag");const c=n&&NAME_ISO[n];if(c){data.flag={country_code:c,country_name:n};saveFlag(c,n,true);}}catch(e){}}
   if(data.isAdmin){
     const [all,mem]=await Promise.all([
       api("/rest/v1/tickets?select=id,event_id,owner_email,holder_name,kind,token,status,checked_in_at,price_cents,created_at&status=neq.void&order=created_at.asc"),
@@ -357,6 +377,51 @@ const evTitle=ev=>ev?(L()==="es"&&ev.title_es?ev.title_es:ev.title_en):"";
 const money=c=>"$"+(c/100).toFixed(c%100?2:0);
 function qrSvg(text,cell){const q=qrcode(0,"M");q.addData(text);q.make();return q.createSvgTag({cellSize:cell||4,margin:2,scalable:true});}
 
+/* ===== flag behind the name ===== */
+const NAME_ISO={"United States":"US",Mexico:"MX",Guatemala:"GT","El Salvador":"SV",Honduras:"HN",Nicaragua:"NI","Costa Rica":"CR",Panama:"PA",Cuba:"CU",
+  "Dominican Republic":"DO","Puerto Rico":"PR",Haiti:"HT",Colombia:"CO",Venezuela:"VE",Ecuador:"EC",Peru:"PE",Bolivia:"BO",Chile:"CL",Argentina:"AR",
+  Uruguay:"UY",Paraguay:"PY",Brazil:"BR",Spain:"ES"};
+const CLUB_ISO=Object.values(NAME_ISO);
+const FLAG_CODES="ad ae af ag ai al am ao ar as at au aw ax az ba bb bd be bf bg bh bi bj bl bm bn bo bq br bs bt bw by bz ca cc cd cf cg ch ci ck cl cm cn co cr cu cv cw cx cy cz de dj dk dm do dz ec ee eg eh er es et fi fj fk fm fo fr ga gb gd ge gf gg gh gi gl gm gn gp gq gr gt gu gw gy hk hn hr ht hu id ie il im in iq ir is it je jm jo jp ke kg kh ki km kn kp kr kw ky kz la lb lc li lk lr ls lt lu lv ly ma mc md me mf mg mh mk ml mm mn mo mp mq mr ms mt mu mv mw mx my mz na nc ne nf ng ni nl no np nr nu nz om pa pe pf pg ph pk pl pm pn pr ps pt pw py qa re ro rs ru rw sa sb sc sd se sg sh si sk sl sm sn so sr ss st sv sx sy sz tc td tg th tj tk tl tm tn to tr tt tv tw tz ua ug us uy uz va vc ve vg vi vn vu wf ws xk ye yt za zm zw".split(" ");
+function cName(code){try{return new Intl.DisplayNames([L()==="es"?"es":"en"],{type:"region"}).of(code);}catch(e){return code;}}
+const flagUrl=c=>"../assets/flags/"+String(c).toLowerCase()+".svg";
+function flagAttrs(){const f=data&&data.flag;return f?` has-flag" style="--flag:url('${flagUrl(f.country_code)}')`:"";}
+function flagLine(){const f=data.flag;
+  return `<div class="repline">${f?`<img src="${flagUrl(f.country_code)}" alt=""><span><span>Representing</span> <b>${esc(cName(f.country_code))}</b></span>`:`<span>Choose the flag you represent</span>`}
+    <button type="button" class="flagbtn" id="bFlag">${f?"Change flag":"Choose flag"}</button></div>`;}
+async function saveFlag(code,name,quiet){
+  try{await api("/rest/v1/profiles?on_conflict=email",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},
+      body:JSON.stringify({country_code:code,country_name:(name||cName(code)).slice(0,60),updated_at:new Date().toISOString()})});return true;}
+  catch(e){if(!quiet)throw e;return false;}
+}
+function openFlagPicker(){
+  const cur=data.flag&&data.flag.country_code;
+  const tiles=CLUB_ISO.map(c=>`<button type="button" class="ft${c===cur?" on":""}" data-c="${c}" aria-pressed="${c===cur}"><img src="${flagUrl(c)}" alt=""><span>${esc(c==="US"?"USA":cName(c))}</span></button>`).join("");
+  const opts=FLAG_CODES.filter(c=>!CLUB_ISO.includes(c.toUpperCase())).map(c=>[c.toUpperCase(),cName(c.toUpperCase())]).filter(x=>x[1]&&x[1]!==x[0]).sort((a,b)=>a[1].localeCompare(b[1]));
+  $("flagPick").innerHTML=`<h2>Choose your flag</h2><p class="small" style="margin:-6px 0 14px">Your flag shows behind your name on your profile.</p>
+    <div class="ftgrid">${tiles}</div>
+    <label for="otherC" style="margin-top:16px">Another country</label>
+    <select id="otherC"><option value="">Choose a country…</option>${opts.map(o=>`<option value="${o[0]}"${o[0]===cur?" selected":""}>${esc(o[1])}</option>`).join("")}</select>
+    <div class="row" style="margin-top:16px"><button class="btn" type="button" id="bFlagSave">Save flag</button><button class="btn ghost" type="button" id="bFlagCancel">Cancel</button>
+    ${cur?`<button class="link" type="button" id="bFlagNone" style="margin-left:auto">Remove flag</button>`:""}</div><div id="flagMsg" class="msg" hidden></div>`;
+  let sel=cur||"";
+  const grid=$("flagPick").querySelector(".ftgrid");
+  grid.addEventListener("click",e=>{const b=e.target.closest(".ft");if(!b)return;sel=b.dataset.c;$("otherC").value="";
+    grid.querySelectorAll(".ft").forEach(x=>{x.classList.toggle("on",x===b);x.setAttribute("aria-pressed",x===b);});});
+  $("otherC").addEventListener("change",()=>{if($("otherC").value){sel=$("otherC").value;grid.querySelectorAll(".ft").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-pressed","false");});}});
+  $("bFlagCancel").onclick=()=>{$("flagPick").hidden=true;};
+  $("bFlagSave").onclick=async()=>{if(!sel){show($("flagMsg"),"err","Tap a flag or choose a country.");return;}
+    $("bFlagSave").disabled=true;
+    try{await saveFlag(sel,cName(sel));data.flag={country_code:sel,country_name:cName(sel)};try{localStorage.setItem("lrc_flag",Object.keys(NAME_ISO).find(k=>NAME_ISO[k]===sel)||"");}catch(e){}
+      $("flagPick").hidden=true;render();jump("mcard");}
+    catch(e){show($("flagMsg"),"err","We couldn't save your flag. Please try again.");}
+    $("bFlagSave").disabled=false;};
+  if($("bFlagNone"))$("bFlagNone").onclick=async()=>{try{await api("/rest/v1/profiles?email=eq."+encodeURIComponent(data.email),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({country_code:null,country_name:null,updated_at:new Date().toISOString()})});
+    data.flag=null;try{localStorage.removeItem("lrc_flag");}catch(e){}$("flagPick").hidden=true;render();}catch(e){show($("flagMsg"),"err","We couldn't save your flag. Please try again.");}};
+  $("flagPick").hidden=false;jump("flagPick");
+}
+document.addEventListener("click",e=>{if(e.target.closest("#bFlag"))openFlagPicker();});
+
 function render(){
   if(!data)return;
   const d=data,m=d.member,es=L()==="es";
@@ -366,21 +431,21 @@ function render(){
   const name=m&&m.name||(d.user.user_metadata&&d.user.user_metadata.name)||"";
   if(d.exec&&d.exec.title){
     const ex=d.exec;
-    $("mcard").innerHTML=`<div class="mcard exec"><div class="mtop"><div><div class="mname">${esc(ex.name||name||"")}</div><div class="memail">${esc(d.email)}</div></div>
+    $("mcard").innerHTML=`<div class="mcard exec${flagAttrs()}"><div class="mtop"><div><div class="mname">${esc(ex.name||name||"")}</div><div class="memail">${esc(d.email)}</div></div>
       <span class="tier gold-x">${esc(ex.title)}</span></div>
       <div class="mgrid"><div><span>Status</span><b class="st-active">Active</b></div><div><span>Role</span><b>Executive Board</b></div>
-      <div><span>Access</span><b>Full access</b></div>${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div></div>`;
+      <div><span>Access</span><b>Full access</b></div>${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div>${flagLine()}</div>`;
   }else if(m){
-    $("mcard").innerHTML=`<div class="mcard"><div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div></div>
+    $("mcard").innerHTML=`<div class="mcard${flagAttrs()}"><div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div></div>
       <span class="tier">${esc(TIER[m.tier]||m.tier)}</span></div>
       <div class="mgrid"><div><span>Status</span><b class="st-${esc(m.status)}">${esc(STATUS[m.status]||m.status)}</b></div>
       <div><span>Member since</span><b>${esc(fmtDate(m.joined_at))}</b></div>
       ${m.renews_at?`<div><span>Renews</span><b>${esc(fmtDate(m.renews_at))}</b></div>`:""}</div>
-      ${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Renew membership</a>`:""}</div>`;
+      ${flagLine()}${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Renew membership</a>`:""}</div>`;
   }else{
-    $("mcard").innerHTML=`<div class="mcard"><div class="mtop"><div><div class="mname">${esc(name||"Welcome")}</div><div class="memail">${esc(d.email)}</div></div><span class="tier none">Not a member yet</span></div>
+    $("mcard").innerHTML=`<div class="mcard${flagAttrs()}"><div class="mtop"><div><div class="mname">${esc(name||"Welcome")}</div><div class="memail">${esc(d.email)}</div></div><span class="tier none">Not a member yet</span></div>
       <p style="margin:18px 0 0;line-height:1.55;opacity:.9">We didn't find a membership for this email. If you joined with a different email, sign in with that one.</p>
-      <a class="btn gold" href="../join/" target="_top">Join the club</a></div>`;
+      ${flagLine()}<a class="btn gold" href="../join/" target="_top">Join the club</a></div>`;
   }
   /* gala bonus */
   const grant=d.grants.find(g=>g.promo==="gala2027-join-bonus");

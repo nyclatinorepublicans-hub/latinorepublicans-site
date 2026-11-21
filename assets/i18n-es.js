@@ -476,6 +476,18 @@ window.LRC_ES={
 "Password saved. Next time, sign in with your email and this password.": "Contraseña guardada. La próxima vez, entra con tu correo y esta contraseña.",
 "Choose a password different from your current one.": "Elige una contraseña distinta a la actual.",
 "We couldn't save it. Please try again.": "No pudimos guardarla. Inténtalo de nuevo.",
-"We couldn't send the email right now. Please try again later or email contact@latinorepublicans.org.": "No pudimos enviar el correo en este momento. Inténtalo más tarde o escribe a contact@latinorepublicans.org."
+"We couldn't send the email right now. Please try again later or email contact@latinorepublicans.org.": "No pudimos enviar el correo en este momento. Inténtalo más tarde o escribe a contact@latinorepublicans.org.",
+"Representing": "Representando",
+"Choose the flag you represent": "Elige la bandera que representas",
+"Change flag": "Cambiar bandera",
+"Choose flag": "Elegir bandera",
+"Choose your flag": "Elige tu bandera",
+"Your flag shows behind your name on your profile.": "Tu bandera aparece detrás de tu nombre en tu perfil.",
+"Another country": "Otro país",
+"Choose a country…": "Elige un país…",
+"Save flag": "Guardar bandera",
+"Remove flag": "Quitar bandera",
+"Tap a flag or choose a country.": "Toca una bandera o elige un país.",
+"We couldn't save your flag. Please try again.": "No pudimos guardar tu bandera. Inténtalo de nuevo."
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

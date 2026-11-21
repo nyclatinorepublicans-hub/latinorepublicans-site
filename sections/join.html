@@ -325,9 +325,13 @@ const COUNTRY=(function(){
   return {find:v=>{const n=norm(v||'');return n.length>1?map[n]||null:null;},names};
 })();
 document.getElementById('countries').innerHTML=COUNTRY.names.map(n=>'<option value="'+esc(n)+'">').join('');
-function flagURL(code){return 'https://flagcdn.com/w160/'+code.toLowerCase()+'.png';}
+/* flag pictures: the club site's own copy first, a public flag service as backup */
+const FLAG_BASE = "../assets/flags/";
+function flagSrcs(code){const c=code.toLowerCase();return [FLAG_BASE+c+'.svg','https://flagcdn.com/w160/'+c+'.png'];}
+window.__flagNext=function(img){const list=JSON.parse(img.dataset.srcs),i=+img.dataset.i+1;
+  if(i<list.length){img.dataset.i=i;img.src=list[i];}else img.replaceWith(document.createTextNode('?'));};
 let otherCode=null;
-function flagImgHTML(code,label){return '<img src="'+flagURL(code)+'" alt="" loading="lazy" onerror="this.replaceWith(document.createTextNode(\'?\'))">';}
+function flagImgHTML(code){const l=flagSrcs(code);return '<img src="'+l[0]+'" alt="" data-i="0" data-srcs=\''+JSON.stringify(l)+'\' onerror="__flagNext(this)">';}
 function updateOtherFlag(){
   const code=COUNTRY.find(document.getElementById('otherIn').value),of=document.getElementById('otherFlag'),tile=document.querySelector('.rp[data-n="Other"] .f');
   if(code===otherCode)return; otherCode=code;

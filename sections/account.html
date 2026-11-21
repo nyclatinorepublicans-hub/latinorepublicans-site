@@ -249,10 +249,16 @@ details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;f
 .ckrow input{margin-top:4px;flex:none}.ckt{flex:1;min-width:0}.ckd{flex:none;font:800 11px "Archivo",sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#667;padding-top:3px}.ckd.soon{color:#a0721e}.ckd.late{color:#d51b2f}
 .ckrow.done .ckt{text-decoration:line-through;color:#8a94a3}
 .chip.late{background:#fde8ea;color:#b3121f}.ok2{color:#1c7c43;margin-top:6px}
+.com{border:1px solid #eee5d3;border-radius:14px;padding:12px 14px;margin-top:10px}.com.dir{border-color:var(--gold-hi);box-shadow:inset 0 0 0 1px var(--gold-hi);background:linear-gradient(180deg,#fffaf0,#fff)}
+.comh{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.comh b{font:900 16px "Archivo",sans-serif;text-transform:uppercase;color:var(--navy);margin-right:8px}.comh p{margin:4px 0 0}.ctag{display:inline-block;margin-top:6px}@media (max-width:560px){.evhead+p.small{margin-top:8px!important}}.comh b.dn{font:700 14px "Hepta Slab",Georgia,serif;text-transform:none;color:var(--ink)}
+.cman{margin-top:10px;border-top:1px dashed #eee5d3;padding-top:8px}.cman>summary,.cev>summary{cursor:pointer;font:800 12px "Archivo",sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--navy);padding:6px 0}
+.cev>summary{text-transform:none;letter-spacing:0;font:400 15px "Hepta Slab",Georgia,serif}.cbody h4{margin:8px 0 6px;font:900 13px "Archivo",sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#a0721e}
+.crow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:7px 0;border-top:1px solid #f1ead9}.crow:first-child{border-top:0}
+.cev{border-top:1px solid #f1ead9;padding:4px 0}.glist{margin:4px 0 8px;padding-left:18px}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=5bf9f87b"></script>
+<script src="../assets/vendor/qrcode.js?v=466331f9"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -379,6 +385,11 @@ details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;f
         <label for="docUrl" style="margin-top:10px">Link (Google Drive, Docs, etc.)</label><input class="tin" id="docUrl" placeholder="https://">
         <label for="docFile" style="margin-top:10px">Or upload a file (PDF, Word, image; up to 5 MB)</label><input id="docFile" type="file" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
         <div class="row" style="margin-top:12px"><button class="btn sm" type="button" id="bDocAdd">Add document</button></div><div id="docMsg" class="msg" hidden></div></div></details></section>
+    <section class="card" id="committees" data-cat="members"><div class="evhead"><h2>Committees</h2><button class="btn ghost sm" type="button" id="bNewCom" hidden>+ New committee</button></div>
+      <p class="small" style="margin:-6px 0 12px">Join a committee to help plan and run the club's sponsored events.</p>
+      <div id="comNew" class="evedit" hidden><label for="cnName">Committee name</label><input class="tin" id="cnName" maxlength="80"><label for="cnAbout" style="margin-top:10px">What it does</label><textarea class="tin" id="cnAbout" rows="2" maxlength="400"></textarea>
+        <label for="cnDir" style="margin-top:10px">Director (email)</label><input class="tin" id="cnDir" type="email" placeholder="name@example.com"><div class="row" style="margin-top:10px"><button class="btn sm" type="button" id="bCnSave">Create committee</button></div></div>
+      <div id="comList"></div><div id="comMsg" class="msg" hidden></div></section>
     <section class="card" id="insider" data-cat="members" hidden><h2>Chairman's Insider</h2><p class="small" style="margin:-6px 0 12px">Monthly behind-the-scenes updates for Ambassadors.</p>
       <div id="insCompose" hidden class="evedit"><label for="insT">Title</label><input class="tin" id="insT" maxlength="140"><label for="insB" style="margin-top:10px">Update</label><textarea class="tin" id="insB" rows="6" maxlength="8000"></textarea>
         <div class="row" style="margin-top:10px"><button class="btn sm" type="button" id="bInsPost">Post update</button><button class="btn ghost sm" type="button" id="bInsMail">Email it to Ambassadors</button><button class="btn ghost sm" type="button" id="bProg">Program listing names</button></div><div id="insMsg" class="msg" hidden></div></div>
@@ -533,7 +544,7 @@ async function fetchAll(){
     api("/rest/v1/members?select=*&email=eq."+encodeURIComponent(email)),
     api("/rest/v1/tickets?select=id,event_id,kind,token,status,checked_in_at,created_at,price_cents,owner_email,holder_name,shared_by&or=(owner_email.eq."+encodeURIComponent(email)+",shared_by.eq."+encodeURIComponent(email)+")&order=created_at.asc"),
     api("/rest/v1/events?select=*&order=starts_at.asc.nullslast"),
-    api("/rest/v1/admins?select=email,name,title,role,subtitle&email=eq."+encodeURIComponent(email)),
+    api("/rest/v1/admins?select=email,name,title,role,subtitle,advisory_title&email=eq."+encodeURIComponent(email)),
     api("/rest/v1/comp_grants?select=*"),
   ]);
   let qa=[];try{qa=await api("/rest/v1/qa_accounts?select=email&email=eq."+encodeURIComponent(email));}catch(e){}
@@ -542,6 +553,10 @@ async function fetchAll(){
   data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,out,prof:prof||{},all:null,flags:prof?(prof.flags&&prof.flags.length?prof.flags:(prof.country_code?[prof.country_code]:[])):[]};
   data.isFull=!!(data.exec&&data.exec.role==="full");data.isQA=qa.length>0;
   data.isBoard=!!(data.exec&&data.exec.title);
+  try{const [cs,cm]=await Promise.all([api("/rest/v1/committees?select=*&order=name_en.asc"),api("/rest/v1/committee_members?select=committee_id,email,role")]);
+    try{data.cdirs=Object.fromEntries((await api("/rest/v1/rpc/committee_directors",{method:"POST",body:"{}"})).map(x=>[x.committee_id,x.name]));}catch(e){data.cdirs={};}
+    data.comms=cs;data.cmem=cm;data.myDir=new Set(cm.filter(x=>x.email===email&&x.role==="director").map(x=>x.committee_id));data.myComms=new Set(cm.filter(x=>x.email===email).map(x=>x.committee_id));}
+  catch(e){data.comms=[];data.cmem=[];data.myDir=new Set();data.myComms=new Set();}
   if(data.isBoard){
     const [mt,rs,ct,docs,me]=await Promise.all([
       api("/rest/v1/board_meetings?select=*&order=starts_at.desc&limit=60"),
@@ -654,7 +669,7 @@ function aboutHTML(ev){
       ${row("Date",date)}${row("Time",time)}${row("Venue",esc(ev.venue_name||""))}${row("Location",esc(ev.address||ev.location||""))}</div>
     ${mapLinks(ev)?`<div class="alinks"><span class="small">Directions:</span>${mapLinks(ev)}</div>`:""}
     ${calLinks(ev)?`<div class="alinks"><span class="small">Add to calendar:</span>${calLinks(ev)}</div>`:""}
-    ${data.isFull||(data.isBoard&&ev.created_by===data.email)?`<div class="alinks"><button class="btn sm navy" type="button" data-edit="${ev.id}">Edit event details</button></div>`:""}
+    ${canEditEv(ev)?`<div class="alinks"><button class="btn sm navy" type="button" data-edit="${ev.id}">Edit event details</button></div>`:""}
   </div></details>`;}
 function icsFor(ev){const st=ev.starts_at,en=ev.ends_at||new Date(Date.parse(st)+2*36e5).toISOString();const x=v=>String(v||"").replace(/([,;\\])/g,"\\$1").replace(/\n/g,"\\n");
   return ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NYC Latino Republican Club//Events//EN","BEGIN:VEVENT","UID:"+ev.id+"@latinorepublicans.org","DTSTAMP:"+gstamp(new Date().toISOString()),
@@ -664,8 +679,9 @@ document.addEventListener("click",e=>{const b=e.target.closest("button[data-ics]
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([icsFor(ev)],{type:"text/calendar"}));a.download=(ev.slug||"event")+".ics";document.body.appendChild(a);a.click();a.remove();});
 
 /* ===== board: add / edit event details ===== */
-function openEditor(ev){
-  const n=!ev;ev=ev||{};const s1=ev.starts_at?nyParts(ev.starts_at):{date:"",time:""},e1=ev.ends_at?nyParts(ev.ends_at):{time:""};
+function openEditor(ev,presetCom){
+  const n=!ev;ev=ev||{};if(n&&presetCom)ev={committee_id:presetCom};
+  const comOpts=(data.comms||[]).filter(c=>data.isFull||data.isBoard||data.myDir.has(c.id)).map(c=>`<option value="${c.id}"${ev.committee_id===c.id?" selected":""}>${esc(c.name_en)}</option>`).join("");const s1=ev.starts_at?nyParts(ev.starts_at):{date:"",time:""},e1=ev.ends_at?nyParts(ev.ends_at):{time:""};
   const v=x=>esc(x==null?"":x);let lang=n?L():"en";
   const pubSrc=ev.public_opens_at||(n?new Date(Date.now()+48*36e5).toISOString():null);const pp=pubSrc?nyParts(pubSrc):{date:"",time:""};const pubD=pp.date,pubT=pp.time;
   const F=["title","summary","about"],orig={};
@@ -684,7 +700,7 @@ function openEditor(ev){
       <label>What to expect</label><textarea class="tin" id="o_about" rows="4" maxlength="2000"></textarea></div></details>
     <div class="egrid">
     <div><label>Hosted by</label><input class="tin" id="e_host" value="${v(ev.host)}" maxlength="120" placeholder="e.g. Hosted by Yanely Rodriguez (Cafecito)"></div>
-    <div><label>Committee</label><input class="tin" id="e_committee" value="${v(ev.committee)}" maxlength="120" placeholder="e.g. Membership & Outreach"></div>
+    <div><label>Committee</label><select class="tin" id="e_committee"><option value="">No committee</option>${comOpts}</select></div>
     <div><label>Category</label><select class="tin" id="e_category"><option value="">Choose…</option>${Object.entries(CATS).map(([k,l])=>`<option value="${k}"${ev.category===k?" selected":""}>${l}</option>`).join("")}</select></div>
     <div><label>Capacity</label><input class="tin" id="e_capacity" type="number" min="1" max="5000" value="${v(ev.capacity)}"></div>
     <div><label>Date</label><input class="tin" id="e_date" type="date" value="${s1.date}"></div>
@@ -724,7 +740,7 @@ function openEditor(ev){
     F.forEach(k=>{if(!P[k])O[k]=O[k]||"";});
     const EN=lang==="en"?P:O,ES=lang==="en"?O:P;
     const body={title_en:EN.title||ES.title,title_es:ES.title||EN.title,summary_en:EN.summary||null,summary_es:ES.summary||null,about_en:EN.about||null,about_es:ES.about||null,
-      is_monthly_meeting:$("e_monthly").checked,host:g("e_host")||null,committee:g("e_committee")||null,category:g("e_category")||($("e_monthly").checked?"community":null),
+      is_monthly_meeting:$("e_monthly").checked,host:g("e_host")||null,committee_id:g("e_committee")?+g("e_committee"):null,committee:g("e_committee")?((data.comms.find(c=>c.id===+g("e_committee"))||{}).name_en||null):null,category:g("e_category")||($("e_monthly").checked?"community":null),
       capacity:g("e_capacity")?Math.max(1,parseInt(g("e_capacity"),10)):null,venue_name:g("e_venue_name")||null,address:g("e_address")||null,location:g("e_location")||null,
       starts_at:d?nyISO(d,st||"00:00"):null,ends_at:d&&en?nyISO(d,en):null,sales_open:$("e_sales_open").checked,listed:$("e_listed").checked,
       public_opens_at:g("e_pub_date")?nyISO(g("e_pub_date"),g("e_pub_time")||"00:00"):null};
@@ -737,7 +753,7 @@ function openEditor(ev){
     }catch(err){show(m,"err","We couldn't save the event. Please try again.");}
     $("bEvSave").disabled=false;};
 }
-document.addEventListener("click",e=>{const b=e.target.closest("button[data-edit]");if(b&&data&&data.isBoard)openEditor(data.events.find(x=>x.id===b.dataset.edit));});
+document.addEventListener("click",e=>{const b=e.target.closest("button[data-edit]");if(b&&data&&canEditEv(data.events.find(x=>x.id===b.dataset.edit)||{}))openEditor(data.events.find(x=>x.id===b.dataset.edit));});
 
 /* ===== member perks ===== */
 const UPPER=["patriot","embajador","corporate"];
@@ -779,14 +795,16 @@ function render(){
   renderApp();
   $("progCard").hidden=!isAmb();if(isAmb())$("progOpt").checked=!!d.prof.program_listing;
   $("insider").hidden=!(isAmb()||d.isBoard);if(!$("insider").hidden)renderInsider();
+  $("committees").hidden=!(d.member||d.isBoard);if(!$("committees").hidden)renderCommittees();
   /* membership */
   const name=(m&&m.tier==="corporate"&&m.name)||d.prof.name||(m&&m.name)||(d.user.user_metadata&&d.user.user_metadata.name)||"";
   if(d.exec&&d.exec.title){
     const ex=d.exec;
     $("mcard").innerHTML=`<div class="mcard exec${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(ex.name||name||"")}</div><div class="memail">${esc(d.email)}</div>${badges()}</div>
       <span class="tier gold-x">${esc(ex.title)}</span></div>
-      <div class="mgrid"><div><span>Status</span><b class="st-active">Active</b></div><div><span>Board</span><b>${esc(ex.subtitle||"Executive Board")}</b></div>
-      <div><span>Access</span><b>${ex.role==="full"?"Full access":"Door check-in & tickets"}</b></div>${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div>${flagLine()}<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button></div>`;
+      <div class="mgrid"><div><span>Status</span><b class="st-active">Active</b></div>
+      ${ex.advisory_title?`<div><span>Executive Board</span><b>${esc(ex.title)}</b></div><div><span>Advisory Board</span><b>${esc(ex.advisory_title)}</b></div>`:`<div><span>Board</span><b>${esc(ex.subtitle||"Executive Board")}</b></div>`}
+      <div><span>Access</span><b>${ex.role==="full"?"Full access":(dirNames().length?"Door check-in, tickets & the "+esc(dirNames().join(", "))+" committee":"Door check-in & tickets")}</b></div>${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div>${flagLine()}<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button></div>`;
   }else if(m){
     $("mcard").innerHTML=`<div class="mcard${m.tier==="embajador"&&m.status==="active"?" exec amb":""}${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div>${badges()}</div>
       <span class="tier${m.tier==="embajador"&&m.status==="active"?" gold-x":""}">${m.tier==="embajador"&&m.status==="active"?"★ ":""}${esc(TIER[m.tier]||m.tier)}</span></div>
@@ -1270,6 +1288,54 @@ document.addEventListener("change",async e=>{const c=e.target.closest("#ckList i
   catch(err){c.checked=!c.checked;show($("ckMsg"),"err","We couldn't save that. Please try again.");}});
 $("ckSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;ckView=b.dataset.v;[...$("ckSeg").children].forEach(x=>x.classList.toggle("on",x===b));renderChecklist();});
 
+/* ===== committees ===== */
+function dirNames(){return (data.comms||[]).filter(c=>data.myDir&&data.myDir.has(c.id)).map(c=>L()==="es"?c.name_es:c.name_en);}
+function canEditEv(ev){return data.isFull||(data.isBoard&&ev.created_by===data.email)||(ev.committee_id&&data.myDir&&data.myDir.has(ev.committee_id));}
+function renderCommittees(){const cs=data.comms||[],es=L()==="es";$("bNewCom").hidden=!data.isFull;
+  $("comList").innerHTML=cs.length?cs.map(c=>{const mine=data.myComms.has(c.id),dir=data.myDir.has(c.id),mgr=dir||data.isFull;
+    const director=(data.cdirs||{})[c.id];
+    return `<div class="com${dir?" dir":""}"><div class="comh"><div><b>${esc(es?c.name_es:c.name_en)}</b>${dir?`<div><span class="chip comp ctag">★ <span>You direct this committee</span></span></div>`:mine?`<div><span class="chip ctag">Member</span></div>`:""}
+      <p class="small">${esc((es?c.about_es:c.about_en)||"")}</p>${director?`<p class="small"><span>Director</span>: <b class="dn">${esc(director)}</b></p>`:""}</div>
+      <div>${dir?"":mine?`<button class="btn ghost sm" type="button" data-cleave="${c.id}">Leave</button>`:c.open_to_join?`<button class="btn sm" type="button" data-cjoin="${c.id}">Join</button>`:""}</div></div>
+      ${mgr?`<details class="cman" data-cid="${c.id}"><summary>${dir?"Manage your committee":"Manage committee"}</summary><div class="cbody" id="cb${c.id}"><div class="small">Loading…</div></div></details>`:""}</div>`;}).join(""):`<div class="empty">No committees yet.</div>`;}
+async function loadCom(cid){const box=$("cb"+cid);let ro=[],gs=[];
+  try{[ro,gs]=await Promise.all([api("/rest/v1/rpc/committee_roster",{method:"POST",body:JSON.stringify({cid})}),api("/rest/v1/rpc/committee_event_guests",{method:"POST",body:JSON.stringify({cid})})]);}catch(e){box.innerHTML=`<div class="msg err">Couldn't load the committee.</div>`;return;}
+  const evs=(data.events||[]).filter(e=>e.committee_id===cid);
+  box.innerHTML=`<h4>Members · ${ro.length}</h4><div class="croster">${ro.map(r=>`<div class="crow"><div><b>${esc(r.name||r.email)}</b>${r.role==="director"?' <span class="chip comp">Director</span>':""}<div class="small">${esc(r.email)}${r.phone?" · "+esc(r.phone):""}${r.tier?" · "+esc(TIER[r.tier]||r.tier):""}</div></div>
+      ${r.role!=="director"?`<button class="link" type="button" data-crm="${cid}|${esc(r.email)}">Remove</button>`:data.isFull&&r.email!==data.email?"":""}</div>`).join("")}</div>
+    <div class="row" style="margin-top:10px"><input class="tin" id="cadd${cid}" type="email" placeholder="Add a member by email" style="flex:1;min-width:180px"><button class="btn sm" type="button" data-cadd="${cid}">Add</button>
+      <button class="btn ghost sm" type="button" data-cmail="${cid}">Email the committee</button></div>
+    <h4 style="margin-top:16px">Committee events</h4>${evs.length?evs.map(e=>{const g=gs.filter(x=>x.event_id===e.id),inn=g.filter(x=>x.checked_in_at).length;
+      return `<details class="cev"><summary><b>${esc(e.title_en)}</b> <span class="small">${esc(e.starts_at?nyDate(e.starts_at):"Date to be announced")} · ${g.length} <span>going</span>${inn?" · "+inn+" <span>checked in</span>":""}</span></summary>
+        ${g.length?`<ul class="glist">${g.map(x=>`<li>${esc(x.holder)}${x.checked_in_at?' <span class="chip used">Checked in</span>':""}</li>`).join("")}</ul>`:`<div class="small">No one has signed up yet.</div>`}
+        <button class="btn sm navy" type="button" data-edit="${e.id}">Edit event</button></details>`;}).join(""):`<div class="small">No events yet.</div>`}
+    ${data.isBoard?`<button class="btn sm" type="button" data-cnewev="${cid}" style="margin-top:10px">+ Add a committee event</button>`:""}`;
+  box.dataset.roster=JSON.stringify(ro.map(r=>r.email));}
+document.addEventListener("toggle",e=>{const d=e.target;if(d.classList&&d.classList.contains("cman")&&d.open)loadCom(+d.dataset.cid);},true);
+async function reloadComs(msg){const keep=[...document.querySelectorAll(".cman[open]")].map(d=>+d.dataset.cid);
+  const cm=await api("/rest/v1/committee_members?select=committee_id,email,role");data.cmem=cm;data.myComms=new Set(cm.filter(x=>x.email===data.email).map(x=>x.committee_id));
+  renderCommittees();keep.forEach(id=>{const d=document.querySelector(`.cman[data-cid="${id}"]`);if(d)d.open=true;});if(msg)show($("comMsg"),"ok",msg);}
+document.addEventListener("click",async e=>{const b=e.target.closest("[data-cjoin],[data-cleave],[data-crm],[data-cadd],[data-cmail],[data-cnewev]");if(!b)return;const m=$("comMsg");
+  try{
+    if(b.dataset.cjoin){await api("/rest/v1/committee_members",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({committee_id:+b.dataset.cjoin,email:data.email,role:"member"})});await reloadComs("You joined the committee.");}
+    else if(b.dataset.cleave){await api("/rest/v1/committee_members?committee_id=eq."+b.dataset.cleave+"&email=eq."+encodeURIComponent(data.email),{method:"DELETE"});await reloadComs("You left the committee.");}
+    else if(b.dataset.crm){const [cid,em]=b.dataset.crm.split("|");await api("/rest/v1/committee_members?committee_id=eq."+cid+"&email=eq."+encodeURIComponent(em),{method:"DELETE"});await reloadComs("Member removed.");}
+    else if(b.dataset.cadd){const cid=+b.dataset.cadd,em=($("cadd"+cid).value||"").trim().toLowerCase();if(!/^\S+@\S+\.\S+$/.test(em)){show(m,"err","Enter a valid email.");return;}
+      await api("/rest/v1/committee_members",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({committee_id:cid,email:em,role:"member"})});await reloadComs("Member added.");}
+    else if(b.dataset.cmail){const r=JSON.parse(($("cb"+b.dataset.cmail).dataset.roster)||"[]");const c=data.comms.find(x=>x.id===+b.dataset.cmail);
+      topWin.location.href="mailto:?bcc="+encodeURIComponent(r.join(","))+"&subject="+encodeURIComponent((c?c.name_en:"Committee")+" Committee");}
+    else if(b.dataset.cnewev){openEditor(null,+b.dataset.cnewev);}
+  }catch(err){show(m,"err",err.status===409?"That person is already on the committee.":"That didn't go through. Please try again.");}});
+$("bNewCom").addEventListener("click",()=>{$("comNew").hidden=!$("comNew").hidden;});
+$("bCnSave").addEventListener("click",async()=>{const n=$("cnName").value.trim(),a=$("cnAbout").value.trim(),d=$("cnDir").value.trim().toLowerCase(),m=$("comMsg");
+  if(n.length<3){show(m,"err","Add a committee name.");return;}
+  try{let T={};try{T=(await api("/functions/v1/translate",{method:"POST",body:JSON.stringify({from:"en",texts:{name:n,about:a}})})).texts||{};}catch(e){}
+    const slug=n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40);
+    const r=await api("/rest/v1/committees",{method:"POST",headers:{Prefer:"return=representation"},body:JSON.stringify({slug,name_en:n,name_es:T.name||n,about_en:a||null,about_es:T.about||a||null})});
+    if(d&&/^\S+@\S+\.\S+$/.test(d))await api("/rest/v1/committee_members",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({committee_id:r[0].id,email:d,role:"director"})});
+    data.comms=await api("/rest/v1/committees?select=*&order=name_en.asc");$("comNew").hidden=true;$("cnName").value=$("cnAbout").value=$("cnDir").value="";await reloadComs("Committee created.");}
+  catch(e){show(m,"err","We couldn't create it. Please try again.");}});
+
 async function reload(){await fetchAll();render();}
 addEventListener("lrc-lang",render);
 
@@ -1307,5 +1373,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=5bf9f87b"></script><script src="../assets/i18n.js?v=5bf9f87b"></script>
+</script><script src="../assets/i18n-es.js?v=466331f9"></script><script src="../assets/i18n.js?v=466331f9"></script>
 </body></html>

@@ -305,10 +305,13 @@ body.gated #contactCard{display:none!important}
 .gconf{position:absolute;inset:0;pointer-events:none}.gconf i{position:absolute;left:50%;top:40%;width:8px;height:12px;background:hsl(calc(var(--i)*40),85%,60%);opacity:0;animation:conf 1.4s calc(.7s + var(--i)*.02s) ease-out forwards}
 @keyframes conf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(calc((var(--i) - 9)*22px),calc(-60px + var(--i)*9px)) rotate(calc(var(--i)*60deg))}}
 @media (prefers-reduced-motion:reduce){.giftw *{animation:none!important;transition:none!important}}
+.mn{padding-right:40px}.mnx{all:unset;cursor:pointer;position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:700 20px/1 Arial,sans-serif;color:#5a6b80}
+.mnx:hover,.mnx:focus-visible{background:rgba(5,42,75,.08);color:#0b2a4a}.mn.gone{opacity:0;transform:translateX(30px);transition:all .2s}
+.mnclear{margin:10px 14px 0 0;font:800 12px "Archivo",sans-serif;letter-spacing:.06em;text-transform:uppercase}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=7cc5b66b"></script>
+<script src="../assets/vendor/qrcode.js?v=b84eb6d7"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -610,7 +613,7 @@ async function fetchAll(){
     api("/rest/v1/comp_grants?select=*"),
   ]);
   let qa=[];try{qa=await api("/rest/v1/qa_accounts?select=email&email=eq."+encodeURIComponent(email));}catch(e){}
-  let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name,flags,name,phone,program_listing&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
+  let prof=null;try{prof=(await api("/rest/v1/profiles?select=country_code,country_name,flags,name,phone,program_listing,notif_hidden&email=eq."+encodeURIComponent(email)))[0]||null;}catch(e){}
   const out=tickets.filter(t=>t.owner_email!==email);tickets=tickets.filter(t=>t.owner_email===email);
   data={email,user,member:members[0]||null,tickets,events,isAdmin:admins.length>0,exec:admins[0]||null,grants,out,prof:prof||{},all:null,flags:prof?(prof.flags&&prof.flags.length?prof.flags:(prof.country_code?[prof.country_code]:[])):[]};
   data.isFull=!!(data.exec&&data.exec.role==="full");data.isQA=qa.length>0;
@@ -1376,18 +1379,30 @@ function renderMemberNotif(){const d=data,now=Date.now(),win=NOTIF_DAYS*864e5,es
   const m=d.member;
   if(m&&m.status==="active"&&m.grace_until)items.push({k:"warn",at:now,html:`<b>Your last payment didn't go through.</b> <span>Update your card by</span> ${esc(fmtDate(m.grace_until))} <span>to keep your member benefits.</span> <a href="${esc(portalUrl())}" target="_blank" rel="noopener">Update card</a>`});
   const elig=earlyOK();
-  (d.events||[]).filter(e=>e.listed!==false&&e.sales_open&&e.public_opens_at&&Date.parse(e.public_opens_at)>now&&fresh(e.early_alert_sent_at||e.updated_at||e.created_at)).forEach(e=>items.push({k:"early",at:Date.parse(e.early_alert_sent_at||e.updated_at||e.created_at),until:e.public_opens_at,
+  (d.events||[]).filter(e=>e.listed!==false&&e.sales_open&&e.public_opens_at&&Date.parse(e.public_opens_at)>now&&fresh(e.early_alert_sent_at||e.updated_at||e.created_at)).forEach(e=>items.push({k:"early",key:"early:"+e.id,at:Date.parse(e.early_alert_sent_at||e.updated_at||e.created_at),until:e.public_opens_at,
     html:elig?`<span class="ntag">★ <span>Early access promotion</span></span><b>${esc(title(e))}</b><div><span>You can sign up now, before anyone else.</span> <span>Early access ends in</span> <b class="cd" data-until="${esc(e.public_opens_at)}">${cdText(Date.parse(e.public_opens_at)-now)}</b></div><a href="#events" data-jump="events">Sign up now</a>`
              :`<span class="ntag">★ <span>Early access promotion</span></span><b>${esc(title(e))}</b><div><span>Patriots and Ambassadors are signing up early. Sign-ups open to you in</span> <b class="cd" data-until="${esc(e.public_opens_at)}">${cdText(Date.parse(e.public_opens_at)-now)}</b></div><a href="../join/" target="_top">Upgrade for early access</a>`}));
-  (d.ins||[]).filter(u=>fresh(u.created_at)).forEach(u=>items.push({k:"ins",at:Date.parse(u.created_at),html:`<span class="ntag gold">✉ <span>Chairman's Insider</span> · ${esc(u.month_label)}</span><b>${esc(u.title)}</b><a href="#insider" data-jump="insider">Read it</a>`}));
-  (d.events||[]).filter(e=>e.listed!==false&&!(e.public_opens_at&&Date.parse(e.public_opens_at)>now)&&fresh(e.created_at)&&(!e.starts_at||Date.parse(e.starts_at)>now)).forEach(e=>items.push({k:"ev",at:Date.parse(e.created_at),
+  (d.ins||[]).filter(u=>fresh(u.created_at)).forEach(u=>items.push({k:"ins",key:"ins:"+u.id,at:Date.parse(u.created_at),html:`<span class="ntag gold">✉ <span>Chairman's Insider</span> · ${esc(u.month_label)}</span><b>${esc(u.title)}</b><a href="#insider" data-jump="insider">Read it</a>`}));
+  (d.events||[]).filter(e=>e.listed!==false&&!(e.public_opens_at&&Date.parse(e.public_opens_at)>now)&&fresh(e.created_at)&&(!e.starts_at||Date.parse(e.starts_at)>now)).forEach(e=>items.push({k:"ev",key:"ev:"+e.id,at:Date.parse(e.created_at),
     html:`<span class="ntag">${e.is_monthly_meeting?"★ ":""}<span>New event</span></span><b>${esc(title(e))}</b>${e.starts_at?`<div>${esc(when(e.starts_at))}</div>`:""}<a href="#events" data-jump="events">Get tickets</a>`}));
-  (d.tickets||[]).filter(t=>t.shared_by&&t.status!=="void"&&fresh(t.shared_at||t.created_at)).forEach(t=>{const e=(d.events||[]).find(x=>x.id===t.event_id);items.push({k:"tk",at:Date.parse(t.shared_at||t.created_at),
+  (d.tickets||[]).filter(t=>t.shared_by&&t.status!=="void"&&fresh(t.shared_at||t.created_at)).forEach(t=>{const e=(d.events||[]).find(x=>x.id===t.event_id);items.push({k:"tk",key:"tk:"+t.id,at:Date.parse(t.shared_at||t.created_at),
     html:`<span class="ntag"><span>Ticket for you</span></span><b>${esc(e?title(e):"Event")}</b><div><span>Shared with you by</span> ${esc(t.shared_by)}</div><a href="#tickets" data-jump="tickets">See ticket</a>`});});
+  const hid=new Set((d.prof&&d.prof.notif_hidden)||[]);const all=items.length;
+  for(let i=items.length-1;i>=0;i--)if(items[i].key&&hid.has(items[i].key))items.splice(i,1);
   items.sort((a,b)=>(a.k==="warn"?-2:a.k==="early"?-1:0)-(b.k==="warn"?-2:b.k==="early"?-1:0)||b.at-a.at);
   d.mnN=items.length;$("mnCount").hidden=!items.length;$("mnCount").textContent=items.length;
-  $("mnList").innerHTML=items.length?items.map(i=>`<div class="mn mn-${i.k}">${i.html}</div>`).join(""):`<div class="empty">You're all caught up.</div>`;
+  const canClear=items.filter(i=>i.key);
+  $("mnList").innerHTML=(items.length?items.map(i=>`<div class="mn mn-${i.k}">${i.key?`<button type="button" class="mnx" data-hide="${esc(i.key)}" aria-label="Hide this notification" title="Hide">×</button>`:""}${i.html}</div>`).join(""):`<div class="empty">You're all caught up.</div>`)+
+    (canClear.length>1?`<button type="button" class="link mnclear" id="bClearN">Clear all</button>`:"")+
+    (all>items.length?`<button type="button" class="link mnclear" id="bShowN"><span>Show hidden</span> (${all-items.length})</button>`:"");
 }
+async function saveHidden(list){const keep=[...new Set(list)].slice(-200);data.prof.notif_hidden=keep;renderMemberNotif();
+  if(data.isBoard)renderNotif();
+  try{await api("/rest/v1/profiles?on_conflict=email",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({notif_hidden:keep,updated_at:new Date().toISOString()})});}catch(e){}}
+document.addEventListener("click",e=>{const h=e.target.closest("[data-hide]");const cur=(data&&data.prof&&data.prof.notif_hidden)||[];
+  if(h){const el=h.closest(".mn");el.classList.add("gone");setTimeout(()=>saveHidden(cur.concat(h.dataset.hide)),220);return;}
+  if(e.target.closest("#bClearN")){saveHidden(cur.concat([...document.querySelectorAll("#mnList [data-hide]")].map(b=>b.dataset.hide)));return;}
+  if(e.target.closest("#bShowN")){saveHidden([]);}});
 setInterval(()=>{document.querySelectorAll(".cd[data-until]").forEach(el=>{el.textContent=cdText(Date.parse(el.dataset.until)-Date.now());});},1000);
 
 /* ===== board notifications ===== */
@@ -1523,5 +1538,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=7cc5b66b"></script><script src="../assets/i18n.js?v=7cc5b66b"></script>
+</script><script src="../assets/i18n-es.js?v=b84eb6d7"></script><script src="../assets/i18n.js?v=b84eb6d7"></script>
 </body></html>

@@ -80,13 +80,9 @@ h3{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:80%;font-weight:
    - rsvp:  full link to your RSVP form or Wix event page ("" hides the button)
    ===================================================================== */
 const EVENTS = [
-  { title:"2027 Inaugural Gala", type:"Gala", date:"", time:"", end:"",
-    place:"Queens, NY",
-    desc:"Celebrate the club’s founding year with members, families and friends. Tickets: $75 members, $100 guests.",
-    rsvp:"../account/#events" },
-  { title:"Inaugural Club Meeting", type:"Meeting", date:"", time:"", end:"",
+  { title:"Inaugural Gala", type:"Gala", date:"", time:"", end:"",
     place:"Astoria, Queens",
-    desc:"Our first official meeting. Meet the Executive Board and help shape what comes next.",
+    desc:"Our first official meeting and founding celebration. Meet the Executive Board, celebrate with members, families and friends, and help shape what comes next. Tickets: $75 members, $100 guests.",
     rsvp:"../account/#events" },
   { title:"2028 / 2029 Potential Candidates Forum", type:"Forum", date:"", time:"", end:"",
     place:"Location TBD",
@@ -97,7 +93,7 @@ const EVENTS = [
     desc:"Latinas Supporting Women Leaders.",
     rsvp:"../account/#events" }
 ];
-const SHOW = 4;
+const SHOW = 3;
 /* ===================================================================== */
 
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -142,5 +138,5 @@ document.getElementById('list').innerHTML = upcoming.length ? upcoming.map(({e,d
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=532db905"></script><script src="../assets/i18n.js?v=532db905"></script>
+</script><script src="../assets/i18n-es.js?v=920de4b9"></script><script src="../assets/i18n.js?v=920de4b9"></script>
 </body></html>

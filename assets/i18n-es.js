@@ -558,6 +558,8 @@ window.LRC_ES={
 "No seats assigned yet.": "Aún no has asignado asientos.",
 "Ticket is back in My Tickets with a new QR code.": "La entrada volvió a Mis entradas con un código QR nuevo.",
 "The email didn't send. Please try again later.": "El correo no se envió. Inténtalo más tarde.",
-"Email sent again.": "Correo reenviado."
+"Email sent again.": "Correo reenviado.",
+"Inaugural Gala": "Gala Inaugural",
+"Our first official meeting and founding celebration. Meet the Executive Board, celebrate with members, families and friends, and help shape what comes next. Tickets: $75 members, $100 guests.": "Nuestra primera reunión oficial y celebración de fundación. Conoce a la Junta Directiva, celebra con miembros, familias y amigos, y ayuda a definir lo que viene. Entradas: $75 miembros, $100 invitados."
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

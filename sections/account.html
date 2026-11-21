@@ -178,7 +178,7 @@ td.acts{white-space:nowrap;text-align:right}td.acts .link{font-size:13px;margin-
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=920de4b9"></script>
+<script src="../assets/vendor/qrcode.js?v=5a171dfe"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -679,7 +679,7 @@ $("fDet").addEventListener("submit",async e=>{e.preventDefault();const n=$("dNm"
   $("bDetSave").disabled=false;});
 
 /* ===== share a ticket by email ===== */
-const SPONSOR_SEATS=10;
+const SPONSOR_SEATS=6;
 $("tkList").addEventListener("click",e=>{
   const b=e.target.closest("button[data-share]");if(!b)return;e.stopPropagation();
   const t=data.tickets.find(x=>x.id===b.dataset.share),ev=data.events.find(x=>x.id===t.event_id);
@@ -703,7 +703,7 @@ function renderOut(byId){
   const comps=d.tickets.filter(t=>t.kind==="comp"&&t.status!=="void"),outComps=o.filter(t=>t.kind==="comp"&&t.status!=="void");
   if(!o.length&&!corp){$("outCard").hidden=true;return;}
   $("outCard").hidden=false;
-  $("outTitle").textContent=corp?"Your Gala Table":"Tickets You've Shared";
+  $("outTitle").textContent=corp?"Your Gala Seats":"Tickets You've Shared";
   $("outSum").innerHTML=corp?`<b>${outComps.length}</b> <span>of</span> <b>${comps.length+outComps.length}</b> <span>seats assigned to guests</span> · <b>${comps.length}</b> <span>still with you. Use "Share ticket" on a seat above to assign it.</span>`:`<span>Tickets you gave to someone else. You can take back any ticket that hasn't been used yet.</span>`;
   $("outList").innerHTML=o.length?`<div style="overflow-x:auto"><table><thead><tr><th>Guest</th><th class="hide-s">Email</th><th>Event</th><th>Status</th><th></th></tr></thead><tbody>${o.map(t=>`<tr>
       <td>${esc(t.holder_name||"")}<span class="em2">${esc(t.owner_email)}</span></td><td class="hide-s">${esc(t.owner_email)}</td><td>${esc(evTitle(byId[t.event_id]))}</td>
@@ -756,5 +756,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=920de4b9"></script><script src="../assets/i18n.js?v=920de4b9"></script>
+</script><script src="../assets/i18n-es.js?v=5a171dfe"></script><script src="../assets/i18n.js?v=5a171dfe"></script>
 </body></html>

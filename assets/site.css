@@ -1,0 +1,16 @@
+/* Page frame for the club site. Each section is its own file in /sections, shown here full width. */
+:root{--hdr:110px}
+@media (max-width:1000px){:root{--hdr:140px}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:#021a30}
+.sec{display:block;scroll-margin-top:var(--hdr)}
+.sec iframe{display:block;width:100%;border:0;height:700px;background:transparent}
+#s-top{position:sticky;top:0;z-index:50;box-shadow:0 6px 18px -8px rgba(0,0,0,.6)}
+#s-top iframe{height:var(--hdr)}
+#s-home iframe{height:clamp(600px,calc(100svh - var(--hdr)),760px)}
+@media (max-width:860px){#s-home iframe{height:800px}}
+.skip{position:absolute;left:-9999px;top:8px;z-index:99;background:#f5d066;color:#021a30;padding:10px 14px;border-radius:8px;font:700 14px system-ui,sans-serif}
+.skip:focus{left:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,700..900&family=Public+Sans:wght@400;600&display=swap">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@400;700&display=swap");
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#efe3cc;color:#1b2133;font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.6}
+.tileband{height:28px;background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%2756%27%20height%3D%2756%27%20viewBox%3D%270%200%2056%2056%27%3E%3Crect%20width%3D%2756%27%20height%3D%2756%27%20fill%3D%27%23f8f1e4%27/%3E%3Cg%20fill%3D%27%231f4f9c%27%3E%3Ccircle%20cx%3D%270%27%20cy%3D%270%27%20r%3D%2711%27/%3E%3Ccircle%20cx%3D%2756%27%20cy%3D%270%27%20r%3D%2711%27/%3E%3Ccircle%20cx%3D%270%27%20cy%3D%2756%27%20r%3D%2711%27/%3E%3Ccircle%20cx%3D%2756%27%20cy%3D%2756%27%20r%3D%2711%27/%3E%3Cpath%20d%3D%27M28%209c5%207%205%2012%200%2019c-5-7-5-12%200-19zM28%2047c5-7%205-12%200-19c-5%207-5%2012%200%2019zM9%2028c7-5%2012-5%2019%200c-7%205-12%205-19%200zM47%2028c-7-5-12-5-19%200c7%205%2012%205%2019%200z%27/%3E%3C/g%3E%3Cg%20fill%3D%27%23d9a441%27%3E%3Ccircle%20cx%3D%2728%27%20cy%3D%2728%27%20r%3D%273.6%27/%3E%3Ccircle%20cx%3D%270%27%20cy%3D%270%27%20r%3D%274.5%27/%3E%3Ccircle%20cx%3D%2756%27%20cy%3D%270%27%20r%3D%274.5%27/%3E%3Ccircle%20cx%3D%270%27%20cy%3D%2756%27%20r%3D%274.5%27/%3E%3Ccircle%20cx%3D%2756%27%20cy%3D%2756%27%20r%3D%274.5%27/%3E%3C/g%3E%3Cg%20fill%3D%27%23c8693f%27%3E%3Ccircle%20cx%3D%2728%27%20cy%3D%273%27%20r%3D%271.6%27/%3E%3Ccircle%20cx%3D%2728%27%20cy%3D%2753%27%20r%3D%271.6%27/%3E%3Ccircle%20cx%3D%273%27%20cy%3D%2728%27%20r%3D%271.6%27/%3E%3Ccircle%20cx%3D%2753%27%20cy%3D%2728%27%20r%3D%271.6%27/%3E%3C/g%3E%3C/svg%3E") repeat-x center/28px 28px;border-block:3px solid #14254a}
+.flags{background:#efe3cc;text-align:center;padding:clamp(48px,7vw,88px) 0;overflow:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,5vw,72px)}
+.eyebrow{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:85%;font-weight:700;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#d51b2f;display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 18px}
+.eyebrow::before,.eyebrow::after{content:"";width:28px;height:2px;background:#d9a441}
+h2 .l{display:block}
+h2 .l+.l{margin-top:.08em}
+h2{font-family:"Archivo","Arial Narrow",Impact,sans-serif;font-stretch:72%;font-weight:900;text-transform:uppercase;line-height:1;letter-spacing:.015em;margin:0 auto;font-size:clamp(30px,6.4vw,72px);color:#052a4b;text-wrap:balance;text-shadow:2.00px 0.00px 0 #d6a844,1.85px 0.77px 0 #d6a844,1.41px 1.41px 0 #d6a844,0.77px 1.85px 0 #d6a844,0.00px 2.00px 0 #d6a844,-0.77px 1.85px 0 #d6a844,-1.41px 1.41px 0 #d6a844,-1.85px 0.77px 0 #d6a844,-2.00px 0.00px 0 #d6a844,-1.85px -0.77px 0 #d6a844,-1.41px -1.41px 0 #d6a844,-0.77px -1.85px 0 #d6a844,-0.00px -2.00px 0 #d6a844,0.77px -1.85px 0 #d6a844,1.41px -1.41px 0 #d6a844,1.85px -0.77px 0 #d6a844,0 3px 0 #c99a3a,0 4px 0 #b68323,0 5px 0 #946a1c,0 6px 0 #7a5310,0 10px 8px rgba(5,42,75,.25),0 18px 22px rgba(5,42,75,.18)}
+.tagline{font-family:"Hepta Slab",Georgia,"Times New Roman",serif;color:#2c3550;margin:22px auto 0;display:inline-block;max-width:100%}
+.tagline .l1{display:block;font-weight:400;font-size:clamp(17px,1.7vw,22px);line-height:1.4;white-space:nowrap}
+.tagline .l2{display:block;font-weight:700;color:#14254a;font-size:22px;line-height:1.2;margin-top:8px;white-space:nowrap}
+@media (max-width:699px){.tagline .l1,.tagline .l2{white-space:normal}.tagline .l2{font-size:20px}.tagline .l2 span{display:block}}
+.marquee{margin-top:44px;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.mtrack{display:flex;gap:28px;width:max-content;animation:slide 55s linear infinite;padding-block:8px}
+.marquee:hover .mtrack{animation-play-state:paused}
+@keyframes slide{to{transform:translateX(-50%)}}
+.flag{display:flex;flex-direction:column;align-items:center;gap:10px;width:132px}
+.flag svg{width:120px;height:80px;border-radius:8px;box-shadow:0 6px 16px -6px rgba(20,37,74,.45),0 0 0 3px #fff;display:block}
+.flag span{font-weight:600;font-size:14px;color:#14254a;line-height:1.2}
+.unity{margin-top:44px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.unity svg{width:210px;height:140px;border-radius:10px;box-shadow:0 10px 30px -10px rgba(20,37,74,.6),0 0 0 4px #fff,0 0 0 7px #d9a441}
+.unity p{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:80%;font-weight:800;font-size:22px;text-transform:uppercase;letter-spacing:.06em;color:#14254a;margin:0}
+@media (max-width:600px){.flag{width:104px}.flag svg{width:96px;height:64px}}
+@media (prefers-reduced-motion:reduce){.mtrack{animation:none}}
+</style><style id="wix-mobile-fit">/* Wix fit: no sideways scroll; if the Wix box is taller than the content, the section centers and the extra space matches its background */html{-webkit-text-size-adjust:100%;text-size-adjust:100%}html,body{max-width:100%;overflow-x:hidden}body>*{flex:0 0 auto;width:100%;box-sizing:border-box}</style>
+</head>
+<body>
+<div class="tileband"></div>
+<section class="flags">
+  <div class="wrap">
+    <p class="eyebrow">Our roots</p>
+    <h2><span class="l">Every Heritage</span> <span class="l">Has a Home Here</span></h2>
+    <p class="tagline"><span class="l1" id="l1">From Latin America, to the Caribbean, to Spain, to right here at home.</span><span class="l2" id="l2"><span>We are proud Latinos.</span> <span>We are proud Americans.</span></span></p>
+  </div>
+  <div class="marquee" aria-label="Flags of the Latino nations represented in the club"><div class="mtrack" id="mtrack"></div></div>
+  <div class="unity"><svg viewBox="0 0 30 20" preserveAspectRatio="none" role="img" aria-label="Flag of the United States"><g class="usf"></g></svg><p>United under one flag</p></div>
+</section>
+<div class="tileband"></div>
+<script>
+function star(cx,cy,r,f){let p=[];for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.4:r;p.push((cx+Math.cos(a)*rr).toFixed(2)+','+(cy+Math.sin(a)*rr).toFixed(2));}return '<polygon fill="'+f+'" points="'+p.join(' ')+'"/>';}
+function R(x,y,w,h,f){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+f+'"/>';}
+function H(a,b,c){return R(0,0,30,20/3+.05,a)+R(0,20/3,30,20/3+.05,b)+R(0,40/3,30,20/3,c);}
+function V(a,b,c){return R(0,0,10.05,20,a)+R(10,0,10.05,20,b)+R(20,0,10,20,c);}
+function C(x,y,r,f,s){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+f+'"'+(s?' stroke="'+s+'" stroke-width=".6"':'')+'/>';}
+function stripes(n,a,b){let s='';for(let i=0;i<n;i++)s+=R(0,i*20/n,30,20/n+.05,i%2?b:a);return s;}
+const FLAGS={
+ 'Mexico':V('#006847','#fff','#ce1126')+C(15,10,2.4,'#fff','#7a5230')+C(15,10,1.3,'#8c5a2b'),
+ 'Guatemala':V('#4997d0','#fff','#4997d0')+C(15,10,2.3,'none','#4f8a3a')+C(15,10,.9,'#d8c27a'),
+ 'El Salvador':H('#0f47af','#fff','#0f47af')+'<polygon points="15,8 12.8,11.6 17.2,11.6" fill="#e3b542"/>',
+ 'Honduras':H('#18a0d8','#fff','#18a0d8')+star(15,10,1,'#18a0d8')+star(11.5,8.6,1,'#18a0d8')+star(11.5,11.4,1,'#18a0d8')+star(18.5,8.6,1,'#18a0d8')+star(18.5,11.4,1,'#18a0d8'),
+ 'Nicaragua':H('#0067c6','#fff','#0067c6')+'<polygon points="15,8 12.9,11.5 17.1,11.5" fill="none" stroke="#c9a227" stroke-width=".7"/>',
+ 'Costa Rica':R(0,0,30,3.4,'#002b7f')+R(0,3.33,30,3.4,'#fff')+R(0,6.66,30,6.7,'#ce1126')+R(0,13.33,30,3.4,'#fff')+R(0,16.66,30,3.34,'#002b7f'),
+ 'Panama':R(0,0,30,20,'#fff')+R(15,0,15,10,'#d21034')+R(0,10,15,10,'#005293')+star(7.5,5,2.6,'#005293')+star(22.5,15,2.6,'#d21034'),
+ 'Cuba':stripes(5,'#002a8f','#fff')+'<polygon points="0,0 0,20 17.3,10" fill="#cf142b"/>'+star(5.8,10,3,'#fff'),
+ 'Dominican Republic':R(0,0,30,20,'#fff')+R(0,0,13,8.5,'#002d62')+R(17,0,13,8.5,'#ce1126')+R(0,11.5,13,8.5,'#ce1126')+R(17,11.5,13,8.5,'#002d62')+C(15,10,1.3,'#2e7d32'),
+ 'Puerto Rico':stripes(5,'#ed0000','#fff')+'<polygon points="0,0 0,20 17.3,10" fill="#0050f0"/>'+star(5.8,10,3,'#fff'),
+ 'Haiti':R(0,0,30,10,'#00209f')+R(0,10,30,10,'#d21034')+R(10.5,6.2,9,7.6,'#fff')+C(15,10.4,1.6,'#2e7d32')+R(13.2,11.6,3.6,1,'#a0522d'),
+ 'Colombia':R(0,0,30,10,'#fcd116')+R(0,10,30,5,'#003893')+R(0,15,30,5,'#ce1126'),
+ 'Venezuela':H('#ffcc00','#00247d','#cf142b')+(function(){let s='';for(let i=0;i<8;i++){const a=Math.PI*(1.12+i*.108);s+=star(15+Math.cos(a)*5.2,12.6+Math.sin(a)*5.2,.62,'#fff');}return s;})(),
+ 'Ecuador':R(0,0,30,10,'#ffdd00')+R(0,10,30,5,'#034ea2')+R(0,15,30,5,'#ed1c24')+C(15,10,2.3,'#fff','#8a6d3b')+C(15,10,1.1,'#2e7d32'),
+ 'Peru':V('#d91023','#fff','#d91023'),
+ 'Bolivia':H('#d52b1e','#f9e300','#007934'),
+ 'Chile':R(0,0,30,10,'#fff')+R(0,0,10,10,'#0039a6')+star(5,5,2.6,'#fff')+R(0,10,30,10,'#d52b1e'),
+ 'Argentina':H('#74acdf','#fff','#74acdf')+C(15,10,1.9,'#f6b40e','#85340a'),
+ 'Uruguay':stripes(9,'#fff','#0038a8')+R(0,0,11.1,11.1,'#fff')+C(5.55,5.55,3,'#fcd116')+C(5.55,5.55,1.9,'#fcd116','#7f3f00'),
+ 'Paraguay':H('#d52b1e','#fff','#0038a8')+C(15,10,2,'none','#2e7d32')+star(15,10,.9,'#e8c33a'),
+ 'Brazil':R(0,0,30,20,'#009c3b')+'<polygon points="15,2.4 27.4,10 15,17.6 2.6,10" fill="#ffdf00"/>'+C(15,10,4.6,'#002776')+'<path d="M10.6 9.3 Q15 7.6 19.4 10.8" stroke="#fff" stroke-width=".8" fill="none"/>',
+ 'Spain':R(0,0,30,5,'#aa151b')+R(0,5,30,10,'#f1bf00')+R(0,15,30,5,'#aa151b')+'<rect x="7" y="7.4" width="3.6" height="5.2" rx=".9" fill="#aa151b" stroke="#c8a24b" stroke-width=".35"/>'
+};
+function usFlag(){let s=stripes(13,'#b22234','#fff')+R(0,0,12,10.77,'#3c3b6e');for(let r=0;r<5;r++)for(let c=0;c<6;c++)s+=C(1+c*2,1.1+r*2.1,.38,'#fff');return s;}
+function flagSVG(inner,label){return '<svg viewBox="0 0 30 20" preserveAspectRatio="none" role="img" aria-label="Flag of '+label+'">'+inner+'</svg>';}
+
+(function(){
+  document.querySelectorAll('.usf').forEach(g=>g.innerHTML=usFlag());
+  const t=document.getElementById('mtrack');
+  if(t){const items=Object.keys(FLAGS).map(n=>'<div class="flag">'+flagSVG(FLAGS[n],n)+'<span>'+n+'</span></div>').join('');
+    t.innerHTML=items+items.replace(/role="img"/g,'aria-hidden="true"');}
+})();
+
+/* make the last sentence run exactly the full width of the line above it */
+(function(){
+  const l1=document.getElementById('l1'), l2=document.getElementById('l2'), wrap=l1.parentElement.parentElement;
+  function fit(){
+    l1.style.fontSize='';l2.style.fontSize='';
+    if(innerWidth<700) return;
+    const room=wrap.clientWidth-8;
+    if(l1.scrollWidth>room){l1.style.fontSize=(parseFloat(getComputedStyle(l1).fontSize)*room/l1.scrollWidth)+'px';}
+    const target=l1.getBoundingClientRect().width, base=parseFloat(getComputedStyle(l2).fontSize);
+    l2.style.fontSize=(base*target/l2.scrollWidth).toFixed(2)+'px';
+  }
+  fit(); addEventListener('resize',fit);
+  if(document.fonts){document.fonts.ready.then(fit);document.fonts.addEventListener&&document.fonts.addEventListener('loadingdone',fit);}
+  setTimeout(fit,800);setTimeout(fit,2000);
+})();
+</script>
+<script>
+/* site helper: links to other parts of the site open in the main window; pop-ups open where the visitor is looking */
+(function(){
+  if(window.parent===window) return;
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href]'); if(!a||e.defaultPrevented) return;
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;
+    var u; try{u=new URL(a.getAttribute('href'),location.href);}catch(err){return;}
+    if(u.origin!==location.origin) return;            /* Stripe, socials, email: leave alone */
+    e.preventDefault(); e.stopPropagation(); parent.postMessage({lrc:'go',href:u.href},'*');
+  },true);
+  addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
+    var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
+})();
+</script></body></html>

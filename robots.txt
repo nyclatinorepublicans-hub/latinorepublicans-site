@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /welcome/
+Sitemap: https://www.latinorepublicans.org/sitemap.xml

@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,600..900&display=swap">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@400;700&display=swap");
+:root{--navy:#052a4b;--gold:#d6a844;--gold-hi:#f5d066;--red:#d51b2f}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#04172b;color:#fff;font-family:"Hepta Slab",Georgia,"Times New Roman",serif;overflow:hidden}
+.hero{position:relative;height:100%;min-height:560px;overflow:hidden;
+  background:linear-gradient(180deg,#020d1c 0%,#06244a 34%,#0f3f78 58%,#7a3b55 78%,#d9733f 90%,#f2b25a 100%)}
+#nyc{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(2,11,25,.62) 0%,rgba(2,11,25,.35) 38%,rgba(2,11,25,0) 62%)}
+.strip{position:absolute;left:0;right:0;bottom:0;height:8px;display:flex;z-index:3}
+.strip i{flex:1}
+
+.content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,5vw,64px) clamp(16px,6vw,88px) 12%;max-width:760px}
+.eyebrow{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:85%;font-weight:700;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-hi);display:flex;align-items:center;gap:12px;margin:0 0 16px;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+.eyebrow::before{content:"";width:28px;height:2px;background:var(--red)}
+h1{margin:0;line-height:0}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ttl{display:block;width:min(100%,560px);height:auto;overflow:visible;font-family:"Archivo","Arial Narrow",Impact,sans-serif;font-stretch:72%;font-weight:900;filter:drop-shadow(0 14px 14px rgba(0,0,0,.55)) drop-shadow(0 24px 30px rgba(0,0,0,.35))}
+.tag{margin:18px 0 0;font-size:clamp(18px,1.8vw,24px);font-style:italic;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.75)}
+.tag b{font-style:normal;font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;letter-spacing:.02em}
+.social{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px;align-items:center}
+.social .lbl{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#dfe6f1;margin-right:4px;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+.soc{position:relative;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;text-decoration:none;
+  background:radial-gradient(circle at 32% 26%,#fff7d6 0%,#e0b44f 30%,#b68323 72%,#7a5310 100%);
+  box-shadow:inset 0 2px 3px rgba(255,255,255,.7),inset 0 -4px 6px rgba(70,40,5,.5),0 8px 16px -6px rgba(0,0,0,.7);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.soc::before{content:"";position:absolute;inset:5px;border-radius:50%;background:radial-gradient(circle at 40% 30%,#f2cd6c 0%,#d6a844 55%,#a97a22 100%);box-shadow:inset 0 2px 4px rgba(80,45,5,.5)}
+.soc svg{position:relative;width:24px;height:24px}
+.soc:hover,.soc:focus-visible{transform:translateY(-4px) rotate(-6deg)}
+.soc:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.soc .tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);white-space:nowrap;font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;background:#fff;color:var(--navy);padding:5px 8px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .2s}
+.soc:hover .tip,.soc:focus-visible .tip{opacity:1}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.btn{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:14px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;padding:15px 26px;border-radius:999px;transition:transform .2s,background .2s,color .2s}
+.btn:hover,.btn:focus-visible{transform:translateY(-2px)}
+.btn.red{background:var(--red);color:#fff;box-shadow:0 4px 0 #8f1020,0 14px 24px -10px rgba(213,27,47,.8)}
+.btn.line{color:#fff;box-shadow:inset 0 0 0 2px var(--gold);background:rgba(5,42,75,.35);backdrop-filter:blur(2px)}
+.btn.line:hover,.btn.line:focus-visible{background:var(--gold);color:var(--navy)}
+.btn:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media (max-width:760px){
+  .content{justify-content:flex-start;padding-top:56px;padding-bottom:0}
+  .scrim{background:linear-gradient(180deg,rgba(2,11,25,.55) 0%,rgba(2,11,25,.25) 55%,rgba(2,11,25,0) 72%)}
+  .ttl{width:min(100%,400px)}
+  .btns{gap:10px;margin-top:20px}
+  .btn{padding:13px 18px;font-size:12.5px}
+  .social{gap:10px;margin-top:20px}
+  .social .lbl{flex-basis:100%;margin:0}
+  .soc{width:46px;height:46px}
+  .soc svg{width:21px;height:21px}
+}
+@media (prefers-reduced-motion:reduce){.soc,.btn{transition:none}}
+</style><style id="wix-mobile-fit">html{-webkit-text-size-adjust:100%;text-size-adjust:100%}html,body{max-width:100%;overflow-x:hidden}</style>
+</head>
+<body>
+<section class="hero" id="hero">
+  <canvas id="nyc" aria-hidden="true"></canvas>
+  <p class="vh">New York City at dusk: the Statue of Liberty, the skyline, and the flags of the 22 Latino nations our members represent, standing with the American flag.</p>
+  <div class="scrim" aria-hidden="true"></div>
+  <div class="strip" aria-hidden="true"><i style="background:#052a4b"></i><i style="background:#fff"></i><i style="background:#d51b2f"></i><i style="background:#d6a844"></i></div>
+
+  <div class="content">
+    <p class="eyebrow">NYC Latino Republican Club</p>
+    <h1><span class="vh">Unidos por América</span>
+      <svg class="ttl" viewBox="0 0 600 236" aria-hidden="true">
+        <defs>
+          <linearGradient id="gEdge" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a97a22"/><stop offset=".5" stop-color="#7a5310"/><stop offset="1" stop-color="#4f350a"/></linearGradient>
+          <linearGradient id="gBase" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0b44f"/><stop offset=".3" stop-color="#c99a3a"/><stop offset=".55" stop-color="#a97a22"/><stop offset=".72" stop-color="#d3a748"/><stop offset="1" stop-color="#8a6118"/></linearGradient>
+          <linearGradient id="gShine" gradientUnits="userSpaceOnUse" x1="-160" y1="0" x2="160" y2="140">
+            <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".4" stop-color="#fff8dc" stop-opacity="0"/><stop offset=".5" stop-color="#fff3c4" stop-opacity=".75"/><stop offset=".6" stop-color="#fff8dc" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+            <animateTransform attributeName="gradientTransform" type="translate" values="-200 0;800 0;800 0" keyTimes="0;.5;1" dur="4.5s" repeatCount="indefinite"/>
+          </linearGradient>
+          <g id="words" font-size="112" letter-spacing="2">
+            <text x="4" y="100" textLength="372" lengthAdjust="spacingAndGlyphs">UNIDOS</text>
+            <text x="4" y="216" textLength="584" lengthAdjust="spacingAndGlyphs">POR AMÉRICA</text>
+          </g>
+        </defs>
+        <g fill="url(#gEdge)" stroke="url(#gEdge)" stroke-width="9" stroke-linejoin="round">
+          <use href="#words" y="10"/><use href="#words" y="8"/><use href="#words" y="6"/><use href="#words" y="4"/><use href="#words" y="2"/>
+        </g>
+        <use href="#words" fill="none" stroke="url(#gBase)" stroke-width="9" stroke-linejoin="round"/>
+        <use href="#words" fill="none" stroke="url(#gShine)" stroke-width="9" stroke-linejoin="round"/>
+        <use href="#words" fill="#ffffff"/>
+      </svg>
+    </h1>
+    <p class="tag"><b>Proud Latinos. Proud Americans.</b> Serving all five boroughs.</p>
+    <div class="btns">
+      <a class="btn red" id="joinLink" href="../join/" target="_top">Join the Club</a>
+      <a class="btn line" id="eventsLink" href="../#events" target="_top">Upcoming Events</a>
+    </div>
+    <div class="social" id="social"><span class="lbl">Follow us</span></div>
+  </div>
+</section>
+<script>
+/* =====================================================================
+   EDIT LINKS HERE
+   ===================================================================== */
+const LINKS = {
+  join:   "../join/",
+  events: "../#events"
+};
+const SOCIAL = [
+  { name:"Instagram", handle:"@latinorepublicansnyc", url:"https://instagram.com/latinorepublicansnyc" },
+  { name:"X",         handle:"@NYCLatinoGOP",         url:"https://x.com/NYCLatinoGOP" },
+  { name:"Facebook",  handle:"Facebook",              url:"https://facebook.com/profile.php?id=61595391893975" },
+  { name:"WhatsApp",  handle:"(347) 676-1876",        url:"https://wa.me/13476761876" }
+];
+/* ===================================================================== */
+
+const ICON={
+  Instagram:'<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#052a4b" stroke-width="2.2"/><circle cx="12" cy="12" r="4" fill="none" stroke="#052a4b" stroke-width="2.2"/><circle cx="17.3" cy="6.7" r="1.3" fill="#052a4b"/>',
+  X:'<path d="M4 4l16 16M20 4L4 20" stroke="#052a4b" stroke-width="2.6" stroke-linecap="round"/>',
+  Facebook:'<path d="M14 21v-8h3l.5-3.5H14V7.6c0-1 .3-1.7 1.8-1.7h1.8V2.8c-.3 0-1.4-.1-2.6-.1c-2.6 0-4.3 1.6-4.3 4.4v2.4H7.8V13h2.9v8z" fill="#052a4b"/>',
+  WhatsApp:'<path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z" fill="none" stroke="#052a4b" stroke-width="2"/><path d="M9.1 7.8c.3-.6.6-.6.9-.6h.6c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .6l-.4.6c-.1.2-.3.3-.1.6c.3.5.9 1.3 1.6 1.9c.9.8 1.6 1 1.9 1.1c.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.8.9c.2.1.4.2.4.4c.1.3 0 1.1-.4 1.6c-.4.5-1.3 1-2 1c-.6.1-1.4.1-2.3-.2c-.5-.2-1.2-.4-2-.8c-3.3-1.5-5.5-4.9-5.6-5.1c-.2-.2-1.3-1.7-1.3-3.3c0-1.5.8-2.3 1.1-2.6z" fill="#052a4b"/>'
+};
+document.getElementById('joinLink').href=LINKS.join;
+document.getElementById('eventsLink').href=LINKS.events;
+const soc=document.getElementById('social');
+SOCIAL.forEach(s=>{
+  const a=document.createElement('a');a.className='soc';a.href=s.url;a.target='_blank';a.rel='noopener';
+  a.setAttribute('aria-label',s.name+' '+s.handle);
+  a.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+(ICON[s.name]||'')+'</svg><span class="tip">'+s.handle+'</span>';
+  soc.appendChild(a);
+});
+
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(reduce) document.querySelectorAll('.ttl animateTransform').forEach(a=>a.remove());
+
+</script>
+<script>/* =====================================================================
+   3D New York skyline at dusk, seen from the harbor.
+   Hand-built renderer on a canvas: real perspective, a slowly drifting
+   camera, lit windows, reflections on the water, fireworks over the city.
+   ===================================================================== */
+(function(){
+const cv=document.getElementById('nyc'), ctx=cv.getContext('2d'), hero=document.getElementById('hero');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W=0,H=0,DPR=1,F=900,CX=0,CY=0,mobile=false;
+
+/* ---------- the club's flags: 22 Latino nations + the American flag ---------- */
+const FL=(function(){
+
+
+function star(cx,cy,r,f){let p=[];for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.4:r;p.push((cx+Math.cos(a)*rr).toFixed(2)+','+(cy+Math.sin(a)*rr).toFixed(2));}return '<polygon fill="'+f+'" points="'+p.join(' ')+'"/>';}
+function R(x,y,w,h,f){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+f+'"/>';}
+function H(a,b,c){return R(0,0,30,20/3+.05,a)+R(0,20/3,30,20/3+.05,b)+R(0,40/3,30,20/3,c);}
+function V(a,b,c){return R(0,0,10.05,20,a)+R(10,0,10.05,20,b)+R(20,0,10,20,c);}
+function C(x,y,r,f,s){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+f+'"'+(s?' stroke="'+s+'" stroke-width=".6"':'')+'/>';}
+function stripes(n,a,b){let s='';for(let i=0;i<n;i++)s+=R(0,i*20/n,30,20/n+.05,i%2?b:a);return s;}
+const FLAGS={
+ 'Mexico':V('#006847','#fff','#ce1126')+C(15,10,2.4,'#fff','#7a5230')+C(15,10,1.3,'#8c5a2b'),
+ 'Guatemala':V('#4997d0','#fff','#4997d0')+C(15,10,2.3,'none','#4f8a3a')+C(15,10,.9,'#d8c27a'),
+ 'El Salvador':H('#0f47af','#fff','#0f47af')+'<polygon points="15,8 12.8,11.6 17.2,11.6" fill="#e3b542"/>',
+ 'Honduras':H('#18a0d8','#fff','#18a0d8')+star(15,10,1,'#18a0d8')+star(11.5,8.6,1,'#18a0d8')+star(11.5,11.4,1,'#18a0d8')+star(18.5,8.6,1,'#18a0d8')+star(18.5,11.4,1,'#18a0d8'),
+ 'Nicaragua':H('#0067c6','#fff','#0067c6')+'<polygon points="15,8 12.9,11.5 17.1,11.5" fill="none" stroke="#c9a227" stroke-width=".7"/>',
+ 'Costa Rica':R(0,0,30,3.4,'#002b7f')+R(0,3.33,30,3.4,'#fff')+R(0,6.66,30,6.7,'#ce1126')+R(0,13.33,30,3.4,'#fff')+R(0,16.66,30,3.34,'#002b7f'),
+ 'Panama':R(0,0,30,20,'#fff')+R(15,0,15,10,'#d21034')+R(0,10,15,10,'#005293')+star(7.5,5,2.6,'#005293')+star(22.5,15,2.6,'#d21034'),
+ 'Cuba':stripes(5,'#002a8f','#fff')+'<polygon points="0,0 0,20 17.3,10" fill="#cf142b"/>'+star(5.8,10,3,'#fff'),
+ 'Dominican Republic':R(0,0,30,20,'#fff')+R(0,0,13,8.5,'#002d62')+R(17,0,13,8.5,'#ce1126')+R(0,11.5,13,8.5,'#ce1126')+R(17,11.5,13,8.5,'#002d62')+C(15,10,1.3,'#2e7d32'),
+ 'Puerto Rico':stripes(5,'#ed0000','#fff')+'<polygon points="0,0 0,20 17.3,10" fill="#0050f0"/>'+star(5.8,10,3,'#fff'),
+ 'Haiti':R(0,0,30,10,'#00209f')+R(0,10,30,10,'#d21034')+R(10.5,6.2,9,7.6,'#fff')+C(15,10.4,1.6,'#2e7d32')+R(13.2,11.6,3.6,1,'#a0522d'),
+ 'Colombia':R(0,0,30,10,'#fcd116')+R(0,10,30,5,'#003893')+R(0,15,30,5,'#ce1126'),
+ 'Venezuela':H('#ffcc00','#00247d','#cf142b')+(function(){let s='';for(let i=0;i<8;i++){const a=Math.PI*(1.12+i*.108);s+=star(15+Math.cos(a)*5.2,12.6+Math.sin(a)*5.2,.62,'#fff');}return s;})(),
+ 'Ecuador':R(0,0,30,10,'#ffdd00')+R(0,10,30,5,'#034ea2')+R(0,15,30,5,'#ed1c24')+C(15,10,2.3,'#fff','#8a6d3b')+C(15,10,1.1,'#2e7d32'),
+ 'Peru':V('#d91023','#fff','#d91023'),
+ 'Bolivia':H('#d52b1e','#f9e300','#007934'),
+ 'Chile':R(0,0,30,10,'#fff')+R(0,0,10,10,'#0039a6')+star(5,5,2.6,'#fff')+R(0,10,30,10,'#d52b1e'),
+ 'Argentina':H('#74acdf','#fff','#74acdf')+C(15,10,1.9,'#f6b40e','#85340a'),
+ 'Uruguay':stripes(9,'#fff','#0038a8')+R(0,0,11.1,11.1,'#fff')+C(5.55,5.55,3,'#fcd116')+C(5.55,5.55,1.9,'#fcd116','#7f3f00'),
+ 'Paraguay':H('#d52b1e','#fff','#0038a8')+C(15,10,2,'none','#2e7d32')+star(15,10,.9,'#e8c33a'),
+ 'Brazil':R(0,0,30,20,'#009c3b')+'<polygon points="15,2.4 27.4,10 15,17.6 2.6,10" fill="#ffdf00"/>'+C(15,10,4.6,'#002776')+'<path d="M10.6 9.3 Q15 7.6 19.4 10.8" stroke="#fff" stroke-width=".8" fill="none"/>',
+ 'Spain':R(0,0,30,5,'#aa151b')+R(0,5,30,10,'#f1bf00')+R(0,15,30,5,'#aa151b')+'<rect x="7" y="7.4" width="3.6" height="5.2" rx=".9" fill="#aa151b" stroke="#c8a24b" stroke-width=".35"/>'
+};
+function usFlag(){let s=stripes(13,'#b22234','#fff')+R(0,0,12,10.77,'#3c3b6e');for(let r=0;r<5;r++)for(let c=0;c<6;c++)s+=C(1+c*2,1.1+r*2.1,.38,'#fff');return s;}
+function flagSVG(inner,label){return '<svg viewBox="0 0 30 20" preserveAspectRatio="none" role="img" aria-label="Flag of '+label+'">'+inner+'</svg>';}
+
+
+const DEMONYM={'Mexico':'Mexican','Guatemala':'Guatemalan','El Salvador':'Salvadoran','Honduras':'Honduran','Nicaragua':'Nicaraguan','Costa Rica':'Costa Rican','Panama':'Panamanian','Cuba':'Cuban','Dominican Republic':'Dominican','Puerto Rico':'Puerto Rican','Haiti':'Haitian','Colombia':'Colombian','Venezuela':'Venezuelan','Ecuador':'Ecuadorian','Peru':'Peruvian','Bolivia':'Bolivian','Chile':'Chilean','Argentina':'Argentine','Uruguay':'Uruguayan','Paraguay':'Paraguayan','Brazil':'Brazilian','Spain':'Spanish'};
+const SHORT={'Dominican Republic':'Dom. Rep.','El Salvador':'El Salvador','Puerto Rico':'Puerto Rico','Costa Rica':'Costa Rica'};
+const PALETTE={'Mexico':['#006847','#fff','#ce1126'],'Guatemala':['#4997d0','#fff','#4997d0'],'El Salvador':['#0f47af','#fff','#0f47af'],'Honduras':['#18a0d8','#fff','#18a0d8'],'Nicaragua':['#0067c6','#fff','#0067c6'],'Costa Rica':['#002b7f','#fff','#ce1126','#fff','#002b7f'],'Panama':['#005293','#fff','#d21034'],'Cuba':['#002a8f','#fff','#cf142b'],'Dominican Republic':['#002d62','#fff','#ce1126'],'Puerto Rico':['#ed0000','#fff','#0050f0'],'Haiti':['#00209f','#d21034'],'Colombia':['#fcd116','#fcd116','#003893','#ce1126'],'Venezuela':['#ffcc00','#00247d','#cf142b'],'Ecuador':['#ffdd00','#ffdd00','#034ea2','#ed1c24'],'Peru':['#d91023','#fff','#d91023'],'Bolivia':['#d52b1e','#f9e300','#007934'],'Chile':['#0039a6','#fff','#d52b1e'],'Argentina':['#74acdf','#fff','#74acdf'],'Uruguay':['#0038a8','#fff','#fcd116'],'Paraguay':['#d52b1e','#fff','#0038a8'],'Brazil':['#009c3b','#ffdf00','#002776'],'Spain':['#aa151b','#f1bf00','#aa151b']};
+const NAMES=Object.keys(FLAGS);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const svg=(n,label)=>flagSVG(FLAGS[n],label||n);
+
+
+return {FLAGS,flagSVG,usFlag,NAMES:Object.keys(FLAGS)};
+})();
+function flagImg(inner,label){const im=new Image();
+  im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(FL.flagSVG(inner,label).replace('<svg ','<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" '));return im;}
+const US_IMG=flagImg(FL.usFlag(),'the United States');
+const NATION_IMGS=FL.NAMES.map(n=>({name:n,img:flagImg(FL.FLAGS[n],n)}));
+let ROW=[],LIB={x:200,z:-300};   // flag poles along the waterfront, laid out in size()
+
+
+/* ---------- seeded random so the city looks the same every visit ---------- */
+let seed=20261120;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+const rr=(a,b)=>a+(b-a)*rnd();
+
+/* ---------- world ---------- */
+const prisms=[];      // every drawable block
+const buildings=[];   // groups of prisms
+function bld(o){const b={x:o.x,z:o.z,prisms:[],lit:o.lit??.33,glass:o.glass||false,col:o.col||null,name:o.name||''};buildings.push(b);return b;}
+function tier(b,w,d,y0,y1,opt={}){const p=Object.assign({b,x:b.x+(opt.dx||0),z:b.z+(opt.dz||0),w,d,y0,y1,rot:opt.rot||0,taper:opt.taper||1,col:opt.col||b.col,emit:opt.emit||null,win:opt.win!==false},opt);b.prisms.push(p);prisms.push(p);return p;}
+
+/* palettes */
+const STEEL=['#16283f','#1a2e48','#1d3350','#142436','#20364f','#18304a'];
+const GLASS=['#1f4064','#24496f','#1b3a5c'];
+
+/* filler towers */
+function cluster(n,x0,x1,z0,z1,h0,h1,wd0,wd1,lit){
+  for(let i=0;i<n;i++){
+    const x=rr(x0,x1),z=rr(z0,z1),h=h0+(h1-h0)*Math.pow(rnd(),1.6),w=rr(wd0,wd1),d=rr(wd0,wd1);
+    const glass=rnd()<.35, b=bld({x,z,lit:lit*rr(.6,1.3),glass,col:(glass?GLASS:STEEL)[(rnd()*(glass?3:6))|0]});
+    if(h>140&&rnd()<.5){tier(b,w,d,0,h*.72);tier(b,w*.72,d*.72,h*.72,h);if(rnd()<.4)tier(b,w*.18,d*.18,h,h+h*.12,{win:false});}
+    else tier(b,w,d,0,h);
+  }
+}
+/* downtown + midtown + the rest of the harbor */
+cluster(70,-420,380,40,820,40,250,26,58,.34);        // Financial District
+cluster(55,-520,620,880,1800,18,85,24,60,.26);       // lower Manhattan low-rise
+cluster(80,150,1150,1700,2700,70,300,26,60,.32);     // Midtown (to the right, behind Brooklyn Bridge)
+cluster(26,-1500,-760,150,1100,40,230,30,60,.30);    // Jersey City
+cluster(40,1250,2100,300,1500,14,70,26,70,.22);       // Brooklyn waterfront
+
+/* landmarks */
+const wtc=bld({x:-130,z:360,glass:true,lit:.18,name:'1wtc'});
+tier(wtc,64,64,0,58,{col:'#2a4f78'});
+const wtcTop={b:wtc,x:-130,z:360,w:64,d:64,y0:58,y1:417,kind:'wtc',col:'#3a6a98',win:true};wtc.prisms.push(wtcTop);prisms.push(wtcTop);
+tier(wtc,20,20,417,425,{win:false,col:'#9fb5cc'});
+wtc.spire={x:-130,z:360,y0:425,y1:541};
+
+const w3=bld({x:-40,z:420,glass:true,lit:.25});tier(w3,48,48,0,329,{col:'#244a70'});
+const w4=bld({x:50,z:470,glass:true,lit:.25});tier(w4,46,40,0,298,{col:'#2a5279'});
+const pine=bld({x:190,z:560,lit:.35});tier(pine,40,40,0,200);tier(pine,30,30,200,262);tier(pine,16,16,262,290,{win:false});pine.spire={x:190,z:560,y0:290,y1:300};
+const spruce=bld({x:290,z:690,glass:true,lit:.3});tier(spruce,42,42,0,265,{col:'#5b6f86'});
+const wool=bld({x:120,z:760,lit:.3});tier(wool,46,40,0,140,{col:'#3a3d48'});tier(wool,26,26,140,200,{col:'#45495a'});tier(wool,14,14,200,236,{col:'#556',win:false});wool.spire={x:120,z:760,y0:236,y1:241};
+
+/* Empire State: lit red, white and blue at the top */
+const esb=bld({x:560,z:2050,lit:.42,name:'esb'});
+tier(esb,72,52,0,25,{col:'#2b2f3c'});tier(esb,58,40,25,260,{col:'#2b2f3c'});
+tier(esb,44,30,260,300,{col:'#323646'});
+tier(esb,30,22,300,320,{emit:'#d51b2f',win:false});
+tier(esb,22,16,320,345,{emit:'#f4f6ff',win:false});
+tier(esb,14,11,345,373,{emit:'#2f6bff',win:false});
+esb.spire={x:560,z:2050,y0:373,y1:443,glow:'#f4f6ff'};
+
+/* Chrysler: silver crown */
+const chr=bld({x:760,z:2150,lit:.4,name:'chrysler'});
+tier(chr,40,40,0,190,{col:'#2d3240'});tier(chr,30,30,190,220,{col:'#3b4152'});
+for(let i=0;i<6;i++){const s=26-i*4;tier(chr,s,s,220+i*10,230+i*10,{emit:i%2?'#e9eef7':'#cfd6e3',win:false});}
+chr.spire={x:760,z:2150,y0:280,y1:319,glow:'#e9eef7'};
+
+const park=bld({x:880,z:2350,lit:.28});tier(park,28,28,0,426,{col:'#1c2a3c'});
+const vand=bld({x:690,z:2240,glass:true,lit:.3});tier(vand,56,44,0,300,{col:'#2e5076',taper:.8});tier(vand,24,20,300,427,{col:'#3a628c',taper:.55});
+const cpt=bld({x:420,z:2600,glass:true,lit:.25});tier(cpt,34,34,0,472,{col:'#263f5e'});
+
+/* land the city sits on */
+const LAND=[
+  [[-560,-80],[420,-120],[700,500],[1250,1300],[1250,2950],[-620,2950],[-600,900]],   // Manhattan
+  [[-1650,80],[-760,40],[-700,1300],[-1650,1300]],                                   // Jersey City
+  [[1200,250],[2300,200],[2300,1700],[1300,1700]],                                  // Brooklyn
+];
+
+/* Brooklyn Bridge */
+const BRIDGE={a:[640,0,760],t1:[720,0,800],t2:[1120,0,900],b:[1210,0,930],deck:40,tower:84};
+
+/* ---------- precompute windows ---------- */
+const FLOOR=11, BAY=9;
+prisms.forEach(p=>{
+  if(!p.win){p.wins=null;return;}
+  const lit=p.b.lit, wins=[];
+  const sides=p.kind==='wtc'?[]:[0,1,2,3];
+  sides.forEach(s=>{
+    const len=(s%2===0?p.w:p.d), cols=Math.max(1,Math.floor(len/BAY)), rows=Math.max(1,Math.floor((p.y1-p.y0)/FLOOR));
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+      if(rnd()<lit){wins.push({s,u:(c+.5)/cols,y:p.y0+(r+.55)*(p.y1-p.y0)/rows,warm:rnd()<.78,a:rr(.45,1),tw:rnd()<.04?rr(.3,1.2):0});}
+    }
+  });
+  if(p.kind==='wtc'){ // a few lit floors on One WTC
+    for(let i=0;i<70;i++)wins.push({s:(rnd()*4)|0,u:rr(.15,.85),y:rr(p.y0+10,p.y1-30),warm:false,a:rr(.3,.8),tw:0,wtc:true});
+  }
+  p.wins=wins;
+});
+
+/* ---------- camera ---------- */
+const cam={x:0,y:50,z:-1150,yaw:0,pitch:0};
+let pointerX=0,pointerY=0,px=0,py=0;
+function setCam(t){
+  const k=reduce?0:1;
+  cam.x=Math.sin(t*.045)*200*k + px*110;
+  cam.z=-1150+Math.sin(t*.031)*110*k;
+  cam.y=50+Math.sin(t*.05)*10*k - py*16;
+  cam.yaw=Math.sin(t*.045)*.05*k + px*.04 + (mobile?0:-.02);
+  cam.pitch=-.005 + py*.015;
+  cyaw=Math.cos(cam.yaw);syaw=Math.sin(cam.yaw);cp=Math.cos(cam.pitch);sp=Math.sin(cam.pitch);
+}
+let cyaw=1,syaw=0,cp=1,sp=0;
+/* world -> screen. returns [sx,sy,depth] or null */
+function P(x,y,z){
+  let dx=x-cam.x,dy=y-cam.y,dz=z-cam.z;
+  let rx=dx*cyaw-dz*syaw, rz=dx*syaw+dz*cyaw;
+  let ry=dy*cp-rz*sp; rz=dy*sp+rz*cp;
+  if(rz<5)return null;
+  return [CX+rx*F/rz, CY-ry*F/rz, rz];
+}
+
+/* ---------- colour helpers ---------- */
+function hex(c){const n=parseInt(c.slice(1),16);return[n>>16,n>>8&255,n&255];}
+const HAZE=hex('#3c4f78');
+function mix(c,k,l){ // colour c, haze amount k, light l
+  const a=hex(c);return 'rgb('+((a[0]*l)*(1-k)+HAZE[0]*k|0)+','+((a[1]*l)*(1-k)+HAZE[1]*k|0)+','+((a[2]*l)*(1-k)+HAZE[2]*k|0)+')';
+}
+const LIGHT=(()=>{const v=[-.55,.55,-.62],m=Math.hypot(...v);return v.map(x=>x/m);})();
+
+/* faces of one prism in world space: array of {pts:[[x,y,z]...], n:[nx,ny,nz], side} */
+function faces(p){
+  const out=[];
+  if(p.kind==='wtc'){
+    const hw=p.w/2,B=[[p.x-hw,p.z-hw],[p.x+hw,p.z-hw],[p.x+hw,p.z+hw],[p.x-hw,p.z+hw]];
+    const r=hw*.72,T=[[p.x,p.z-r*1.41],[p.x+r*1.41,p.z],[p.x,p.z+r*1.41],[p.x-r*1.41,p.z]];
+    for(let i=0;i<4;i++){const j=(i+1)%4;
+      out.push(tri([B[i][0],p.y0,B[i][1]],[B[j][0],p.y0,B[j][1]],[T[i][0],p.y1,T[i][1]],i));
+      out.push(tri([T[i][0],p.y1,T[i][1]],[B[j][0],p.y0,B[j][1]],[T[j][0],p.y1,T[j][1]],i));
+    }
+    out.push({pts:T.map(t=>[t[0],p.y1,t[1]]),n:[0,1,0],top:true});
+    return out;
+  }
+  const hw=p.w/2,hd=p.d/2,tw=hw*p.taper,td=hd*p.taper;
+  const B=[[p.x-hw,p.z-hd],[p.x+hw,p.z-hd],[p.x+hw,p.z+hd],[p.x-hw,p.z+hd]];
+  const T=[[p.x-tw,p.z-td],[p.x+tw,p.z-td],[p.x+tw,p.z+td],[p.x-tw,p.z+td]];
+  for(let i=0;i<4;i++){const j=(i+1)%4;
+    const f={pts:[[B[i][0],p.y0,B[i][1]],[B[j][0],p.y0,B[j][1]],[T[j][0],p.y1,T[j][1]],[T[i][0],p.y1,T[i][1]]],side:i};
+    f.n=normal(f.pts);out.push(f);}
+  out.push({pts:T.map(t=>[t[0],p.y1,t[1]]),n:[0,1,0],top:true});
+  return out;
+}
+function tri(a,b,c,side){const f={pts:[a,b,c],side};f.n=normal(f.pts);return f;}
+function normal(q){const a=q[0],b=q[1],c=q[2];const u=[b[0]-a[0],b[1]-a[1],b[2]-a[2]],v=[c[0]-a[0],c[1]-a[1],c[2]-a[2]];
+  let n=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]];const m=Math.hypot(...n)||1;n=n.map(x=>x/m);
+  /* make it point outward (away from the prism centre) */
+  return n;}
+prisms.forEach(p=>{p.faces=faces(p);
+  p.faces.forEach(f=>{if(f.top)return;const c=f.pts.reduce((s,q)=>[s[0]+q[0],s[1]+q[1],s[2]+q[2]],[0,0,0]).map(v=>v/f.pts.length);
+    const out=[c[0]-p.x,0,c[2]-p.z];if(out[0]*f.n[0]+out[2]*f.n[2]<0)f.n=f.n.map(v=>-v);});});
+
+/* ---------- drawing ---------- */
+function poly(pts){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.closePath();}
+function hazeK(d){return Math.min(.78,Math.max(0,(d-700)/3600));}
+
+function drawPrism(p,t,mirror){
+  const sgn=mirror?-1:1;
+  const fs=[];
+  for(const f of p.faces){
+    const c=f.pts[0];
+    const vx=cam.x-c[0],vy=cam.y-c[1]*sgn,vz=cam.z-c[2];
+    const ny=f.n[1]*sgn;
+    if(f.n[0]*vx+ny*vy+f.n[2]*vz<=0)continue;
+    const sp=[];let dsum=0,ok=true;
+    for(const q of f.pts){const s=P(q[0],q[1]*sgn,q[2]);if(!s){ok=false;break;}sp.push(s);dsum+=s[2];}
+    if(!ok)continue;
+    fs.push({f,sp,d:dsum/sp.length});
+  }
+  fs.sort((a,b)=>b.d-a.d);
+  for(const o of fs){
+    const f=o.f,k=hazeK(o.d);
+    const diff=Math.max(0,f.n[0]*LIGHT[0]+f.n[1]*LIGHT[1]+f.n[2]*LIGHT[2]);
+    let l=f.top?.9:.62+diff*.75;
+    if(p.emit){ctx.fillStyle=mix(p.emit,k*.5,f.top?.55:.7+diff*.4);}
+    else if(p.b.glass&&!mirror){
+      const ys=o.sp.map(s=>s[1]),y0=Math.min(...ys),y1=Math.max(...ys);
+      const g=ctx.createLinearGradient(0,y0,0,y1);
+      g.addColorStop(0,mix('#6d8db3',k,l*.85));g.addColorStop(.55,mix(p.col||'#24496f',k,l));g.addColorStop(1,mix('#0d1c30',k,1));
+      ctx.fillStyle=g;
+    } else ctx.fillStyle=mix(p.col||'#18304a',k,l);
+    poly(o.sp);ctx.fill();
+    if(!mirror&&!f.top&&o.sp.length>=3&&!p.emit){ctx.strokeStyle='rgba(0,0,0,.18)';ctx.lineWidth=.6;ctx.stroke();}
+    if(!mirror&&f.side!=null&&p.wins)drawWindows(p,f,o.d,k,t);
+  }
+}
+function drawWindows(p,f,depth,k,t){
+  const side=f.side, hw=p.w/2, hd=p.d/2;
+  const sz=F/depth; if(sz<.12)return;
+  const ww=Math.max(.7,4.2*sz), wh=Math.max(.7,5.2*sz);
+  for(const w of p.wins){
+    if(w.s!==side)continue;
+    let x,z;
+    if(p.kind==='wtc'){ // place on the triangular faces roughly
+      const frac=(w.y-p.y0)/(p.y1-p.y0),r=hw*(1-frac*.28);
+      const a=[[0,-1],[1,0],[0,1],[-1,0]][side];const b=[[1,0],[0,1],[-1,0],[0,-1]][side];
+      x=p.x+a[0]*r*(1-frac*.3)+b[0]*(w.u-.5)*r*1.4;z=p.z+a[1]*r*(1-frac*.3)+b[1]*(w.u-.5)*r*1.4;
+    } else {
+      const tf=1-(1-p.taper)*(w.y-p.y0)/(p.y1-p.y0), u=(w.u-.5);
+      if(side===0){x=p.x+u*p.w*tf;z=p.z-hd*tf-.5;}
+      else if(side===1){x=p.x+hw*tf+.5;z=p.z+u*p.d*tf;}
+      else if(side===2){x=p.x-u*p.w*tf;z=p.z+hd*tf+.5;}
+      else {x=p.x-hw*tf-.5;z=p.z-u*p.d*tf;}
+    }
+    const s=P(x,w.y,z);if(!s)continue;
+    let a=w.a*(1-k*.7);if(w.tw)a*=.55+.45*Math.sin(t*w.tw+w.u*9);
+    ctx.globalAlpha=a;
+    ctx.fillStyle=w.wtc?'#cfe6ff':(w.warm?'#ffd78a':'#e6f0ff');
+    ctx.fillRect(s[0]-ww/2,s[1]-wh/2,ww,wh);
+  }
+  ctx.globalAlpha=1;
+}
+function drawSpire(b,mirror){
+  const s=b.spire;if(!s)return;const sg=mirror?-1:1;
+  const a=P(s.x,s.y0*sg,s.z),c=P(s.x,s.y1*sg,s.z);if(!a||!c)return;
+  ctx.strokeStyle=mirror?'rgba(200,215,235,.25)':'#c9d6e6';ctx.lineWidth=Math.max(1,2.4*F/a[2]);
+  ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(c[0],c[1]);ctx.stroke();
+  if(!mirror){const r=Math.max(2,9*F/c[2]);const g=ctx.createRadialGradient(c[0],c[1],0,c[0],c[1],r*3);
+    g.addColorStop(0,s.glow||'#ff5a5a');g.addColorStop(1,'rgba(255,90,90,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(c[0],c[1],r*3,0,7);ctx.fill();}
+}
+
+/* sky, stars, fireworks */
+let stars=[],bursts=[];
+function drawSky(t){
+  const hz=CY;
+  const g=ctx.createLinearGradient(0,0,0,hz);
+  g.addColorStop(0,'#020b19');g.addColorStop(.42,'#08244a');g.addColorStop(.7,'#18447a');g.addColorStop(.86,'#7c3d5d');g.addColorStop(.95,'#d9733f');g.addColorStop(1,'#f2b25a');
+  ctx.fillStyle=g;ctx.fillRect(0,0,W,hz+1);
+  for(const s of stars){ctx.globalAlpha=.3+.5*Math.abs(Math.sin(t*.7+s.p));ctx.fillStyle='#fff';ctx.fillRect(s.x,s.y*hz,s.r,s.r);}
+  ctx.globalAlpha=1;
+  /* glow over the city */
+  const cg=ctx.createRadialGradient(CX,hz,0,CX,hz,W*.7);cg.addColorStop(0,'rgba(255,170,90,.28)');cg.addColorStop(1,'rgba(255,170,90,0)');
+  ctx.fillStyle=cg;ctx.fillRect(0,0,W,hz);
+}
+function launch(){
+  const cols=[['#d51b2f','#ffd1d6'],['#ffffff','#e8f0ff'],['#2f6bff','#dce8ff'],['#f5d066','#fff3c4'],['#1fa34a','#d9ffe4'],['#ffd21f','#fff6c2'],['#75aadb','#e6f3ff']];
+  const c=cols[(rnd()*cols.length)|0], at=rnd()<.5?[rr(-300,300),rr(420,600),rr(300,800)]:[rr(400,1000),rr(450,620),rr(1700,2500)];
+  const parts=[];for(let i=0;i<90;i++){const u=rr(-1,1),th=rr(0,6.283),r=Math.sqrt(1-u*u),s=rr(26,34);parts.push({x:at[0],y:at[1],z:at[2],vx:r*Math.cos(th)*s,vy:u*s,vz:r*Math.sin(th)*s,life:1});}
+  bursts.push({parts,c});
+}
+function drawFireworks(dt){
+  for(let i=bursts.length-1;i>=0;i--){const b=bursts[i];let alive=false;
+    for(const p of b.parts){if(p.life<=0)continue;alive=true;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.vy-=9*dt;p.vx*=.985;p.vy*=.985;p.vz*=.985;p.life-=dt*.5;
+      const s=P(p.x,p.y,p.z);if(!s)continue;ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.life>.55?b.c[1]:b.c[0];
+      const r=Math.max(1.2,5*F/s[2]);ctx.beginPath();ctx.arc(s[0],s[1],r,0,7);ctx.fill();}
+    if(!alive)bursts.splice(i,1);}
+  ctx.globalAlpha=1;
+}
+
+/* water + land */
+function drawWater(t){
+  const g=ctx.createLinearGradient(0,CY,0,H);g.addColorStop(0,'#3a3f63');g.addColorStop(.08,'#1b2c4f');g.addColorStop(1,'#030d1c');
+  ctx.fillStyle=g;ctx.fillRect(0,CY,W,H-CY);
+}
+function drawLand(){
+  for(const L of LAND){const sp=[];for(const q of L){const s=P(q[0],1.5,q[1]);if(!s)return;sp.push(s);}ctx.fillStyle='#07111f';poly(sp);ctx.fill();
+    ctx.strokeStyle='rgba(255,200,120,.18)';ctx.lineWidth=1;ctx.stroke();}
+}
+function drawWaterShimmer(t){
+  ctx.globalCompositeOperation='lighter';
+  for(const b of buildings){if(b.prisms[0].y1<60&&!b.name)continue;
+    const s=P(b.x,0,b.z-40);if(!s||s[1]<CY)continue;
+    const len=Math.min(H-s[1],(b.prisms[b.prisms.length-1].y1)*F/s[2]*.9), w=Math.max(1,18*F/s[2]);
+    const col=b.name==='esb'?'rgba(213,27,47,':'rgba(255,200,120,';
+    for(let y=0;y<len;y+=3){const a=.10*(1-y/len)*(b.lit+.2);
+      const off=Math.sin(t*1.7+y*.22+b.x)*w*.6;ctx.fillStyle=col+a.toFixed(3)+')';ctx.fillRect(s[0]-w/2+off,s[1]+y,w,2);}
+  }
+  ctx.globalCompositeOperation='source-over';
+}
+
+/* Brooklyn Bridge */
+function drawBridge(){
+  const B=BRIDGE, D=B.deck, T=B.tower;
+  const lerp=(a,b,u)=>[a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u,a[2]+(b[2]-a[2])*u];
+  // deck
+  const d0=P(B.a[0],D,B.a[2]),d1=P(B.b[0],D,B.b[2]);if(!d0||!d1)return;
+  ctx.strokeStyle='#0b1626';ctx.lineWidth=Math.max(2,10*F/d0[2]);ctx.beginPath();ctx.moveTo(d0[0],d0[1]);ctx.lineTo(d1[0],d1[1]);ctx.stroke();
+  // deck lights
+  for(let u=0;u<=1;u+=.02){const q=lerp([B.a[0],D,B.a[2]],[B.b[0],D,B.b[2]],u),s=P(...q);if(s){ctx.fillStyle='#ffd78a';ctx.fillRect(s[0]-1,s[1]-1.5,2,2);}}
+  // cables: anchor -> tower -> sag -> tower -> anchor, two sides
+  for(const off of [-8,8]){
+    ctx.strokeStyle='rgba(220,230,245,.7)';ctx.lineWidth=1;ctx.beginPath();
+    const pts=[];
+    for(let u=0;u<=1;u+=.02){let q;
+      if(u<.15){q=lerp([B.a[0],D,B.a[2]],[B.t1[0],T,B.t1[2]],u/.15);}
+      else if(u>.85){q=lerp([B.t2[0],T,B.t2[2]],[B.b[0],D,B.b[2]],(u-.85)/.15);}
+      else{const v=(u-.15)/.7;q=lerp([B.t1[0],T,B.t1[2]],[B.t2[0],T,B.t2[2]],v);q[1]=T-(T-D-6)*4*v*(1-v);}
+      q[2]+=off;const s=P(...q);if(s)pts.push(s);}
+    pts.forEach((s,i)=>i?ctx.lineTo(s[0],s[1]):ctx.moveTo(s[0],s[1]));ctx.stroke();
+    ctx.fillStyle='#fff2cf';pts.forEach((s,i)=>{if(i%3===0)ctx.fillRect(s[0]-.8,s[1]-.8,1.6,1.6);});
+  }
+  // towers (stone with two gothic arches)
+  for(const tw of [B.t1,B.t2]){
+    const p={b:{glass:false,lit:0},x:tw[0],z:tw[2],w:18,d:30,y0:0,y1:T,taper:1,col:'#6b6a72',win:false};
+    p.faces=faces(p);p.faces.forEach(f=>{if(f.top)return;const c=f.pts[0];const out=[c[0]-p.x,0,c[2]-p.z];if(out[0]*f.n[0]+out[2]*f.n[2]<0)f.n=f.n.map(v=>-v);});
+    drawPrism(p,0,false);
+    for(const dz of [-7,7]){const a=P(tw[0]-9.5,T*.55,tw[2]+dz),b=P(tw[0]-9.5,T*.85,tw[2]+dz);if(a&&b){ctx.fillStyle='#1b2a44';const w=Math.max(1,6*F/a[2]);ctx.fillRect(a[0]-w/2,b[1],w,a[1]-b[1]);}}
+  }
+}
+
+/* Statue of Liberty: silhouette standing in 3D space, lit by spotlights */
+function drawLiberty(t){
+  const us=ROW[0];if(!us)return;
+  const tx0=us.sx*W, ty0=CY-us.poleTopPx;              /* torch = top of the US pole */
+  const u=(CY+4-ty0)/106;                              /* statue base sits on the horizon */
+  const x=tx0-11.2*u, y=ty0+106*u, h=100*u;
+  ctx.fillStyle='#0a1626';ctx.beginPath();ctx.ellipse(x,y+2*u,40*u,6*u,0,0,7);ctx.fill();
+  const g=ctx.createRadialGradient(x,y-h*.55,0,x,y-h*.55,h*.9);g.addColorStop(0,'rgba(120,220,190,.25)');g.addColorStop(1,'rgba(120,220,190,0)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y-h*.55,h*.9,0,7);ctx.fill();
+  ctx.save();ctx.translate(x,y);ctx.scale(u,u);
+  // pedestal
+  const pg=ctx.createLinearGradient(-18,0,18,0);pg.addColorStop(0,'#59606e');pg.addColorStop(.5,'#9aa2b0');pg.addColorStop(1,'#4a505c');
+  ctx.fillStyle='#3a4150';ctx.fillRect(-22,-12,44,12);ctx.fillStyle=pg;ctx.fillRect(-13,-50,26,38);ctx.fillRect(-16,-52,32,4);
+  ctx.fillStyle='rgba(255,220,150,.5)';for(let i=0;i<3;i++)ctx.fillRect(-8+i*7,-40,2.5,6);
+  // statue
+  const sg=ctx.createLinearGradient(-12,0,12,0);sg.addColorStop(0,'#2f7a6a');sg.addColorStop(.5,'#6fc2a8');sg.addColorStop(1,'#25594f');
+  ctx.fillStyle=sg;ctx.beginPath();
+  ctx.moveTo(-9,-52);ctx.lineTo(-7,-80);ctx.quadraticCurveTo(-6,-88,0,-89);ctx.quadraticCurveTo(6,-88,7,-80);ctx.lineTo(9,-52);ctx.closePath();ctx.fill();
+  ctx.beginPath();ctx.arc(0,-91.5,3.4,0,7);ctx.fill();
+  ctx.beginPath();ctx.moveTo(4,-84);ctx.lineTo(10,-104);ctx.lineTo(12.5,-103);ctx.lineTo(7,-82);ctx.closePath();ctx.fill();   // raised arm
+  ctx.fillRect(-11,-80,5,9);                                                                                               // tablet
+  ctx.strokeStyle='#6fc2a8';ctx.lineWidth=.9;for(let i=0;i<7;i++){const a=-Math.PI/2+(i-3)*.32;ctx.beginPath();ctx.moveTo(Math.cos(a)*3.5,-93+Math.sin(a)*3.5);ctx.lineTo(Math.cos(a)*7,-93+Math.sin(a)*7);ctx.stroke();}
+  ctx.restore();
+  const tx=x+11.2*u,ty=y-106*u,r=(6+Math.sin(t*3.1)*1.2)*u*1.15;
+  const tg=ctx.createRadialGradient(tx,ty,0,tx,ty,r*4);tg.addColorStop(0,'#fff3c4');tg.addColorStop(.3,'rgba(245,208,102,.9)');tg.addColorStop(1,'rgba(245,167,58,0)');
+  ctx.fillStyle=tg;ctx.beginPath();ctx.arc(tx,ty,r*4,0,7);ctx.fill();
+}
+
+/* waving American flag on the pier */
+function drawFlag(t){
+  if(mobile)return;const base=P(140,0,-700),top=P(140,46,-700);if(!base||!top)return;
+  const ph=base[1]-top[1],x=base[0];
+  const pg=ctx.createLinearGradient(x-3,0,x+3,0);pg.addColorStop(0,'#7a5310');pg.addColorStop(.5,'#f5d066');pg.addColorStop(1,'#7a5310');
+  ctx.fillStyle=pg;ctx.fillRect(x-Math.max(1.5,ph*.012),top[1],Math.max(3,ph*.024),ph);
+  ctx.beginPath();ctx.arc(x,top[1]-3,Math.max(3,ph*.03),0,7);ctx.fillStyle='#f5d066';ctx.fill();
+  const fw=ph*.62,fh=fw*.53,stripeH=fh/13,cw=fw*.4,ch=stripeH*7,step=Math.max(1.5,fw/70),amp=fh*.09;
+  const sh=(hex,l)=>{const a=hexA(hex);return 'rgb('+Math.min(255,a[0]*l|0)+','+Math.min(255,a[1]*l|0)+','+Math.min(255,a[2]*l|0)+')';};
+  for(let xx=0;xx<fw;xx+=step){const k=xx/fw,p=k*6.5-t*2.6,off=Math.sin(p)*amp*k,l=1+Math.cos(p)*k*.22;
+    for(let s=0;s<13;s++){const c=(xx<cw&&s<7)?'#0a3161':(s%2?'#f7f7f7':'#c8102e');ctx.fillStyle=sh(c,l);ctx.fillRect(x+xx,top[1]+4+off+s*stripeH,step+.6,stripeH+.6);}}
+  ctx.fillStyle='#fff';
+  for(let r=0;r<5;r++)for(let c=0;c<(r%2?5:6);c++){const sx=(c+(r%2?1:.5))*cw/6,k=sx/fw,off=Math.sin(k*6.5-t*2.6)*amp*k;ctx.fillRect(x+sx-.6,top[1]+4+off+(r+.6)*ch/5.4,1.3,1.3);}
+}
+const EYE=50;   /* fixed eye height for the foreground row */
+function drawPoleFlag(f,t){
+  const sc=F/f.d, x=f.sx*W, baseY=CY+EYE*sc;
+  const topY=f.us?CY-f.poleTopPx:CY+(EYE-f.pole)*sc;
+  const ph=baseY-topY;
+  const pw=Math.max(1.2,(f.us?.9:.6)*sc);
+  const pg=ctx.createLinearGradient(x-pw,0,x+pw,0);pg.addColorStop(0,'#8a6418');pg.addColorStop(.5,'#f5d066');pg.addColorStop(1,'#8a6418');
+  ctx.fillStyle=pg;ctx.fillRect(x-pw/2,topY,pw,ph);
+  if(!f.us){ctx.fillStyle='#f5d066';ctx.beginPath();ctx.arc(x,topY-pw,Math.max(1.5,pw*1.3),0,7);ctx.fill();}
+  if(f.img.complete&&f.img.naturalWidth){
+    const fw=f.fw*sc, fh=fw*2/3, n=Math.max(6,Math.min(24,fw/4|0)), sw=300/n, dw=fw/n, amp=fh*.10;
+    const y0=f.us?topY+Math.max(10,ph*.06):topY+pw*.5;    /* the US flag flies just under the torch */
+    const dir=f.dir||1;
+    for(let i=0;i<n;i++){const k=i/n, p=k*6.2-t*2.4+f.ph, off=Math.sin(p)*amp*k;
+      const srcX=dir>0?i*sw:(n-1-i)*sw, dx=dir>0?x+i*dw:x-(i+1)*dw;   /* left-side flags fly to the left, design unchanged */
+      ctx.drawImage(f.img,srcX,0,sw,200,dx,y0+off,dw+.6,fh);
+      const shade=Math.cos(p)*k*.22;
+      ctx.fillStyle=shade<0?'rgba(0,0,0,'+(-shade).toFixed(3)+')':'rgba(255,255,255,'+(shade*.6).toFixed(3)+')';
+      ctx.fillRect(dx,y0+off,dw+.6,fh);}
+  }
+  const r=Math.max(4,6*sc),g=ctx.createRadialGradient(x,baseY,0,x,baseY,r);g.addColorStop(0,'rgba(255,214,140,.55)');g.addColorStop(1,'rgba(255,214,140,0)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,baseY,r,0,7);ctx.fill();
+  /* shimmer of the pole light on the water */
+  ctx.fillStyle='rgba(255,214,140,.10)';for(let y=4;y<Math.min(60*sc,H-baseY);y+=3)ctx.fillRect(x-1+Math.sin(t*2+y*.3+f.sx*40)*1.5,baseY+y,2,1.5);
+}
+function drawPromenade(){
+  if(ROW.length<2)return;
+  /* a dark waterfront walkway under the flag row */
+  const a=ROW[1],b=ROW[ROW.length-1],us=ROW[0];
+  const pts=[[us.x-30,us.z-25],[a.x+25,a.z-20],[b.x+25,b.z+15],[b.x-25,b.z+15],[a.x-25,a.z+20],[us.x-30,us.z+25]];
+  const sp=[];for(const q of pts){const s=P(q[0],1,q[1]);if(!s)return;sp.push(s);}
+  ctx.fillStyle='#08121f';poly(sp);ctx.fill();ctx.strokeStyle='rgba(255,210,140,.35)';ctx.lineWidth=1;ctx.stroke();
+}
+function hexA(c){const n=parseInt(c.slice(1),16);return[n>>16,n>>8&255,n&255];}
+
+/* ---------- frame ---------- */
+function size(){
+  DPR=Math.min(mobileQ()?1.5:2,devicePixelRatio||1);W=hero.clientWidth;H=hero.clientHeight;mobile=W<760;
+  cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+  F=mobile?Math.max(380,Math.min(W*1.35,560)):Math.min(Math.max(W*.78,760),1150);
+  CX=mobile?W*.5:W*.64; CY=mobile?H*.80:H*.74;
+  layoutFlags();
+  seed=99;stars=Array.from({length:Math.round(W*H/4200)},()=>({x:rnd()*W,y:rnd()*.92,r:rnd()<.85?1:1.6,p:rnd()*6.28}));
+}
+/* order of the flags, from the American flag outward */
+const LEFT_ORDER =['Puerto Rico','Colombia','Cuba','Panama','Costa Rica','Nicaragua','Honduras','El Salvador','Guatemala','Haiti','Mexico'];
+const RIGHT_ORDER=['Dominican Republic','Venezuela','Ecuador','Peru','Bolivia','Chile','Argentina','Uruguay','Paraguay','Brazil','Spain'];
+function layoutFlags(){
+  /* Flags stand in the foreground, fixed to the screen so the row stays centered while the city drifts behind it.
+     Desktop: one straight row across the bottom. Phones: a centered V. The American flag is in the middle, tallest,
+     and the Statue of Liberty stands behind it so her torch sits on top of its pole.
+     Flags on the left fly to the left and flags on the right fly to the right, so the row mirrors around the US flag. */
+  ROW=[];
+  const img=n=>NATION_IMGS.find(o=>o.name===n).img;
+  const usD=mobile?230:330, usTop=mobile?118:150;
+  ROW.push({img:US_IMG,us:true,sx:.5,d:usD,poleTopPx:usTop,fw:mobile?22:26,ph:0,dir:1});
+  const FW=18;                                   /* flag width in metres; screen size comes from its depth */
+  if(!mobile){
+    const g=W*.016, m=W*.012, slot=(W/2-g-m)/10.92, fwPx=slot*.92, d=FW*F/fwPx;
+    for(let j=0;j<11;j++){
+      ROW.push({img:img(LEFT_ORDER[j]), name:LEFT_ORDER[j], sx:(W/2-g-j*slot)/W, d, pole:40, fw:FW, ph:j*.7, dir:-1});
+      ROW.push({img:img(RIGHT_ORDER[j]),name:RIGHT_ORDER[j],sx:(W/2+g+j*slot)/W, d, pole:40, fw:FW, ph:j*.7+.35, dir:1});
+    }
+  } else {
+    /* V: the flags nearest the US flag are closest (biggest), stepping back toward the edges */
+    const FWm=22, ds=[], xs=[];let acc=0;
+    for(let j=0;j<11;j++){const d=215+62*j;ds.push(d);const fw=FWm*F/d;xs.push(acc);acc+=fw*.62;}
+    const lastFw=FWm*F/ds[10], room=W/2-8-6, k=Math.min(1.25,(room-lastFw)/xs[10]);
+    for(let j=0;j<11;j++){const off=8+xs[j]*k;
+      ROW.push({img:img(LEFT_ORDER[j]), name:LEFT_ORDER[j], sx:(W/2-off)/W, d:ds[j], pole:40, fw:FWm, ph:j*.7, dir:-1});
+      ROW.push({img:img(RIGHT_ORDER[j]),name:RIGHT_ORDER[j],sx:(W/2+off)/W, d:ds[j], pole:40, fw:FWm, ph:j*.7+.35, dir:1});
+    }
+  }
+}
+function mobileQ(){return (hero.clientWidth||innerWidth)<760;}
+let t=0,last=0,visible=true,next=0;
+function render(dt){
+  setCam(t);
+  ctx.clearRect(0,0,W,H);
+  drawSky(t);
+  drawFireworks(dt);
+  drawWater(t);
+  /* reflections: mirror the city in the water, faint */
+  const order=buildings.map(b=>{const dx=b.x-cam.x,dz=b.z-cam.z;return[b,dx*dx+dz*dz];}).sort((a,b)=>b[1]-a[1]).map(a=>a[0]);
+  ctx.save();ctx.beginPath();ctx.rect(0,CY,W,H-CY);ctx.clip();ctx.globalAlpha=.22;
+  for(const b of order){for(const p of b.prisms)drawPrism(p,t,true);}
+  ctx.restore();ctx.globalAlpha=1;
+  drawWaterShimmer(t);
+  drawLand();
+  /* city, far to near; bridge slots in by distance */
+  const bd=(()=>{const dx=BRIDGE.t1[0]-cam.x,dz=BRIDGE.t1[2]-cam.z;return dx*dx+dz*dz;})();let bridgeDone=false;
+  for(const b of order){const dx=b.x-cam.x,dz=b.z-cam.z;
+    if(!bridgeDone&&dx*dx+dz*dz<bd){drawBridge();bridgeDone=true;}
+    for(const p of b.prisms)drawPrism(p,t,false);drawSpire(b,false);}
+  if(!bridgeDone)drawBridge();
+  drawLiberty(t);
+  ROW.slice().sort((a,b)=>b.d-a.d).forEach(f=>drawPoleFlag(f,t));
+  /* soft haze at the horizon line */
+  const hg=ctx.createLinearGradient(0,CY-30,0,CY+20);hg.addColorStop(0,'rgba(242,178,90,0)');hg.addColorStop(.6,'rgba(242,178,90,.10)');hg.addColorStop(1,'rgba(242,178,90,0)');
+  ctx.fillStyle=hg;ctx.fillRect(0,CY-30,W,50);
+}
+function frame(now){
+  if(!visible){last=now;requestAnimationFrame(frame);return;}
+  const dt=Math.min(.05,(now-last)/1000||.016);last=now;t+=dt;
+  px+=(pointerX-px)*.04;py+=(pointerY-py)*.04;
+  if(Math.random()<dt*.5)launch();
+  if(mobile&&now<next){requestAnimationFrame(frame);return;}   // phones: about 30 frames a second
+  next=now+30;
+  render(dt);
+  requestAnimationFrame(frame);
+}
+size();
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{size();if(reduce)render(0);},120);});
+hero.addEventListener('pointermove',e=>{const r=hero.getBoundingClientRect();pointerX=(e.clientX-r.left)/r.width-.5;pointerY=(e.clientY-r.top)/r.height-.5;});
+hero.addEventListener('pointerleave',()=>{pointerX=0;pointerY=0;});
+if('IntersectionObserver' in window)new IntersectionObserver(es=>{visible=es[0].isIntersecting;}).observe(hero);
+document.addEventListener('visibilitychange',()=>{visible=!document.hidden;});
+if(reduce){t=8;for(let i=0;i<3;i++)launch();for(let i=0;i<25;i++)drawFireworksStep();render(0);}
+else{launch();requestAnimationFrame(frame);}
+function drawFireworksStep(){for(const b of bursts)for(const p of b.parts){p.x+=p.vx*.04;p.y+=p.vy*.04;p.z+=p.vz*.04;p.vy-=9*.04;p.life-=.02;}}
+})();
+</script>
+<script>
+/* site helper: links to other parts of the site open in the main window; pop-ups open where the visitor is looking */
+(function(){
+  if(window.parent===window) return;
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href]'); if(!a||e.defaultPrevented) return;
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;
+    var u; try{u=new URL(a.getAttribute('href'),location.href);}catch(err){return;}
+    if(u.origin!==location.origin) return;            /* Stripe, socials, email: leave alone */
+    e.preventDefault(); e.stopPropagation(); parent.postMessage({lrc:'go',href:u.href},'*');
+  },true);
+  addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
+    var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
+})();
+</script></body></html>

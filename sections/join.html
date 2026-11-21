@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,600..900&display=swap">
+<style>
+:root{--navy:#052a4b;--navy2:#0b3d6b;--deep:#021a30;--gold:#d6a844;--gold-hi:#f5d066;--gold-lo:#b68323;--red:#d51b2f;--cream:#fffaf1;--ink:#0d2238}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{margin:0;max-width:100%;overflow-x:hidden;min-height:100%}
+body{background:#0a3a6e;color:#fff;font-family:"Hepta Slab",Georgia,serif;display:flex;flex-direction:column}
+
+.wrap{flex:0 0 auto;width:100%;position:relative;padding:clamp(40px,6vw,72px) clamp(14px,4vw,40px) clamp(44px,6vw,76px);
+  background:radial-gradient(90% 60% at 50% 0%,rgba(245,208,102,.18),transparent 60%),linear-gradient(180deg,#1557a0 0%,#0d4683 45%,#0a3a6e 100%)}
+.wrap::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background-image:radial-gradient(rgba(255,255,255,.08) 1px,transparent 1.3px);background-size:16px 16px}
+.inner{position:relative;max-width:1040px;margin:0 auto}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold-hi);outline-offset:3px}
+
+/* steps */
+.steps{display:flex;justify-content:center;gap:clamp(6px,1.6vw,14px);list-style:none;margin:0 auto clamp(22px,3vw,30px);padding:0;
+  font-family:"Archivo",sans-serif;font-weight:800;font-stretch:85%;text-transform:uppercase;letter-spacing:.12em;font-size:clamp(10px,1.2vw,12.5px)}
+.steps li{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.6);white-space:nowrap}
+.steps b{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.35);font-size:12px;letter-spacing:0}
+.steps li.on{color:var(--gold-hi)} .steps li.on b{background:var(--gold);border-color:var(--gold-hi);color:var(--deep)}
+.steps li.done b{background:#fff;border-color:#fff;color:var(--deep)}
+.steps li+li::before{content:"";width:clamp(12px,3vw,34px);height:2px;background:rgba(255,255,255,.3);margin-right:clamp(0px,.6vw,6px)}
+
+/* heading */
+.head{text-align:center;margin-bottom:clamp(22px,3vw,34px)}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-family:"Archivo",sans-serif;font-weight:800;letter-spacing:.3em;text-transform:uppercase;font-size:13px;color:var(--gold-hi)}
+.eyebrow::before,.eyebrow::after{content:"";width:28px;height:2px;background:var(--red)}
+h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stretch:78%;text-transform:uppercase;line-height:.95;letter-spacing:.01em;
+  font-size:clamp(42px,8vw,86px);color:#fff;
+  text-shadow:-2px -2px 0 var(--gold),2px -2px 0 var(--gold),-2px 2px 0 var(--gold),2px 2px 0 var(--gold),0 -2px 0 var(--gold),0 2px 0 var(--gold),-2px 0 0 var(--gold),2px 0 0 var(--gold),
+    0 4px 0 #c99a3a,0 5px 0 #a87a22,0 6px 0 #7a5310,0 14px 22px rgba(0,0,0,.45)}
+.sub{margin:0 auto;max-width:560px;font-style:italic;font-size:clamp(15px,1.8vw,18px);color:#e4ecf7;line-height:1.5}
+.rep{display:none;align-items:center;gap:10px;margin:16px auto 0;padding:8px 8px 8px 10px;border-radius:999px;background:rgba(2,26,48,.45);box-shadow:inset 0 0 0 1px rgba(245,208,102,.5);
+  font-family:"Archivo",sans-serif;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px;width:max-content;max-width:100%}
+.rep.show{display:flex}
+.rep .f{display:block;width:34px;border-radius:4px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.4)} .rep .f svg{display:block;width:100%;height:auto}
+.rep button{margin-left:4px;border:0;border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.12);color:#fff;font:inherit;font-size:11px;cursor:pointer}
+
+/* panel */
+.panel{background:var(--cream);color:var(--ink);border-radius:26px;padding:clamp(18px,3vw,34px);
+  box-shadow:0 0 0 2px rgba(214,168,68,.7),0 8px 0 0 #b68323,0 30px 60px -18px rgba(0,0,0,.6)}
+.lbl{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-family:"Archivo",sans-serif;font-weight:900;font-stretch:85%;text-transform:uppercase;letter-spacing:.14em;font-size:14px;color:var(--navy)}
+.lbl i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--navy);color:var(--gold-hi);font-style:normal;font-size:13px;letter-spacing:0}
+
+/* tiers */
+.tiers{min-width:0;min-inline-size:0;display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:clamp(10px,1.6vw,18px);border:0;margin:0 0 clamp(22px,3vw,30px);padding:0}
+.tier{position:relative;display:flex;flex-direction:column;min-width:0;cursor:pointer;border-radius:18px;background:#fff;padding:20px 18px 18px;
+  box-shadow:0 0 0 2px #e4d7bd,0 6px 0 #e4d7bd;transition:transform .2s,box-shadow .2s}
+.tier input{position:absolute;opacity:0;pointer-events:none}
+.tier:hover{transform:translateY(-3px)}
+.tier:has(input:checked){box-shadow:0 0 0 3px var(--gold),0 6px 0 var(--gold-lo),0 18px 30px -14px rgba(5,42,75,.5);background:linear-gradient(180deg,#fff,#fff7e4)}
+.tier:has(input:focus-visible){outline:3px solid var(--navy);outline-offset:4px}
+.tier .chk{position:absolute;top:14px;right:14px;width:24px;height:24px;border-radius:50%;border:2px solid #cdbf9f;display:grid;place-items:center;background:#fff}
+.tier:has(input:checked) .chk{background:var(--gold);border-color:var(--gold-lo)}
+.tier:has(input:checked) .chk::after{content:"";width:7px;height:12px;border:solid var(--deep);border-width:0 3px 3px 0;transform:translateY(-1px) rotate(45deg)}
+.tier h3{margin:0;padding-right:28px;font-family:"Archivo",sans-serif;font-weight:900;font-stretch:80%;text-transform:uppercase;letter-spacing:.04em;font-size:22px;color:var(--navy)}
+.tier .tag{margin:2px 0 12px;font-style:italic;font-size:13.5px;color:#b0402f}
+.price{display:flex;align-items:baseline;gap:4px;white-space:nowrap;font-family:"Archivo",sans-serif;color:var(--ink)}
+.price b{font-weight:900;font-stretch:80%;font-size:clamp(36px,3.6vw,44px);line-height:1}
+.price span{font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#5a6b80}
+.perks{flex:1;list-style:none;margin:12px 0 0;padding:0;font-size:14px;line-height:1.45;color:#33465c}
+.perks li{position:relative;padding-left:20px;margin-top:5px}
+.perks li::before{content:"★";position:absolute;left:0;top:0;color:var(--gold-lo);font-size:12px}
+
+/* per-card pay button */
+.pay{margin-top:16px;width:100%;white-space:nowrap;border:0;cursor:pointer;border-radius:999px;padding:13px 12px;font:900 13px "Archivo",sans-serif;font-stretch:85%;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--navy);background:#fff;box-shadow:inset 0 0 0 2px var(--navy),0 3px 0 #c9bb98;transition:transform .15s,background .15s}
+.pay:hover{transform:translateY(-2px)}
+.tier:has(input:checked) .pay{color:#fff;background:linear-gradient(180deg,#ec3346,var(--red) 55%,#b3121f);box-shadow:0 0 0 2px var(--gold),0 3px 0 2px #7a0d17}
+/* form */
+.fields{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+.reps{display:grid;grid-template-columns:repeat(auto-fill,minmax(82px,1fr));gap:10px;margin:0 0 6px}
+.rp{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 6px 7px;border:0;border-radius:12px;background:#fff;cursor:pointer;color:#33465c;
+  font:700 11.5px/1.15 "Archivo",sans-serif;font-stretch:88%;text-align:center;box-shadow:0 0 0 1.5px #e4d7bd;transition:transform .15s,box-shadow .15s}
+.rp .f{display:block;width:100%;aspect-ratio:3/2;border-radius:5px;overflow:hidden;box-shadow:0 2px 5px rgba(0,0,0,.25)}
+.rp .f svg{display:block;width:100%;height:100%}
+.rp .f.q{display:grid;place-items:center;background:linear-gradient(135deg,var(--navy),var(--navy2));color:var(--gold-hi);font-size:22px;font-weight:900}
+.rp:hover{transform:translateY(-2px)}
+.rp[aria-checked="true"]{background:#fff7e4;box-shadow:0 0 0 3px var(--gold),0 4px 0 var(--gold-lo);color:var(--navy)}
+
+.other{max-width:420px;margin:10px 0 0}
+.field label{display:block;margin:0 0 6px;font-family:"Archivo",sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:11.5px;color:#4a5b70}
+.field input,.field select{width:100%;height:50px;border-radius:12px;border:2px solid #dccfb2;background:#fff;color:var(--ink);padding:0 14px;font:16px "Hepta Slab",Georgia,serif;appearance:none;-webkit-appearance:none}
+.field select{background-image:linear-gradient(45deg,transparent 50%,#052a4b 50%),linear-gradient(135deg,#052a4b 50%,transparent 50%);background-position:calc(100% - 20px) 21px,calc(100% - 14px) 21px;background-size:6px 6px;background-repeat:no-repeat;padding-right:36px}
+.field input:focus,.field select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(214,168,68,.45)}
+.field.bad input,.field.bad select{border-color:var(--red)}
+.err{min-height:18px;margin:5px 0 0;font-size:12.5px;color:var(--red)}
+.agree{display:flex;align-items:flex-start;gap:10px;margin:6px 0 0;font-size:14px;line-height:1.45;color:#33465c;cursor:pointer}
+.agree input{flex:none;width:20px;height:20px;margin:1px 0 0;accent-color:var(--navy)}
+.agree.bad{color:var(--red)}
+
+.cta{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:22px;padding-top:22px;border-top:1px dashed #d6c7a5}
+.total{font-family:"Archivo",sans-serif}
+.total small{display:block;font-weight:800;text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#5a6b80}
+.total b{font-weight:900;font-stretch:80%;font-size:30px;color:var(--navy)}
+.total em{font-style:normal;font-weight:700;font-size:13px;color:#5a6b80;margin-left:4px}
+.go{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;border-radius:999px;padding:18px 30px;
+  font-family:"Archivo",sans-serif;font-weight:900;font-stretch:88%;letter-spacing:.14em;text-transform:uppercase;font-size:15px;color:#fff;
+  background:linear-gradient(180deg,#ec3346,var(--red) 55%,#b3121f);box-shadow:0 0 0 2px var(--gold),0 5px 0 2px #7a0d17,0 14px 24px -6px rgba(213,27,47,.55);transition:transform .2s}
+.go:hover{transform:translateY(-2px)} .go:active{transform:translateY(2px)}
+.go svg{width:18px;height:18px;fill:currentColor}
+.pay[aria-busy="true"]{opacity:.75;pointer-events:none}
+.secure{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin:10px 0 0;font-size:12.5px;color:#5a6b80}
+.secure svg{width:13px;height:13px;fill:#5a6b80}
+.note{margin:18px 0 0;font-size:12px;line-height:1.5;color:#6a7889;text-align:center}
+.soon{display:none;margin:14px 0 0;padding:12px 14px;border-radius:12px;background:#fff3d6;color:#6b4a0c;font-size:14px;line-height:1.5;text-align:center}
+.soon.show{display:block}
+.soon a{font-weight:700;color:var(--navy)}
+
+@media (min-width:861px) and (max-width:1100px){.tiers{grid-template-columns:repeat(min(var(--n),2),minmax(0,1fr))}}
+@media (max-width:860px){
+  .tiers{grid-template-columns:1fr;gap:12px}
+  .tier{padding:16px 16px 16px}
+  .tier .tag{margin-bottom:8px}
+  .tier .price b{font-size:34px}
+  .tier .perks{margin-top:8px}
+}
+@media (max-width:560px){
+  .steps li span{display:none}
+  .steps li.on span{display:inline}
+  .fields{grid-template-columns:1fr}
+  .reps{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .rp{font-size:10.5px;padding:6px 4px}
+  .cta{flex-direction:column;align-items:stretch;text-align:center}
+  .go{width:100%}
+  .secure{justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){.tier,.go{transition:none}.tier:hover,.go:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <div class="inner">
+  <ol class="steps" aria-label="Steps to join">
+    <li class="on"><b>1</b><span>Your info</span></li>
+    <li><b>2</b><span>Membership</span></li>
+    <li><b>3</b><span>Secure payment</span></li>
+  </ol>
+
+  <div class="head">
+    <span class="eyebrow">Membership</span>
+    <h1>Join the Club</h1>
+    <p class="sub">Proud Latinos. Proud Americans. Your seat at the table is waiting.</p>
+    <div class="rep" id="rep"><span class="f" id="repFlag"></span><span id="repText"></span><button type="button" id="repChange">Change</button></div>
+  </div>
+
+  <form class="panel" id="form" novalidate>
+    <p class="lbl"><i>1</i>Where are you representing?</p>
+    <div class="reps" id="reps" role="radiogroup" aria-label="Where are you representing?"></div>
+    <div class="field other" id="f-other" hidden><label for="otherIn">Which country are you representing?</label><input id="otherIn" maxlength="40" autocomplete="country-name" placeholder="Type your country"><p class="err" id="e-other"></p></div>
+    <p class="err" id="e-her"></p>
+
+    <p class="lbl" style="margin-top:14px"><i>2</i>Your info</p>
+    <div class="fields">
+      <div class="field" id="f-email"><label for="email">Email</label><input id="email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com"><p class="err" id="e-email"></p></div>
+      <div class="field" id="f-boro"><label for="boro">Borough</label>
+        <select id="boro"><option value="">Choose one</option><option value="BX">Bronx</option><option value="BK">Brooklyn</option><option value="MN">Manhattan</option><option value="QN">Queens</option><option value="SI">Staten Island</option><option value="OUT">Outside NYC</option></select><p class="err" id="e-boro"></p></div>
+    </div>
+    <label class="agree" id="f-agree"><input type="checkbox" id="agree"><span>I'm 18 or older and I support the club's mission and values: faith, family, heritage, patriotism, freedom and opportunity.</span></label>
+
+    <div style="height:clamp(18px,2.6vw,26px)"></div>
+    <p class="lbl"><i>3</i>Choose your membership</p>
+    <fieldset class="tiers" id="tiers"><legend style="position:absolute;left:-9999px">Membership level</legend></fieldset>
+
+    <p class="secure" style="justify-content:center;margin-top:16px"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 9V7a5 5 0 0 0-10 0v2H5v13h14V9zm-8 0V7a3 3 0 0 1 6 0v2z"/></svg>Secure checkout by Stripe. Name and card on the next screen.</p>
+    <p class="soon" id="soon" role="status"></p>
+    <p class="note" id="note"></p>
+  </form>
+ </div>
+</div>
+<script>
+/* =====================================================================
+   EDIT HERE
+   Stripe Payment Links are already filled in below (TEST MODE links,
+   they start with buy.stripe.com/test_). When you go live, swap each
+   link:"" for the live link from Stripe > Payment Links. Each link sends
+   new members to https://www.latinorepublicans.org/welcome after paying.
+   Prices, names and perks below are what visitors see. Keep them the
+   same as Stripe so nobody is surprised at checkout.
+   ===================================================================== */
+const TIERS = [
+  { id:"young", name:"Young Leader", tag:"The next generation starts here.", price:25,
+    perks:["Ages 18\u201325","Attend member meetings","General member voting rights","Young Leaders mentorship track"],
+    link:"https://buy.stripe.com/test_6oU9AT4W1aKfaAccjN7N601" },
+  { id:"member", name:"Member", tag:"Your seat at the table.", price:50,
+    perks:["Support the club","Attend member meetings","General member voting rights"],
+    link:"https://buy.stripe.com/test_eVq28r88d5pV37KdnR7N602", selected:true },
+  { id:"patriot", name:"Patriot", tag:"All in for the club.", price:100,
+    perks:["Everything in Member","Free admission to workshops","Discounts on special events","Access to members-only club merch"],
+    link:"https://buy.stripe.com/test_aFa7sL1JPg4z0ZC6Zt7N603" },
+  { id:"embajador", name:"Embajador", tag:"Carry the flag.", price:250,
+    perks:["Everything in Patriot","Reserved seating at the gala & forums","Official club pin","Name on our Embajadores wall","Yearly roundtable with the board"],
+    link:"https://buy.stripe.com/test_bJedR93RX2dJ37KfvZ7N604" }
+];
+const PERIOD = "/ year";            /* shown next to every price */
+const RENEWS = true;                /* true if your Payment Links are yearly subscriptions */
+const CONTACT = "contact@latinorepublicans.org";
+const NOTE = "Dues are not tax deductible as charitable contributions for federal income tax purposes. Paid for by NYC Latino Republican Club Inc.";
+/* ===================================================================== */
+
+
+function star(cx,cy,r,f){let p=[];for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,rr=i%2?r*.4:r;p.push((cx+Math.cos(a)*rr).toFixed(2)+','+(cy+Math.sin(a)*rr).toFixed(2));}return '<polygon fill="'+f+'" points="'+p.join(' ')+'"/>';}
+function R(x,y,w,h,f){return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+f+'"/>';}
+function H(a,b,c){return R(0,0,30,20/3+.05,a)+R(0,20/3,30,20/3+.05,b)+R(0,40/3,30,20/3,c);}
+function V(a,b,c){return R(0,0,10.05,20,a)+R(10,0,10.05,20,b)+R(20,0,10,20,c);}
+function C(x,y,r,f,s){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+f+'"'+(s?' stroke="'+s+'" stroke-width=".6"':'')+'/>';}
+function stripes(n,a,b){let s='';for(let i=0;i<n;i++)s+=R(0,i*20/n,30,20/n+.05,i%2?b:a);return s;}
+const FLAGS={
+ 'Mexico':V('#006847','#fff','#ce1126')+C(15,10,2.4,'#fff','#7a5230')+C(15,10,1.3,'#8c5a2b'),
+ 'Guatemala':V('#4997d0','#fff','#4997d0')+C(15,10,2.3,'none','#4f8a3a')+C(15,10,.9,'#d8c27a'),
+ 'El Salvador':H('#0f47af','#fff','#0f47af')+'<polygon points="15,8 12.8,11.6 17.2,11.6" fill="#e3b542"/>',
+ 'Honduras':H('#18a0d8','#fff','#18a0d8')+star(15,10,1,'#18a0d8')+star(11.5,8.6,1,'#18a0d8')+star(11.5,11.4,1,'#18a0d8')+star(18.5,8.6,1,'#18a0d8')+star(18.5,11.4,1,'#18a0d8'),
+ 'Nicaragua':H('#0067c6','#fff','#0067c6')+'<polygon points="15,8 12.9,11.5 17.1,11.5" fill="none" stroke="#c9a227" stroke-width=".7"/>',
+ 'Costa Rica':R(0,0,30,3.4,'#002b7f')+R(0,3.33,30,3.4,'#fff')+R(0,6.66,30,6.7,'#ce1126')+R(0,13.33,30,3.4,'#fff')+R(0,16.66,30,3.34,'#002b7f'),
+ 'Panama':R(0,0,30,20,'#fff')+R(15,0,15,10,'#d21034')+R(0,10,15,10,'#005293')+star(7.5,5,2.6,'#005293')+star(22.5,15,2.6,'#d21034'),
+ 'Cuba':stripes(5,'#002a8f','#fff')+'<polygon points="0,0 0,20 17.3,10" fill="#cf142b"/>'+star(5.8,10,3,'#fff'),
+ 'Dominican Republic':R(0,0,30,20,'#fff')+R(0,0,13,8.5,'#002d62')+R(17,0,13,8.5,'#ce1126')+R(0,11.5,13,8.5,'#ce1126')+R(17,11.5,13,8.5,'#002d62')+C(15,10,1.3,'#2e7d32'),
+ 'Puerto Rico':stripes(5,'#ed0000','#fff')+'<polygon points="0,0 0,20 17.3,10" fill="#0050f0"/>'+star(5.8,10,3,'#fff'),
+ 'Haiti':R(0,0,30,10,'#00209f')+R(0,10,30,10,'#d21034')+R(10.5,6.2,9,7.6,'#fff')+C(15,10.4,1.6,'#2e7d32')+R(13.2,11.6,3.6,1,'#a0522d'),
+ 'Colombia':R(0,0,30,10,'#fcd116')+R(0,10,30,5,'#003893')+R(0,15,30,5,'#ce1126'),
+ 'Venezuela':H('#ffcc00','#00247d','#cf142b')+(function(){let s='';for(let i=0;i<8;i++){const a=Math.PI*(1.12+i*.108);s+=star(15+Math.cos(a)*5.2,12.6+Math.sin(a)*5.2,.62,'#fff');}return s;})(),
+ 'Ecuador':R(0,0,30,10,'#ffdd00')+R(0,10,30,5,'#034ea2')+R(0,15,30,5,'#ed1c24')+C(15,10,2.3,'#fff','#8a6d3b')+C(15,10,1.1,'#2e7d32'),
+ 'Peru':V('#d91023','#fff','#d91023'),
+ 'Bolivia':H('#d52b1e','#f9e300','#007934'),
+ 'Chile':R(0,0,30,10,'#fff')+R(0,0,10,10,'#0039a6')+star(5,5,2.6,'#fff')+R(0,10,30,10,'#d52b1e'),
+ 'Argentina':H('#74acdf','#fff','#74acdf')+C(15,10,1.9,'#f6b40e','#85340a'),
+ 'Uruguay':stripes(9,'#fff','#0038a8')+R(0,0,11.1,11.1,'#fff')+C(5.55,5.55,3,'#fcd116')+C(5.55,5.55,1.9,'#fcd116','#7f3f00'),
+ 'Paraguay':H('#d52b1e','#fff','#0038a8')+C(15,10,2,'none','#2e7d32')+star(15,10,.9,'#e8c33a'),
+ 'Brazil':R(0,0,30,20,'#009c3b')+'<polygon points="15,2.4 27.4,10 15,17.6 2.6,10" fill="#ffdf00"/>'+C(15,10,4.6,'#002776')+'<path d="M10.6 9.3 Q15 7.6 19.4 10.8" stroke="#fff" stroke-width=".8" fill="none"/>',
+ 'Spain':R(0,0,30,5,'#aa151b')+R(0,5,30,10,'#f1bf00')+R(0,15,30,5,'#aa151b')+'<rect x="7" y="7.4" width="3.6" height="5.2" rx=".9" fill="#aa151b" stroke="#c8a24b" stroke-width=".35"/>'
+};
+function usFlag(){let s=stripes(13,'#b22234','#fff')+R(0,0,12,10.77,'#3c3b6e');for(let r=0;r<5;r++)for(let c=0;c<6;c++)s+=C(1+c*2,1.1+r*2.1,.38,'#fff');return s;}
+function flagSVG(inner,label){return '<svg viewBox="0 0 30 20" preserveAspectRatio="none" role="img" aria-label="Flag of '+label+'">'+inner+'</svg>';}
+
+
+const DEMONYM={'Mexico':'Mexican','Guatemala':'Guatemalan','El Salvador':'Salvadoran','Honduras':'Honduran','Nicaragua':'Nicaraguan','Costa Rica':'Costa Rican','Panama':'Panamanian','Cuba':'Cuban','Dominican Republic':'Dominican','Puerto Rico':'Puerto Rican','Haiti':'Haitian','Colombia':'Colombian','Venezuela':'Venezuelan','Ecuador':'Ecuadorian','Peru':'Peruvian','Bolivia':'Bolivian','Chile':'Chilean','Argentina':'Argentine','Uruguay':'Uruguayan','Paraguay':'Paraguayan','Brazil':'Brazilian','Spain':'Spanish'};
+const SHORT={'Dominican Republic':'Dom. Rep.','El Salvador':'El Salvador','Puerto Rico':'Puerto Rico','Costa Rica':'Costa Rica'};
+const PALETTE={'Mexico':['#006847','#fff','#ce1126'],'Guatemala':['#4997d0','#fff','#4997d0'],'El Salvador':['#0f47af','#fff','#0f47af'],'Honduras':['#18a0d8','#fff','#18a0d8'],'Nicaragua':['#0067c6','#fff','#0067c6'],'Costa Rica':['#002b7f','#fff','#ce1126','#fff','#002b7f'],'Panama':['#005293','#fff','#d21034'],'Cuba':['#002a8f','#fff','#cf142b'],'Dominican Republic':['#002d62','#fff','#ce1126'],'Puerto Rico':['#ed0000','#fff','#0050f0'],'Haiti':['#00209f','#d21034'],'Colombia':['#fcd116','#fcd116','#003893','#ce1126'],'Venezuela':['#ffcc00','#00247d','#cf142b'],'Ecuador':['#ffdd00','#ffdd00','#034ea2','#ed1c24'],'Peru':['#d91023','#fff','#d91023'],'Bolivia':['#d52b1e','#f9e300','#007934'],'Chile':['#0039a6','#fff','#d52b1e'],'Argentina':['#74acdf','#fff','#74acdf'],'Uruguay':['#0038a8','#fff','#fcd116'],'Paraguay':['#d52b1e','#fff','#0038a8'],'Brazil':['#009c3b','#ffdf00','#002776'],'Spain':['#aa151b','#f1bf00','#aa151b']};
+const NAMES=Object.keys(FLAGS);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const svg=(n,label)=>flagSVG(FLAGS[n],label||n);
+
+
+const ABBR={};NAMES.forEach(n=>{ABBR[n]=n.replace(/[^A-Za-z]/g,'').slice(0,12);});
+
+const tiersEl=document.getElementById('tiers');
+tiersEl.insertAdjacentHTML('beforeend',TIERS.map((t,i)=>
+ '<label class="tier"><input type="radio" name="tier" value="'+t.id+'"'+((t.selected||(!TIERS.some(x=>x.selected)&&i===0))?' checked':'')+'><span class="chk" aria-hidden="true"></span>'+
+ '<h3>'+esc(t.name)+'</h3><p class="tag">'+esc(t.tag)+'</p>'+
+ '<div class="price"><b>$'+t.price+'</b><span>'+esc(PERIOD)+'</span></div>'+
+ '<ul class="perks">'+t.perks.map(p=>'<li>'+esc(p)+'</li>').join('')+'</ul>'+
+ '<button type="button" class="pay" data-id="'+t.id+'" aria-label="Join as '+esc(t.name)+' for $'+t.price+' a year">Join for $'+t.price+' <span aria-hidden="true">\u2192</span></button></label>').join(''));
+tiersEl.addEventListener('click',e=>{const b=e.target.closest('.pay');if(!b)return;e.preventDefault();
+  const r=tiersEl.querySelector('input[value="'+b.dataset.id+'"]');r.checked=true;syncTotal();checkout();});
+tiersEl.style.setProperty('--n',TIERS.length);
+document.getElementById('note').textContent=(RENEWS?"Renews yearly. Cancel anytime by emailing "+CONTACT+". ":"")+NOTE;
+
+/* "Where are you representing?" tiles: USA, every flag, Other */
+const slug=n=>n.toLowerCase().replace(/[^a-z]+/g,'-').replace(/^-|-$/g,'');
+const REPS=['United States'].concat(NAMES,['Other']);
+const repSVG=n=>n==='United States'?flagSVG(usFlag(),'the United States'):svg(n);
+document.getElementById('reps').innerHTML=REPS.map(n=>'<button type="button" role="radio" aria-checked="false" class="rp'+(n==='United States'?' usa':'')+'" data-n="'+esc(n)+'">'+
+  (n==='Other'?'<span class="f q" aria-hidden="true">?</span>':'<span class="f">'+repSVG(n)+'</span>')+
+  '<span>'+esc(n==='United States'?'USA':n==='Other'?'Other':(SHORT[n]||n))+'</span></button>').join('');
+let chosen='';
+function pick(n,quiet){
+  chosen=REPS.includes(n)?n:'';
+  document.querySelectorAll('.rp').forEach(b=>b.setAttribute('aria-checked',b.dataset.n===chosen));
+  const box=document.getElementById('f-other');box.hidden=chosen!=='Other';
+  if(chosen==='Other'&&!quiet)document.getElementById('otherIn').focus();
+  setErr('her','');showRep();
+  try{if(chosen&&chosen!=='Other')localStorage.setItem('lrc_flag',chosen);}catch(e){}
+}
+document.getElementById('reps').addEventListener('click',e=>{const b=e.target.closest('.rp');if(b){pick(b.dataset.n);}});
+document.getElementById('reps').addEventListener('keydown',e=>{
+  const bs=[...document.querySelectorAll('.rp')],i=bs.indexOf(document.activeElement);if(i<0)return;
+  const k={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[e.key];if(!k)return;e.preventDefault();
+  const nb=bs[(i+k+bs.length)%bs.length];nb.focus();pick(nb.dataset.n,true);});
+document.getElementById('otherIn').addEventListener('input',showRep);
+function tier(){const v=(document.querySelector('input[name=tier]:checked')||{}).value;return TIERS.find(t=>t.id===v)||TIERS[0];}
+function syncTotal(){}
+tiersEl.addEventListener('change',()=>{syncTotal();step(2);});
+syncTotal();
+
+/* steps indicator */
+const stepsEl=[...document.querySelectorAll('.steps li')];
+function step(n){stepsEl.forEach((li,i)=>{li.classList.toggle('on',i===n-1);li.classList.toggle('done',i<n-1);});}
+document.getElementById('form').addEventListener('focusin',e=>{if(e.target.closest('.tiers'))step(2);});
+
+/* banner under the title */
+function repName(){if(chosen==='Other')return document.getElementById('otherIn').value.trim();return chosen;}
+function showRep(){
+  const r=document.getElementById('rep'),n=repName();
+  if(!n){r.classList.remove('show');return;}
+  document.getElementById('repFlag').innerHTML=chosen==='Other'?'':repSVG(chosen);
+  document.getElementById('repFlag').style.display=chosen==='Other'?'none':'';
+  document.getElementById('repText').textContent='Representing '+(n==='Dominican Republic'||n==='United States'?'the '+n:n);
+  r.classList.add('show');
+}
+document.getElementById('repChange').onclick=()=>{const b=document.querySelector('.rp[aria-checked="true"]')||document.querySelector('.rp');b.focus();b.scrollIntoView({block:'center',behavior:'smooth'});};
+
+/* the Wix page can hand over ?rep= (see the optional Velo snippet in the setup notes) */
+addEventListener('message',e=>{const d=e.data;const v=d&&(d.rep||(d.lrc==='rep'&&d.value));if(typeof v==='string'){const n=REPS.find(x=>slug(x)===v.toLowerCase());if(n)pick(n,true);}});
+try{parent.postMessage({lrc:'ready'},'*');}catch(e){}
+/* preselect the flag the visitor tapped on the Get Involved page
+   (its "Represent" button links here as /join?rep=puerto-rico and also remembers it) */
+(function(){
+  let n=null;
+  try{const q=new URLSearchParams(location.search).get('rep');if(q)n=REPS.find(x=>slug(x)===q.toLowerCase())||null;}catch(e){}
+  if(!n){try{const m=/[?&#]rep=([a-z-]+)/.exec(document.referrer||'');if(m)n=REPS.find(x=>slug(x)===m[1]);}catch(e){}}
+  if(!n){try{const v=localStorage.getItem('lrc_flag');if(v&&REPS.includes(v))n=v;}catch(e){}}
+  if(n)pick(n,true);
+})();
+
+/* validate + send to Stripe */
+function setErr(id,msg){const f=document.getElementById('f-'+id);if(f)f.classList.toggle('bad',!!msg);const e=document.getElementById('e-'+id);if(e)e.textContent=msg||'';}
+document.getElementById('form').addEventListener('submit',e=>{e.preventDefault();checkout();});
+function checkout(){
+  const email=document.getElementById('email').value.trim(),boro=document.getElementById('boro').value,h=repName(),ok=document.getElementById('agree').checked;
+  const okEmail=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+  setErr('email',okEmail?'':'Enter a valid email.');setErr('boro',boro?'':'Pick your borough.');setErr('her',chosen?'':'Tap where you\u2019re representing.');if(chosen==='Other')setErr('other',h?'':'Type the country you\u2019re representing.');else setErr('other','');
+  document.getElementById('f-agree').classList.toggle('bad',!ok);
+  const first=(!chosen?document.querySelector('.rp'):null)||document.querySelector('.field.bad input,.field.bad select')||(!ok?document.getElementById('agree'):null);
+  if(first){first.focus({preventScroll:true});first.scrollIntoView({block:'center',behavior:'smooth'});return;}
+  step(3);
+  const t=tier(),soon=document.getElementById('soon');
+  if(!t.link){soon.innerHTML='Online dues open soon. To join today, email <a href="mailto:'+CONTACT+'?subject='+encodeURIComponent('Membership: '+t.name)+'" target="_top">'+CONTACT+'</a> and we’ll get you set up.';soon.classList.add('show');return;}
+  const code=chosen==='United States'?'USA':chosen==='Other'?'Other-'+h.replace(/[^A-Za-z]+/g,'').slice(0,24):ABBR[chosen];
+  const ref=[t.id,boro,code].join('_');
+  const u=t.link+(t.link.includes('?')?'&':'?')+'prefilled_email='+encodeURIComponent(email)+'&client_reference_id='+encodeURIComponent(ref);
+  document.querySelectorAll('.pay').forEach(x=>x.setAttribute('aria-busy','true'));
+  try{window.top.location.href=u;}catch(err){window.open(u,'_top');}
+}
+</script>
+<script>
+/* site helper: links to other parts of the site open in the main window; pop-ups open where the visitor is looking */
+(function(){
+  if(window.parent===window) return;
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href]'); if(!a||e.defaultPrevented) return;
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;
+    var u; try{u=new URL(a.getAttribute('href'),location.href);}catch(err){return;}
+    if(u.origin!==location.origin) return;            /* Stripe, socials, email: leave alone */
+    e.preventDefault(); e.stopPropagation(); parent.postMessage({lrc:'go',href:u.href},'*');
+  },true);
+  addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
+    var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
+})();
+</script></body></html>

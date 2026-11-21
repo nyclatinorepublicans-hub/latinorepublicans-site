@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,600..900&display=swap">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@400;700&display=swap");
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#14254a;color:#fff;font-family:"Hepta Slab",Georgia,"Times New Roman",serif}
+.events{position:relative;overflow:hidden;padding:clamp(56px,8vw,100px) clamp(16px,5vw,72px);background:radial-gradient(ellipse at 50% 0%,#1f3870 0%,#14254a 62%)}
+.events::before{content:"";position:absolute;inset:0;opacity:.06;background-image:radial-gradient(circle at 25% 25%,#d9a441 2px,transparent 2.5px),radial-gradient(circle at 75% 75%,#d9a441 2px,transparent 2.5px);background-size:44px 44px}
+.wrap{position:relative;max-width:1180px;margin:0 auto}
+.head{text-align:center}
+.eyebrow{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:85%;font-weight:700;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#d9a441;display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 14px}
+.eyebrow::before,.eyebrow::after{content:"";width:28px;height:2px;background:#c8323a}
+h2{font-family:"Archivo","Arial Narrow",Impact,sans-serif;font-stretch:72%;font-weight:900;text-transform:uppercase;line-height:.95;margin:0 0 6px;font-size:clamp(46px,6.4vw,92px);letter-spacing:.01em;color:#f8f1e4;text-wrap:balance;
+  text-shadow:0 1px 0 #e9bd5a,0 2px 0 #d9a441,0 3px 0 #cc9636,0 4px 0 #be892d,0 5px 0 #ad7a25,0 6px 0 #9a6b1f,0 10px 10px rgba(0,0,0,.45),0 20px 26px rgba(0,0,0,.3)}
+.sub{font-style:italic;font-size:clamp(16px,1.4vw,19px);color:#c9cfdf;margin:14px auto 0}
+
+.list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:48px}
+.ticket{position:relative;display:flex;flex-direction:column;background:#fffaf1;color:#1b2133;border-radius:18px;overflow:hidden;min-width:0;
+  box-shadow:0 3px 0 #d9a441,0 6px 0 #a8711f,0 26px 40px -18px rgba(0,0,0,.7);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.ticket:hover{transform:translateY(-6px) rotate(-.4deg)}
+.stub{position:relative;display:flex;align-items:center;gap:16px;padding:18px 20px;background:linear-gradient(135deg,#1f3870,#14254a);color:#fff}
+.stub::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;border-bottom:2px dashed rgba(20,37,74,.35)}
+.date{flex:none;width:74px;height:78px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 32% 26%,#fff6d2 0%,#f4cf72 24%,#d9a441 52%,#a8711f 100%);color:#14254a;
+  box-shadow:inset 0 2px 3px rgba(255,255,255,.7),inset 0 -4px 6px rgba(70,40,5,.45),0 6px 12px -4px rgba(0,0,0,.6)}
+.date .m{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase}
+.date .d{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:72%;font-weight:900;font-size:38px;line-height:.9}
+.date .tbd{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:72%;font-weight:900;font-size:24px;line-height:1;letter-spacing:.02em}
+.stubinfo{min-width:0}
+.tag{display:inline-block;font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;border-radius:999px;border:1px solid rgba(217,164,65,.6);color:#f4cf72;margin-bottom:6px}
+.when{font-size:14px;color:#dfe3ee;line-height:1.35}
+.notch{position:absolute;width:22px;height:22px;border-radius:50%;background:#14254a;bottom:-11px;z-index:1}
+.notch.l{left:-11px}.notch.r{right:-11px}
+.body{display:flex;flex-direction:column;gap:10px;padding:22px 20px 20px;flex:1}
+h3{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:80%;font-weight:800;text-transform:uppercase;font-size:clamp(21px,2vw,26px);line-height:1.02;margin:0;color:#14254a;overflow-wrap:anywhere}
+.subt{margin:-4px 0 0;font-style:italic;font-weight:700;font-size:16px;line-height:1.3;color:#c8323a}
+.where{display:flex;align-items:center;gap:6px;font-size:14px;color:#c8693f;margin:0}
+.where svg{flex:none}
+.desc{margin:0;font-size:15px;line-height:1.5;color:#4b5268;flex:1}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.btn{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:11px 16px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;transition:transform .2s,background .2s,color .2s}
+.btn:hover,.btn:focus-visible{transform:translateY(-2px)}
+.btn.red{background:#c8323a;color:#fff}
+.btn.line{border:1.5px solid #14254a;color:#14254a}
+.btn.line:hover,.btn.line:focus-visible{background:#14254a;color:#fff}
+.btn:focus-visible{outline:3px solid #d9a441;outline-offset:2px}
+.foot{display:flex;justify-content:center;margin-top:40px}
+.all{font-family:"Archivo","Arial Narrow",sans-serif;font-weight:800;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#14254a;background:linear-gradient(180deg,#f4cf72,#d9a441);padding:15px 28px;border-radius:999px;text-decoration:none;box-shadow:0 3px 0 #a8711f,0 12px 20px -8px rgba(0,0,0,.6);transition:transform .2s}
+.all:hover,.all:focus-visible{transform:translateY(-2px)}
+.empty{grid-column:1/-1;text-align:center;padding:40px 20px;border:1.5px dashed rgba(217,164,65,.5);border-radius:18px;color:#dfe3ee;font-style:italic}
+@media (max-width:980px){.list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.list{grid-template-columns:1fr;gap:18px}}
+@media (prefers-reduced-motion:reduce){.ticket,.btn,.all{transition:none}.ticket:hover{transform:none}}
+</style><style id="wix-mobile-fit">/* Wix fit: no sideways scroll; if the Wix box is taller than the content, the section centers and the extra space matches its background */html{-webkit-text-size-adjust:100%;text-size-adjust:100%}html,body{max-width:100%;overflow-x:hidden}body>*{flex:0 0 auto;width:100%;box-sizing:border-box}</style>
+</head>
+<body>
+<section class="events">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Get in the room</p>
+      <h2>Upcoming Events</h2>
+      <p class="sub">Pull up a chair. Everyone is welcome.</p>
+    </div>
+    <div class="list" id="list"></div>
+    <div class="foot"><a class="all" id="allLink" href="../#events" target="_top">View All Events →</a></div>
+  </div>
+</section>
+
+<script>
+/* =====================================================================
+   EDIT EVENTS HERE  (the 3 soonest upcoming events show; past ones hide on their own)
+   - date:  "2026-11-20" format, or "" if the date isn't set yet (shows TBD)
+   - time:  e.g. "7:00 PM"  (leave "" if not set)
+   - end:   e.g. "9:00 PM"  (optional, used for the calendar button)
+   - subtitle: optional line under the title
+   - rsvp:  full link to your RSVP form or Wix event page ("" hides the button)
+   ===================================================================== */
+const EVENTS = [
+  { title:"Inaugural Club Meeting", type:"Meeting", date:"", time:"", end:"",
+    place:"Astoria, Queens",
+    desc:"Our first official meeting. Meet the Executive Board and help shape what comes next.",
+    rsvp:"../#events" },
+  { title:"2028 / 2029 Potential Candidates Forum", type:"Forum", date:"", time:"", end:"",
+    place:"Location TBD",
+    desc:"Hear from Republicans who may seek office in 2028 and 2029, and ask them your questions.",
+    rsvp:"../#events" },
+  { title:"Women in Politics Forum", subtitle:"", type:"Forum", date:"", time:"", end:"",
+    place:"Location TBD",
+    desc:"Latinas Supporting Women Leaders.",
+    rsvp:"../#events" }
+];
+const SHOW = 3;
+/* ===================================================================== */
+
+const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DOW=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+function parseDate(s){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return m?new Date(+m[1],+m[2]-1,+m[3]):null;}
+function to24(t){const m=/^(\d{1,2})(?::(\d{2}))?\s*([AaPp][Mm])?$/.exec((t||'').trim());if(!m)return null;let h=+m[1]%12;if(m[3]&&/p/i.test(m[3]))h+=12;if(!m[3])h=+m[1];return [h,+(m[2]||0)];}
+function gcal(e,d){
+  const pad=n=>String(n).padStart(2,'0'), ymd=d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate());
+  let dates;const s=to24(e.time), en=to24(e.end);
+  if(s){const st=ymd+'T'+pad(s[0])+pad(s[1])+'00';const f=en||[Math.min(23,s[0]+2),s[1]];dates=st+'/'+ymd+'T'+pad(f[0])+pad(f[1])+'00';}
+  else{const n=new Date(d);n.setDate(n.getDate()+1);dates=ymd+'/'+n.getFullYear()+pad(n.getMonth()+1)+pad(n.getDate());}
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.title+' | NYC Latino Republican Club')+'&dates='+dates+'&ctz=America/New_York&location='+encodeURIComponent(e.place||'')+'&details='+encodeURIComponent((e.desc||'')+(e.rsvp?'\n\nRSVP: '+e.rsvp:''));
+}
+const pin='<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" fill="#c8693f"/></svg>';
+
+const today=new Date();today.setHours(0,0,0,0);
+const upcoming=EVENTS.map((e,i)=>({e,i,d:parseDate(e.date)}))
+  .filter(x=>!x.d||x.d>=today)
+  .sort((a,b)=>(a.d&&b.d)?a.d-b.d:(a.d?-1:(b.d?1:a.i-b.i)))
+  .slice(0,SHOW);
+
+document.getElementById('list').innerHTML = upcoming.length ? upcoming.map(({e,d})=>{
+  const dateBox=d?'<span class="m">'+MON[d.getMonth()]+'</span><span class="d">'+d.getDate()+'</span>':'<span class="tbd">TBD</span>';
+  const when=d?DOW[d.getDay()]+(e.time?' · '+esc(e.time)+(e.end?' – '+esc(e.end):''):''):'Date coming soon';
+  const btns=(e.rsvp?'<a class="btn red" href="'+esc(e.rsvp)+'" target="_top">RSVP</a>':'')+(d?'<a class="btn line" href="'+gcal(e,d)+'" target="_blank" rel="noopener">+ Calendar</a>':'');
+  return '<article class="ticket"><div class="stub"><div class="date" aria-hidden="true">'+dateBox+'</div><div class="stubinfo"><span class="tag">'+esc(e.type||'Event')+'</span><div class="when">'+when+'</div></div><span class="notch l"></span><span class="notch r"></span></div>'
+   +'<div class="body"><h3>'+esc(e.title)+'</h3>'+(e.subtitle?'<p class="subt">'+esc(e.subtitle)+'</p>':'')+'<p class="where">'+pin+esc(e.place||'Location TBD')+'</p><p class="desc">'+esc(e.desc)+'</p>'+(btns?'<div class="btns">'+btns+'</div>':'')+'</div></article>';
+}).join('') : '<p class="empty">New events are on the way. Follow @latinorepublicansnyc for announcements.</p>';
+</script>
+<script>
+/* site helper: links to other parts of the site open in the main window; pop-ups open where the visitor is looking */
+(function(){
+  if(window.parent===window) return;
+  document.addEventListener('click',function(e){
+    var a=e.target.closest&&e.target.closest('a[href]'); if(!a||e.defaultPrevented) return;
+    if(e.metaKey||e.ctrlKey||e.shiftKey||e.button===1) return;
+    var u; try{u=new URL(a.getAttribute('href'),location.href);}catch(err){return;}
+    if(u.origin!==location.origin) return;            /* Stripe, socials, email: leave alone */
+    e.preventDefault(); e.stopPropagation(); parent.postMessage({lrc:'go',href:u.href},'*');
+  },true);
+  addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
+    var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
+})();
+</script></body></html>

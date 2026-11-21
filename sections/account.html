@@ -293,7 +293,9 @@ $("bForgot").addEventListener("click",async()=>{
   const em=$("em").value.trim().toLowerCase(),m=$("inMsg");
   if(!emailOk(em)){show(m,"err","Enter your email above first, then press Forgot password.");$("em").focus();return;}
   try{const r=await fetch(SB_URL+"/auth/v1/recover?redirect_to="+encodeURIComponent(pageUrl()),{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({email:em})});
-    show(m,r.status===429?"err":"ok",r.status===429?"Too many tries. Please wait a minute and try again.":"If that email has an account, a link to set a new password is on its way. It works once, for one hour.");}
+    if(r.status===429)show(m,"err","Too many tries. Please wait a minute and try again.");
+    else if(!r.ok)show(m,"err","We couldn't send the email right now. Please try again later or email contact@latinorepublicans.org.");
+    else show(m,"ok","If that email has an account, a link to set a new password is on its way. It works once, for one hour.");}
   catch(e){show(m,"err","No connection. Please try again.");}
 });
 $("bLink").addEventListener("click",async()=>{

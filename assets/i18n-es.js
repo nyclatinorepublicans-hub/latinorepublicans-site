@@ -475,6 +475,7 @@ window.LRC_ES={
 "The two passwords don't match.": "Las dos contraseñas no coinciden.",
 "Password saved. Next time, sign in with your email and this password.": "Contraseña guardada. La próxima vez, entra con tu correo y esta contraseña.",
 "Choose a password different from your current one.": "Elige una contraseña distinta a la actual.",
-"We couldn't save it. Please try again.": "No pudimos guardarla. Inténtalo de nuevo."
+"We couldn't save it. Please try again.": "No pudimos guardarla. Inténtalo de nuevo.",
+"We couldn't send the email right now. Please try again later or email contact@latinorepublicans.org.": "No pudimos enviar el correo en este momento. Inténtalo más tarde o escribe a contact@latinorepublicans.org."
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

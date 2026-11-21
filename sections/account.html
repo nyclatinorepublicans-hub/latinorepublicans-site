@@ -220,7 +220,7 @@ textarea.tin{resize:vertical}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=bc47d5a5"></script>
+<script src="../assets/vendor/qrcode.js?v=edfeb5f4"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -700,8 +700,8 @@ function render(){
       <div class="mgrid"><div><span>Status</span><b class="st-active">Active</b></div><div><span>Board</span><b>${esc(ex.subtitle||"Executive Board")}</b></div>
       <div><span>Access</span><b>${ex.role==="full"?"Full access":"Door check-in & tickets"}</b></div>${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div>${flagLine()}</div>`;
   }else if(m){
-    $("mcard").innerHTML=`<div class="mcard${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div></div>
-      <span class="tier">${esc(TIER[m.tier]||m.tier)}</span></div>
+    $("mcard").innerHTML=`<div class="mcard${m.tier==="embajador"&&m.status==="active"?" exec amb":""}${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div></div>
+      <span class="tier${m.tier==="embajador"&&m.status==="active"?" gold-x":""}">${m.tier==="embajador"&&m.status==="active"?"★ ":""}${esc(TIER[m.tier]||m.tier)}</span></div>
       <div class="mgrid"><div><span>Status</span><b class="st-${esc(m.status)}">${esc(STATUS[m.status]||m.status)}</b></div>
       <div><span>Member since</span><b>${esc(fmtDate(m.joined_at))}</b></div>
       ${m.renews_at?`<div><span>Renews</span><b>${esc(fmtDate(m.renews_at))}</b></div>`:""}</div>
@@ -1093,11 +1093,17 @@ $("bActRec").addEventListener("click",async()=>{try{const r=await api("/rest/v1/
 function renderApp(){let standalone=false;try{standalone=topWin.matchMedia("(display-mode: standalone)").matches||topWin.navigator.standalone===true;}catch(e){}
   let hide=false;try{hide=localStorage.getItem("lrc_app_hide")==="1";}catch(e){}
   const q=(()=>{try{return new URLSearchParams(topWin.location.search).get("app")==="1";}catch(e){return false;}})();
-  $("appCard").hidden=standalone||(hide&&!q)||!(data.isBoard||q);
+  const mm=data.member,appPerk=data.isBoard||!!(mm&&mm.status==="active"&&["patriot","embajador","corporate"].includes(mm.tier));
+  const canUp=!!(mm&&["young","member"].includes(mm.tier));
+  $("appCard").hidden=standalone||(hide&&!q)||!(appPerk||canUp);
+  $("appCard").classList.toggle("up",!appPerk);
+  $("bApp").textContent=appPerk?"Install":"See memberships";
+  if(!appPerk){$("bApp").hidden=false;$("appHow").textContent="The club app is a Patriot and Ambassador benefit: your profile and tickets one tap from your home screen. Upgrade to get it.";return;}
   const iOS=/iP(hone|ad|od)/.test(navigator.userAgent);
+  $("bApp").hidden=false;
   if(iOS){$("appHow").textContent="On iPhone: tap the Share button in Safari, then \"Add to Home Screen\". Sign in once inside the app and it stays signed in.";$("bApp").hidden=true;}
 }
-$("bApp").addEventListener("click",async()=>{const p=topWin.__lrcInstall;
+$("bApp").addEventListener("click",async()=>{if($("appCard").classList.contains("up")){topWin.location.href="../join/";return;}const p=topWin.__lrcInstall;
   if(p){p.prompt();try{await p.userChoice;}catch(e){}topWin.__lrcInstall=null;$("appCard").hidden=true;}
   else $("appHow").textContent="In your browser menu (⋮ or Share), choose \"Install app\" or \"Add to Home Screen\". Sign in once inside the app and it stays signed in.";});
 $("bAppX").addEventListener("click",()=>{try{localStorage.setItem("lrc_app_hide","1");}catch(e){}$("appCard").hidden=true;});
@@ -1139,5 +1145,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=bc47d5a5"></script><script src="../assets/i18n.js?v=bc47d5a5"></script>
+</script><script src="../assets/i18n-es.js?v=edfeb5f4"></script><script src="../assets/i18n.js?v=edfeb5f4"></script>
 </body></html>

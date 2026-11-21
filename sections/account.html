@@ -258,7 +258,7 @@ details.more{margin-top:4px}details.more>summary{cursor:pointer;padding:10px 0;f
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=da6f21ce"></script>
+<script src="../assets/vendor/qrcode.js?v=db370636"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -804,7 +804,7 @@ function render(){
       <span class="tier gold-x">${esc(ex.title)}</span></div>
       <div class="mgrid"><div><span>Status</span><b class="st-active">Active</b></div>
       ${ex.advisory_title?`<div><span>Executive Board</span><b>${esc(ex.title)}</b></div><div><span>Advisory Board</span><b>${esc(ex.advisory_title)}</b></div>`:`<div><span>Board</span><b>${esc(ex.subtitle||"Executive Board")}</b></div>`}
-      ${ex.role==="full"?`<div><span>Access</span><b>Full access</b></div>`:""}${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div>${flagLine()}<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button></div>`;
+      ${ex.role==="full"?`<div><span>Access</span><b>Full access</b></div>`:dirAbbr().length?`<div><span>Access</span><b>${esc(dirAbbr().join(", "))} Committee</b></div>`:""}${m?`<div><span>Membership</span><b>${esc(TIER[m.tier]||m.tier)}</b></div>`:""}</div>${flagLine()}<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button></div>`;
   }else if(m){
     $("mcard").innerHTML=`<div class="mcard${m.tier==="embajador"&&m.status==="active"?" exec amb":""}${flagAttrs()}">${flagBg()}<div class="mtop"><div><div class="mname">${esc(name||"Club Member")}</div><div class="memail">${esc(d.email)}</div>${badges()}</div>
       <span class="tier${m.tier==="embajador"&&m.status==="active"?" gold-x":""}">${m.tier==="embajador"&&m.status==="active"?"★ ":""}${esc(TIER[m.tier]||m.tier)}</span></div>
@@ -1289,6 +1289,7 @@ document.addEventListener("change",async e=>{const c=e.target.closest("#ckList i
 $("ckSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;ckView=b.dataset.v;[...$("ckSeg").children].forEach(x=>x.classList.toggle("on",x===b));renderChecklist();});
 
 /* ===== committees ===== */
+function dirAbbr(){return (data.comms||[]).filter(c=>data.myDir&&data.myDir.has(c.id)).map(c=>c.name_en.split(/\s+/).filter(w=>/^[A-Z]/.test(w)).map(w=>w[0]).join(""));}
 function dirNames(){return (data.comms||[]).filter(c=>data.myDir&&data.myDir.has(c.id)).map(c=>L()==="es"?c.name_es:c.name_en);}
 function canEditEv(ev){return data.isFull||(data.isBoard&&ev.created_by===data.email)||(ev.committee_id&&data.myDir&&data.myDir.has(ev.committee_id));}
 function renderCommittees(){const cs=data.comms||[],es=L()==="es";$("bNewCom").hidden=!data.isFull;
@@ -1373,5 +1374,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=da6f21ce"></script><script src="../assets/i18n.js?v=da6f21ce"></script>
+</script><script src="../assets/i18n-es.js?v=db370636"></script><script src="../assets/i18n.js?v=db370636"></script>
 </body></html>

@@ -488,6 +488,10 @@ window.LRC_ES={
 "Save flag": "Guardar bandera",
 "Remove flag": "Quitar bandera",
 "Tap a flag or choose a country.": "Toca una bandera o elige un país.",
-"We couldn't save your flag. Please try again.": "No pudimos guardar tu bandera. Inténtalo de nuevo."
+"We couldn't save your flag. Please try again.": "No pudimos guardar tu bandera. Inténtalo de nuevo.",
+"✓ Reserved": "✓ Reservado",
+"Cancel RSVP": "Cancelar reserva",
+"Your RSVP was canceled.": "Tu reserva fue cancelada.",
+"You're already on the list for this event. Your ticket is in My Tickets.": "Ya estás en la lista de este evento. Tu entrada está en Mis entradas."
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

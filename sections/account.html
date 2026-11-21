@@ -146,10 +146,11 @@ input[type=password]:focus{border-color:var(--gold);outline:0}
 .ft{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border-radius:12px;border:0;cursor:pointer;background:#f8f4ea;box-shadow:inset 0 0 0 2px transparent;font:700 12px "Hepta Slab",Georgia,serif;color:var(--ink);text-align:center;line-height:1.2}
 .ft img{width:54px;height:40px;object-fit:cover;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,.25)}
 .ft.on{background:#fff6dc;box-shadow:inset 0 0 0 2.5px var(--gold)}
+.chip.rsv{font-size:12px;padding:8px 12px}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js"></script>
+<script src="../assets/vendor/qrcode.js?v=ae611496"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -474,8 +475,8 @@ function render(){
     return `<div class="ev"><div><h3>${esc(evTitle(ev))}</h3><div class="meta">${esc(evWhen(ev))}${ev.location?" · "+esc(ev.location):""}</div>
       <div class="price">${p?`${money(p)} ${isMem?"<span>member price</span>":(ev.price_member_cents<ev.price_guest_cents?`<span>· members</span> ${money(ev.price_member_cents)}`:"")}`:"<span>Free</span>"}</div>
       ${mine?`<div class="small"><span>You have</span> ${mine} <span>${mine===1?"ticket":"tickets"}</span></div>`:""}</div>
-      <div class="act">${p?"":`<select id="q-${ev.id}" aria-label="Quantity">${opts}</select>`}
-      <button class="btn sm" type="button" data-ev="${ev.id}">${p?"Buy tickets":"Reserve"}</button></div></div>`;}).join("")
+      <div class="act">${!p&&mine?`<span class="chip used rsv">✓ Reserved</span>${live.some(t=>t.event_id===ev.id&&t.status==="valid"&&t.kind!=="comp")?`<button class="btn ghost sm" type="button" data-cancel="${ev.id}">Cancel RSVP</button>`:""}`
+        :`${p?"":`<select id="q-${ev.id}" aria-label="Quantity">${opts}</select>`}<button class="btn sm" type="button" data-ev="${ev.id}">${p?"Buy tickets":"Reserve"}</button>`}</div></div>`;}).join("")
     :`<div class="empty">No events open right now.</div>`;
   renderRsvp(byId);
   /* history */
@@ -488,12 +489,18 @@ function render(){
 
 /* buy or reserve */
 $("evList").addEventListener("click",async e=>{
-  const b=e.target.closest("button[data-ev]");if(!b)return;
+  const cb=e.target.closest("button[data-cancel]");
+  if(cb){cb.disabled=true;const m=$("evMsg");
+    try{await api("/functions/v1/buy-ticket",{method:"POST",body:JSON.stringify({action:"cancel",event_id:cb.dataset.cancel,return_url:pageUrl()})});show(m,"ok","Your RSVP was canceled.");await reload();}
+    catch(err){show(m,"err","Something went wrong. Please try again.");cb.disabled=false;}
+    return;}
+  const b=e.target.closest("button[data-ev]");if(!b||b.disabled)return;
   const id=b.dataset.ev,sel=document.getElementById("q-"+id),qty=sel?+sel.value:1,m=$("evMsg");
   b.disabled=true;m.hidden=true;
   try{
     const r=await api("/functions/v1/buy-ticket",{method:"POST",body:JSON.stringify({event_id:id,qty,return_url:pageUrl(),lang:L()})});
     if(r.url){topWin.location.href=r.url;return;}
+    if(r.already){show(m,"info","You're already on the list for this event. Your ticket is in My Tickets.");await reload();return;}
     if(r.free){show(m,"ok",r.issued===1?"Reserved! Your ticket is in My Tickets.":"Reserved! Your tickets are in My Tickets.");await reload();jump("tickets");}
   }catch(err){
     const c=err.body&&err.body.error;
@@ -576,5 +583,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js"></script><script src="../assets/i18n.js"></script>
+</script><script src="../assets/i18n-es.js?v=ae611496"></script><script src="../assets/i18n.js?v=ae611496"></script>
 </body></html>

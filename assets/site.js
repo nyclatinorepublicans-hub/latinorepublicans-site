@@ -7,7 +7,7 @@
   const hdr=()=>hdrEl?hdrEl.getBoundingClientRect().bottom:0;
 
   /* pass this page's ?query (e.g. ?rep=ecuador) to sections that ask for it */
-  frames.forEach(f=>{const src=f.dataset.src;if(!src)return;f.src=src+(f.hasAttribute('data-query')?location.search:'');});
+  frames.forEach(f=>{const src=f.dataset.src;if(!src)return;f.src=src+(f.hasAttribute('data-query')&&location.search?(src.includes('?')?'&':'?')+location.search.slice(1):'');});
 
   function contentHeight(doc){
     let m=0;const kids=doc.body?doc.body.children:[];

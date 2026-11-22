@@ -247,7 +247,7 @@ h1{margin:12px 0 10px;font-family:"Archivo",sans-serif;font-weight:900;font-stre
 <script>
 /* =====================================================================
    EDIT HERE
-   Stripe Payment Links are already filled in below (TEST MODE links,
+   Stripe Payment Links below are LIVE (real charges;
    they start with buy.stripe.com/test_). When you go live, swap each
    link:"" for the live link from Stripe > Payment Links. Each link sends
    new members to https://www.latinorepublicans.org/welcome after paying.
@@ -258,19 +258,19 @@ const TIERS = [
   { id:"young", name:"Young Leader", tag:"The next generation starts here.",
     prices:{year:40,semiannual:22,quarter:12,month:4.3},
     perks:["Ages 18\u201325","Attend member meetings","General member voting rights","Young Leaders mentorship track","Official club pin"],
-    links:{year:"https://buy.stripe.com/test_aFafZh9chaKf37KcjN7N60t",semiannual:"https://buy.stripe.com/test_bJe5kDfAFbOj8s42Jd7N60u",quarter:"https://buy.stripe.com/test_aFa14ndsx5pV37K83x7N60v",month:"https://buy.stripe.com/test_eVq7sL3RX4lR23G5Vp7N60w"} },
+    links:{year:"https://buy.stripe.com/fZu5kE1waa6JfKU4ezasg0k",semiannual:"https://buy.stripe.com/3cI7sM7UyceR9mw7qLasg0g",quarter:"https://buy.stripe.com/bJeeVeb6K4Mp56g9yTasg0e",month:"https://buy.stripe.com/5kQ7sMfn0diV7eodP9asg0b"} },
   { id:"member", name:"Member", tag:"Your seat at the table.", selected:true,
     prices:{year:60,semiannual:33,quarter:18,month:6.5},
     perks:["Support the club","Attend member meetings","General member voting rights","Official club pin"],
-    links:{year:"https://buy.stripe.com/test_4gMbJ1fAFdWr23GfvZ7N60x",semiannual:"https://buy.stripe.com/test_28EeVddsx9GbdMogA37N60y",quarter:"https://buy.stripe.com/test_00w4gzgEJ3hN8s4fvZ7N60z",month:"https://buy.stripe.com/test_7sYfZhcot4lRaAccjN7N60A"} },
+    links:{year:"https://buy.stripe.com/fZu8wQgr46Ux2Y8cL5asg0c",semiannual:"https://buy.stripe.com/9B6cN6a2G0w98iscL5asg0a",quarter:"https://buy.stripe.com/28E8wQgr4baNcyIdP9asg0n",month:"https://buy.stripe.com/9B614o6QubaN8isfXhasg09"} },
   { id:"patriot", name:"Patriot", tag:"All in for the club.", promo:2,
     prices:{year:120,semiannual:66,quarter:36,month:13},
     perks:["Everything in Member","Free admission to workshops","Discounts on special events","Access to members-only club merch","The club app on your phone","Early access to event sign-ups","Printable membership certificate","Founding Member badge when you join before the Inaugural Gala"],
-    links:{year:"https://buy.stripe.com/test_5kQbJ1gEJf0v37K1F97N60B",semiannual:"https://buy.stripe.com/test_cNi00j0FL9Gb0ZC2Jd7N60C",quarter:"https://buy.stripe.com/test_4gMaEX749g4z6jWabF7N60D",month:"https://buy.stripe.com/test_cNieVdewB4lR4bO2Jd7N60E"} },
+    links:{year:"https://buy.stripe.com/eVqaEY3EibaN6ak12nasg07",semiannual:"https://buy.stripe.com/fZu5kEeiW92FdCM7qLasg03",quarter:"https://buy.stripe.com/aFaaEY0s62EheGQ7qLasg01",month:"https://buy.stripe.com/dRmaEYfn0fr3cyIdP9asg05"} },
   { id:"embajador", name:"Ambassador", tag:"Carry the flag.", promo:4,
     prices:{year:300,semiannual:165,quarter:90,month:32.5},
     perks:["Everything in Patriot","Preferred seating at events (when applicable)","Gold member card in the club app","Chairman's Insider: monthly behind-the-scenes updates","Your name in our event programs","Yearly roundtable with the board","Automatic upgrades: every new club app feature, portal tool and partner benefit as it launches"],
-    links:{year:"https://buy.stripe.com/test_7sY7sLaglbOj9w81F97N60F",semiannual:"https://buy.stripe.com/test_3cI00j4W1dWrbEg2Jd7N60G",quarter:"https://buy.stripe.com/test_3cI8wPdsxg4zdMogA37N60H",month:"https://buy.stripe.com/test_4gM5kDcot19FgYA97B7N60I"} }
+    links:{year:"https://buy.stripe.com/4gM28scaO7YB0Q03avasg04",semiannual:"https://buy.stripe.com/9B6bJ27Uy2Eh9mwaCXasg02",quarter:"https://buy.stripe.com/bJebJ2gr492F7eo12nasg00",month:"https://buy.stripe.com/00wbJ26Qufr3eGQcL5asg0d"} }
 ];
 /* Billing periods. Annual is the best value; Inaugural Gala seats are a one-time PROMOTION that comes with annual plans only. */
 const PERIODS = [
@@ -279,9 +279,9 @@ const PERIODS = [
   {id:"quarter",label:"Quarterly",per:"/ quarter",months:3},
   {id:"month",label:"Monthly",per:"/ month",months:1}];
 const PROMO_BY = "December 31";        /* gala promotion: join on an annual plan by this date */
-/* Corporate Sponsorship (TEST MODE links): swap for the live links when you go live */
+/* Corporate Sponsorship (live links) */
 const SPONSOR = {prices:{year:2500,semiannual:1375,quarter:750,month:270},
-  links:{year:"https://buy.stripe.com/test_6oUaEXbkp19FeQsfvZ7N60p",semiannual:"https://buy.stripe.com/test_cNieVd2NT5pV0ZC2Jd7N60J",quarter:"https://buy.stripe.com/test_6oU9AT1JP19FaAcerV7N60K",month:"https://buy.stripe.com/test_14A4gz1JP8C70ZC5Vp7N60L"}};
+  links:{year:"https://buy.stripe.com/4gMcN63Eifr3gOY6mHasg0h",semiannual:"https://buy.stripe.com/4gMaEY8YC1Ad2Y8cL5asg08",quarter:"https://buy.stripe.com/cNicN65Mq3IlcyI3avasg06",month:"https://buy.stripe.com/aFaeVe7UyceR9mwaCXasg0f"}};
 const CONTACT = "contact@latinorepublicans.org";
 const NOTE = "Dues are not tax deductible as charitable contributions for federal income tax purposes. Paid for by NYC Latino Republican Club Inc.";
 /* ===================================================================== */

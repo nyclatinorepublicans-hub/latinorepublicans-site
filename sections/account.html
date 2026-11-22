@@ -481,7 +481,7 @@ const JOIN_BONUS={cutoff:Date.parse("2027-01-01T05:00:00Z"),patriot:2,embajador:
 const TIER={young:"Young Leader",member:"Member",patriot:"Patriot",embajador:"Ambassador",corporate:"Corporate Sponsor"};
 const STATUS={active:"Active",past_due:"Payment due",canceled:"Canceled",lapsed:"Lapsed"};
 const BILL={sponsor:"Covered by sponsorship",month:"Monthly",quarter:"Quarterly",semiannual:"Every 6 months",year:"Annual"};
-const PORTAL="https://billing.stripe.com/p/login/test_aFacN5bkpcSn0ZC4Rl7N600"; /* Stripe billing page (TEST MODE): swap for the live link when you go live */
+const PORTAL="https://billing.stripe.com/p/login/bJebJ2gr492F7eo12nasg00"; /* Stripe billing page (live) */
 const portalUrl=()=>PORTAL+"?prefilled_email="+encodeURIComponent(data.email);
 const SKEY="lrc_session";
 const $=id=>document.getElementById(id);
@@ -873,6 +873,29 @@ async function certificate(){const m=data.member,ex=data.exec,es=L()==="es";
   <div class="s"><div>Elijah Diaz, ${esc(T.c)}</div><div>${esc(es?"Fecha":"Date")}: ${esc(new Date().toLocaleDateString(es?"es-US":"en-US",{timeZone:NY,year:"numeric",month:"long",day:"numeric"}))}</div></div></div></div>
   <script>setTimeout(function(){print()},500)<\/script></body></html>`);w.document.close();}
 document.addEventListener("click",e=>{if(e.target.closest("#bCert"))certificate();});
+/* Switch to annual: pay the annual rate only for the months left in the membership year (club rule, Nov 2026). */
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("#bUpAnnual");if(!b||b.disabled)return;
+  const msg=$("upMsg"),es=L()==="es",usd=c=>"$"+(c/100).toFixed(c%100?2:0);
+  b.disabled=true;msg.hidden=true;
+  try{
+    const q=await api("/functions/v1/upgrade-annual",{method:"POST",body:JSON.stringify({action:"quote"})});
+    const txt=es
+      ?`Cambiar a pago anual (${q.tier_name}):\n\nHoy: ${usd(q.amount_cents)} por ${q.months_left} mes(es) restantes de tu año de membresía, a la tarifa anual.\nLuego: ${usd(q.annual_cents)} al año a partir del ${fmtDate(q.renews_on)}.\n\nSe cobrará a la tarjeta que tienes registrada. ¿Continuar?`
+      :`Switch to annual (${q.tier_name}):\n\nToday: ${usd(q.amount_cents)} for the ${q.months_left} month(s) left in your membership year, at the annual rate.\nThen: ${usd(q.annual_cents)} a year starting ${fmtDate(q.renews_on)}.\n\nYour card on file will be charged. Continue?`;
+    if(!confirm(txt)){b.disabled=false;return;}
+    await api("/functions/v1/upgrade-annual",{method:"POST",body:JSON.stringify({action:"confirm",amount_cents:q.amount_cents})});
+    show(msg,"ok",es?"¡Listo! Ahora eres miembro anual. Tu recibo llegará por correo.":"Done! You're now on an annual plan. Your receipt is on its way.");
+    setTimeout(()=>reload(),2500);
+  }catch(err){
+    const c=err.body&&err.body.error;
+    show(msg,"err",c==="card_declined"?(es?"Tu tarjeta fue rechazada. Actualízala en Administrar facturación e inténtalo de nuevo.":"Your card was declined. Update it under Manage billing and try again.")
+      :c==="already_annual"?(es?"Ya tienes un plan anual.":"You're already on an annual plan.")
+      :c==="quote_changed"?(es?"El monto cambió. Inténtalo de nuevo.":"The amount changed. Please try again.")
+      :(es?"Algo salió mal. Inténtalo de nuevo o escribe a contact@latinorepublicans.org.":"Something went wrong. Please try again or email contact@latinorepublicans.org."));
+    b.disabled=false;
+  }
+});
 
 function render(){
   if(!data)return;
@@ -911,7 +934,7 @@ function render(){
       ${m.billing_interval?`<div><span>Billing</span><b>${esc(BILL[m.billing_interval]||m.billing_interval)}</b></div>`:""}
       ${m.renews_at?`<div><span>${m.linked_to?"Covered through":m.status==="active"?"Next payment":"Paid through"}</span><b>${esc(fmtDate(m.renews_at))}</b></div>`:""}</div>
       ${m.tier==="corporate"?`<p class="sponnote"><span>Your sponsorship includes full Ambassador membership, with voting rights, for you and one spouse or partner. Other owners and employees of the business are not members; they can join on their own.</span></p><div class="partner" id="partnerBox"><b class="pt">Spouse / partner membership</b><div id="partnerBody"><span class="muted">Loading…</span></div></div>`:""}${m.linked_to?`<p class="sponnote"><span>Your Ambassador membership is included with a corporate sponsorship.</span></p>`:""}
-      ${flagLine()}<div class="mbtns">${perkLevel()?`<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button>`:""}${(m.stripe_customer||m.billing_interval)&&!m.linked_to?`<a class="flagbtn" href="${esc(portalUrl())}" target="_blank" rel="noopener">Manage billing</a>`:""}<button class="flagbtn" type="button" id="bGetApp"${perkLevel()&&!isStandalone()?"":" hidden"}>📱 Get the app</button></div>${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Rejoin the club</a>`:""}</div>`;
+      ${flagLine()}<div class="mbtns">${perkLevel()?`<button class="flagbtn certb" type="button" id="bCert">Membership certificate</button>`:""}${(m.stripe_customer||m.billing_interval)&&!m.linked_to?`<a class="flagbtn" href="${esc(portalUrl())}" target="_blank" rel="noopener">Manage billing</a>`:""}${m.status==="active"&&m.stripe_subscription&&["month","quarter","semiannual"].includes(m.billing_interval)&&!m.linked_to?`<button class="flagbtn" type="button" id="bUpAnnual">Switch to annual</button>`:""}<button class="flagbtn" type="button" id="bGetApp"${perkLevel()&&!isStandalone()?"":" hidden"}>📱 Get the app</button></div>${m.status!=="active"?`<a class="btn gold" href="../join/" target="_top">Rejoin the club</a>`:""}<p class="msg" id="upMsg" hidden></p></div>`;
     if(m.tier==="corporate")renderPartner();
     if(m.status==="active"&&m.grace_until){$("mcard").insertAdjacentHTML("afterbegin",`<div class="paywarn" role="alert"><b>Your last payment didn't go through.</b> <span>Update your card by</span> ${esc(fmtDate(m.grace_until))} <span>to keep your member benefits.</span> <a class="btn sm gold" href="${esc(portalUrl())}" target="_blank" rel="noopener">Update card</a></div>`);}
     else if(m.status==="lapsed"||m.status==="canceled"){$("mcard").insertAdjacentHTML("afterbegin",`<div class="paywarn off" role="status"><b>Your membership has lapsed.</b> <span>Member benefits are paused until you rejoin. Your profile, tickets you bought and event history stay here.</span></div>`);}

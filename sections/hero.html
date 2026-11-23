@@ -75,9 +75,9 @@ h1{margin:0;line-height:0}
             <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".4" stop-color="#fff8dc" stop-opacity="0"/><stop offset=".5" stop-color="#fff3c4" stop-opacity=".75"/><stop offset=".6" stop-color="#fff8dc" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
             <animateTransform attributeName="gradientTransform" type="translate" values="-200 0;800 0;800 0" keyTimes="0;.5;1" dur="4.5s" repeatCount="indefinite"/>
           </linearGradient>
-          <g id="words" font-size="112" letter-spacing="2">
-            <text x="4" y="100" textLength="372" lengthAdjust="spacingAndGlyphs">UNIDOS</text>
-            <text x="4" y="216" textLength="584" lengthAdjust="spacingAndGlyphs">POR AMÉRICA</text>
+          <g id="words" font-size="112">
+            <text x="4" y="100" data-w="372">UNIDOS</text>
+            <text x="4" y="216" data-w="584">POR AMÉRICA</text>
           </g>
         </defs>
         <g fill="url(#gEdge)" stroke="url(#gEdge)" stroke-width="9" stroke-linejoin="round">
@@ -133,6 +133,13 @@ SOCIAL.forEach(s=>{
 });
 
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* fit each title line to its width by measuring once and scaling the shared source text,
+   so the gold edge, outline and white fill (all copies of #words) always line up */
+(function(){const svg=document.querySelector('svg.ttl');if(!svg)return;const NS='http://www.w3.org/2000/svg';
+  function fit(){svg.querySelectorAll('#words text[data-w]').forEach(t=>{const m=document.createElementNS(NS,'text');m.setAttribute('font-size','112');m.setAttribute('opacity','0');m.textContent=t.textContent;svg.appendChild(m);
+    let w=0;try{w=m.getComputedTextLength();}catch(e){}svg.removeChild(m);
+    if(w>0){const k=(+t.dataset.w)/w,x=+t.getAttribute('x');t.setAttribute('transform',`translate(${x} 0) scale(${k} 1) translate(${-x} 0)`);}});}
+  fit();if(document.fonts){document.fonts.ready.then(fit);document.fonts.addEventListener&&document.fonts.addEventListener('loadingdone',fit);}})();
 if(reduce) document.querySelectorAll('.ttl animateTransform').forEach(a=>a.remove());
 
 </script>
@@ -680,5 +687,5 @@ function drawFireworksStep(){for(const b of bursts)for(const p of b.parts){p.x+=
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=e4d974c1"></script><script src="../assets/i18n.js?v=e4d974c1"></script>
+</script><script src="../assets/i18n-es.js?v=eef1881d"></script><script src="../assets/i18n.js?v=eef1881d"></script>
 </body></html>

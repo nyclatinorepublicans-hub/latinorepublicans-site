@@ -122,8 +122,8 @@ a.lang{text-decoration:none}
    ===================================================================== */
 const SITE = new URL("../", location.href).href;
 /* Donate button goes straight to the Stripe donation page (donor picks amount + where it goes).
-   Live Stripe donation link. */
-const DONATE_LINK = "https://donate.stripe.com/4gM00k0s692F7eo9yTasg0q";
+   TEST MODE link: swap for the live donate.stripe.com link when you go live. */
+const DONATE_LINK = "https://donate.stripe.com/test_9B65kD4W19GbdMo83x7N605";
 const LINKS = {
   home:     SITE + "#home",
   about:    SITE + "#about",
@@ -196,5 +196,5 @@ document.querySelectorAll('[data-link]').forEach(a=>{
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=e4d974c1"></script><script src="../assets/i18n.js?v=e4d974c1"></script>
+</script><script src="../assets/i18n-es.js?v=eef1881d"></script><script src="../assets/i18n.js?v=eef1881d"></script>
 </body></html>

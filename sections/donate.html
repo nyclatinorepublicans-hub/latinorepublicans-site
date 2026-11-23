@@ -155,9 +155,9 @@ function flagSVG(inner,label){return '<svg viewBox="0 0 30 20" preserveAspectRat
 
 
 /* EDIT HERE: link the Donate button goes to (your Stripe / Wix donation page) */
-/* Stripe donation pages (live): one per amount, "Other" lets the donor type any amount */
-const DONATE_URL = "https://donate.stripe.com/4gM00k0s692F7eo9yTasg0q";
-const DONATE_BY_AMOUNT = {"$25": "https://donate.stripe.com/7sY9AUeiW3IlaqA3avasg0p", "$50": "https://donate.stripe.com/3cI8wQ7Uya6J7eo26rasg0o", "$100": "https://donate.stripe.com/00w7sM4Im4MpdCM9yTasg0m", "$250": "https://donate.stripe.com/14AcN6b6K3Il0Q0eTdasg0l"};
+/* Stripe donation pages (TEST MODE): one per amount, "Other" lets the donor type any amount */
+const DONATE_URL = "https://donate.stripe.com/test_9B65kD4W19GbdMo83x7N605";
+const DONATE_BY_AMOUNT = {"$25": "https://donate.stripe.com/test_9B6fZhagl8C7dMo0B57N606", "$50": "https://donate.stripe.com/test_dRmeVdgEJ19F6jW6Zt7N607", "$100": "https://donate.stripe.com/test_3cIbJ11JP7y30ZCfvZ7N608", "$250": "https://donate.stripe.com/test_dRm7sLfAF7y3eQs5Vp7N609"};
 /* EDIT HERE: link for the Join the Club / member dues button */
 const JOIN_URL = "../join/";
 
@@ -196,5 +196,5 @@ if(!reduce){const seal=document.getElementById('seal'),coin=document.getElementB
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=e4d974c1"></script><script src="../assets/i18n.js?v=e4d974c1"></script>
+</script><script src="../assets/i18n-es.js?v=eef1881d"></script><script src="../assets/i18n.js?v=eef1881d"></script>
 </body></html>

@@ -948,6 +948,15 @@ window.LRC_ES={
 "Get a notification on this phone for every new account, new member and new event.": "Recibe una notificación en este teléfono por cada cuenta nueva, miembro nuevo y evento nuevo.",
 "Turn on phone alerts": "Activar alertas en el teléfono",
 "Send a test": "Enviar una prueba",
-"Turn off on this phone": "Desactivar en este teléfono"
+"Turn off on this phone": "Desactivar en este teléfono",
+"Free club account": "Cuenta gratis del club",
+"Not sure which membership yet? Create a free account, show your flag and follow club events. Upgrade anytime.": "¿Aún no sabes qué membresía elegir? Crea una cuenta gratis, muestra tu bandera y sigue los eventos del club. Hazte miembro cuando quieras.",
+"Create free account": "Crear cuenta gratis",
+"Not sure yet?": "¿Aún no estás seguro?",
+"Start with a free club account: show your flag, follow events and upgrade to a membership anytime.": "Empieza con una cuenta gratis del club: muestra tu bandera, sigue los eventos y hazte miembro cuando quieras.",
+"Free account": "Cuenta gratis",
+"No membership needed. Show your flag, follow events and join whenever you're ready.": "No necesitas membresía. Muestra tu bandera, sigue los eventos y únete cuando estés listo.",
+"Which flag do you represent?": "¿Qué bandera representas?",
+"(tap up to 3)": "(toca hasta 3)"
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

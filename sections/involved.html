@@ -62,7 +62,7 @@ h2{font-family:"Archivo","Arial Narrow",Impact,sans-serif;font-stretch:72%;font-
 @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
 
 /* cards */
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:40px;max-width:820px;margin-inline:auto}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:40px;max-width:1120px;margin-inline:auto}
 .card{perspective:900px;min-width:0}
 .inner{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 22px 28px;border-radius:22px;background:#fff;overflow:hidden;
   box-shadow:0 0 0 1.5px var(--line),0 3px 0 1.5px var(--gold),0 6px 0 1.5px var(--gold-lo),0 9px 0 1.5px #83601a,0 28px 40px -18px rgba(5,42,75,.55);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
@@ -146,6 +146,13 @@ h3{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:78%;font-weight:
         <h3>Become a Member</h3>
         <p class="line">Your seat at the table is waiting.</p>
         <a class="btn navy" href="../join/" target="_top">Join the Club →</a>
+      </div></div>
+      <div class="card"><div class="inner">
+        <div class="strip" aria-hidden="true"></div>
+        <div class="coin"><svg viewBox="0 0 32 32" aria-hidden="true" fill="#052a4b"><path d="M7 4.5h2.2v24H7z"/><path d="M9.2 5.5c4-1.8 7 1.8 11 0s5.5-1 5.5-1v11s-1.5-.8-5.5 1-7-1.8-11 0z"/><path d="M13 9.5l1 2 2.2.3-1.6 1.5.4 2.2-2-1-2 1 .4-2.2-1.6-1.5 2.2-.3z" fill="#f5d066"/></svg></div>
+        <h3>Start Free</h3>
+        <p class="line">Not sure yet? Show your flag, follow events.</p>
+        <a class="btn navy" href="https://www.latinorepublicans.org/account/?signup=1" target="_top">Create Free Account →</a>
       </div></div>
       <div class="card"><div class="inner">
         <div class="strip" aria-hidden="true"></div>
@@ -312,5 +319,5 @@ document.addEventListener('keydown',e=>{if(!modal.hidden&&e.key==='Escape')close
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=e5c87b4f"></script><script src="../assets/i18n.js?v=e5c87b4f"></script>
+</script><script src="../assets/i18n-es.js?v=d7af5b64"></script><script src="../assets/i18n.js?v=d7af5b64"></script>
 </body></html>

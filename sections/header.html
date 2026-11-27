@@ -89,7 +89,7 @@ nav ul{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:cl
 .lang svg{width:1.2em;height:1.2em;fill:none;stroke:#f5d066;stroke-width:1.8}
 a.lang{text-decoration:none}
 @media (max-width:1300px) and (min-width:1001px){.proflbl{display:none}}
-@media (max-width:1000px){.langli{position:absolute;top:min(5vh,10px);right:clamp(8px,2.5vw,18px);z-index:2}.langli{flex-direction:column;align-items:stretch;gap:5px}.lang{margin:0;font-size:11px;padding:6px 9px;justify-content:center}.proflbl{display:none}}
+@media (max-width:1000px){.langli{position:absolute;top:min(5vh,10px);right:clamp(8px,2.5vw,18px);z-index:2}.langli{flex-direction:column;align-items:stretch;gap:5px}.lang{margin:0;font-size:11px;padding:6px 9px;justify-content:center}.proflbl{display:inline;font-size:10.5px;letter-spacing:.04em}}
 </style>
 </head>
 <body>
@@ -106,7 +106,7 @@ a.lang{text-decoration:none}
         <li><a class="tab" data-link="events" href="#" target="_top">Events</a></li>
         <li><a class="tab" data-link="involved" href="#" target="_top">Get Involved</a></li>
         <li><a class="donate" data-link="join" href="#" target="_top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.2 6.8.7-5.1 4.6 1.4 6.7L12 17.3l-6 3.4 1.4-6.7-5.1-4.6 6.8-.7z"/></svg>Join the Club</a></li>
-        <li class="langli"><a class="lang prof" href="../account/" target="_top" aria-label="My Profile" title="My Profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 20.5c1.2-4 4.4-6 8-6s6.8 2 8 6"/></svg><span class="proflbl">Profile</span></a><button class="lang" id="langBtn" type="button" aria-label="Ver en español"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span id="langLbl">ES</span></button></li>
+        <li class="langli"><a class="lang prof" href="../account/" target="_top" aria-label="My Profile" title="My Profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4 20.5c1.2-4 4.4-6 8-6s6.8 2 8 6"/></svg><span class="proflbl" id="profLbl">Sign in</span></a><button class="lang" id="langBtn" type="button" aria-label="Ver en español"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg><span id="langLbl">ES</span></button></li>
       </ul>
     </nav>
   </div>
@@ -179,6 +179,9 @@ document.querySelectorAll('[data-link]').forEach(a=>{
 (function(){const b=document.getElementById('langBtn'),l=document.getElementById('langLbl');
   function show(){const es=window.LRC_LANG==='es';l.textContent=es?'EN':'ES';b.setAttribute('aria-label',es?'View in English':'Ver en español');b.setAttribute('lang',es?'en':'es');}
   b.addEventListener('click',()=>{if(window.LRC_I18N)LRC_I18N.set(window.LRC_LANG==='es'?'en':'es');show();});
+  const pl=document.getElementById('profLbl');function prof(){let on=false;try{on=!!localStorage.getItem('lrc_session');}catch(e){}const es=window.LRC_LANG==='es';
+    pl.textContent=on?(es?'Perfil':'Profile'):(es?'Entrar':'Sign in');const a=pl.parentNode;a.setAttribute('aria-label',on?(es?'Mi perfil':'My profile'):(es?'Entrar o crear cuenta':'Sign in or create account'));a.title=a.getAttribute('aria-label');}
+  prof();addEventListener('lrc-lang',prof);addEventListener('storage',prof);addEventListener('load',prof);
   addEventListener('lrc-lang',show);addEventListener('load',show);setTimeout(show,0);
 })();
 </script><script>
@@ -196,5 +199,5 @@ document.querySelectorAll('[data-link]').forEach(a=>{
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=e5c87b4f"></script><script src="../assets/i18n.js?v=e5c87b4f"></script>
+</script><script src="../assets/i18n-es.js?v=d7af5b64"></script><script src="../assets/i18n.js?v=d7af5b64"></script>
 </body></html>

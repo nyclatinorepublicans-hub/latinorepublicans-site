@@ -59,6 +59,7 @@ h3{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:80%;font-weight:
 .ticket.featured .stub{background:linear-gradient(135deg,#8a5d0a,#d6a844 55%,#f5d066)}
 .ticket.featured .tag{background:#052a4b;color:#f5d066;border-color:#052a4b}
 .ticket.featured .stubinfo .when{color:#1b1200}
+.notify{margin:18px auto 0;text-align:center;color:#e9eef6;font-size:15px}.notify a{color:#f5d066;font-weight:700}
 .lang-es .tbd{font-size:16px;letter-spacing:0}</style><style id="wix-mobile-fit">/* Wix fit: no sideways scroll; if the Wix box is taller than the content, the section centers and the extra space matches its background */html{-webkit-text-size-adjust:100%;text-size-adjust:100%}html,body{max-width:100%;overflow-x:hidden}body>*{flex:0 0 auto;width:100%;box-sizing:border-box}</style>
 </head>
 <body>
@@ -71,6 +72,8 @@ h3{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:80%;font-weight:
     </div>
     <div class="list" id="list"></div>
     <div class="foot"><a class="all" id="allLink" href="../#events" target="_top">View All Events →</a></div>
+    <p class="notify" id="notify" hidden>★ <span>Get first notice when tickets open.</span> <a href="https://www.latinorepublicans.org/account/?signup=1" target="_top">Create a free account</a></p>
+    <script>try{if(!localStorage.getItem('lrc_session'))document.getElementById('notify').hidden=false;}catch(e){}</script>
   </div>
 </section>
 
@@ -163,5 +166,5 @@ drawEvents(EVENTS);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=e5c87b4f"></script><script src="../assets/i18n.js?v=e5c87b4f"></script>
+</script><script src="../assets/i18n-es.js?v=d7af5b64"></script><script src="../assets/i18n.js?v=d7af5b64"></script>
 </body></html>

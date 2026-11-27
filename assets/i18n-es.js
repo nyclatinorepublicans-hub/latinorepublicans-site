@@ -328,7 +328,7 @@ window.LRC_ES={
 "Members": "Miembros",
 "Profile": "Perfil",
 "Your membership, your event tickets with QR codes, and the events you have attended.": "Tu membresía, tus entradas con código QR y los eventos a los que has asistido.",
-"Sign in": "Iniciar sesión",
+"Sign in": "Entrar",
 "Enter the email you used to join or buy tickets. We will email you a secure sign-in link. No password needed.": "Escribe el correo que usaste para unirte o comprar entradas. Te enviaremos un enlace seguro para entrar. No necesitas contraseña.",
 "Email me a link": "Envíame un enlace",
 "Not a member yet?": "¿Aún no eres miembro?",
@@ -957,6 +957,12 @@ window.LRC_ES={
 "Free account": "Cuenta gratis",
 "No membership needed. Show your flag, follow events and join whenever you're ready.": "No necesitas membresía. Muestra tu bandera, sigue los eventos y únete cuando estés listo.",
 "Which flag do you represent?": "¿Qué bandera representas?",
-"(tap up to 3)": "(toca hasta 3)"
+"(tap up to 3)": "(toca hasta 3)",
+"Start Free": "Empieza gratis",
+"Not sure yet? Show your flag, follow events.": "¿Aún no estás seguro? Muestra tu bandera y sigue los eventos.",
+"Create Free Account →": "Crear cuenta gratis →",
+"Get first notice when tickets open.": "Entérate primero cuando abran las entradas.",
+"Create a free account": "Crea una cuenta gratis",
+"Search your country": "Busca tu país"
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};

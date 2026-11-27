@@ -383,7 +383,7 @@ function pick(n,quiet){
   const box=document.getElementById('f-other');box.hidden=chosen!=='Other';
   if(chosen==='Other'&&!quiet)document.getElementById('otherIn').focus();
   setErr('her','');showRep();
-  try{if(chosen&&chosen!=='Other')localStorage.setItem('lrc_flag',chosen);}catch(e){}
+  try{if(chosen&&chosen!=='Other'){localStorage.setItem('lrc_flag',chosen);localStorage.removeItem('lrc_flags');}}catch(e){}
 }
 document.getElementById('reps').addEventListener('click',e=>{const b=e.target.closest('.rp');if(b){pick(b.dataset.n);}});
 document.getElementById('reps').addEventListener('keydown',e=>{
@@ -433,6 +433,7 @@ function flagImgHTML(code){const l=flagSrcs(code);return '<img src="'+l[0]+'" al
 function updateOtherFlag(){
   const code=COUNTRY.find(document.getElementById('otherIn').value),of=document.getElementById('otherFlag'),tile=document.querySelector('.rp[data-n="Other"] .f');
   if(code===otherCode)return; otherCode=code;
+  try{if(code)localStorage.setItem('lrc_flags',JSON.stringify([String(code).toUpperCase()]));}catch(e){}
   if(code){of.innerHTML=flagImgHTML(code);tile.innerHTML=flagImgHTML(code);}
   else{of.textContent='?';tile.textContent='?';}
   const lab=document.querySelector('.rp[data-n="Other"] span:last-child');if(lab)lab.textContent=code?document.getElementById('otherIn').value.trim().slice(0,14):'Other';
@@ -508,5 +509,5 @@ function checkout(){
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=e5c87b4f"></script><script src="../assets/i18n.js?v=e5c87b4f"></script>
+</script><script src="../assets/i18n-es.js?v=d7af5b64"></script><script src="../assets/i18n.js?v=d7af5b64"></script>
 </body></html>

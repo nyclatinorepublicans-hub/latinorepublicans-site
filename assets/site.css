@@ -17,3 +17,18 @@ body{margin:0;background:#021a30;padding-bottom:env(safe-area-inset-bottom,0px)}
 .skip{position:absolute;left:-9999px;top:8px;z-index:99;background:#f5d066;color:#021a30;padding:10px 14px;border-radius:8px;font:700 14px system-ui,sans-serif}
 .skip:focus{left:8px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* phone comfort + quick actions */
+@media (max-width:1000px){#s-top{transition:transform .25s ease}body.hdr-hide #s-top{transform:translateY(-110%)}}
+@media (prefers-reduced-motion:reduce){#s-top{transition:none}}
+.qbar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;gap:8px;align-items:center;padding:8px;border-radius:999px;
+  background:rgba(2,26,48,.94);box-shadow:0 10px 30px -8px rgba(0,0,0,.6),inset 0 0 0 1.5px rgba(214,168,68,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transform:translateY(140%);transition:transform .25s ease;font-family:"Archivo","Arial Narrow",Arial,sans-serif}
+.qbar.on{transform:none}
+@media (min-width:1001px){.qbar{display:none}}
+.qbar a,.qbar button{flex:1;display:flex;align-items:center;justify-content:center;min-height:46px;padding:0 14px;border:0;border-radius:999px;text-decoration:none;font:inherit;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-align:center}
+.qbar .q1{background:#d51b2f;color:#fff;box-shadow:0 3px 0 #8f1020}
+.qbar .q2{background:transparent;color:#f5d066;box-shadow:inset 0 0 0 2px #d6a844}
+.qbar .qsum{flex:1;min-width:0;display:flex;flex-direction:column;padding:0 6px 0 12px;color:#fff;line-height:1.15}
+.qbar .qsum b{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#f5d066;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qbar .qsum span{font-size:13px;opacity:.9;white-space:nowrap}
+.qbar #qPay{flex:0 0 auto}

@@ -164,3 +164,52 @@
   addEventListener('pageshow',function(e){if(e.persisted)check(120000);});
   setInterval(function(){if(!document.hidden)check(0);},15*60*1000);
 })();
+
+/* ===== Phone comfort + quick actions (Nov 2026 UX pass) =====
+   1) Phones: the menu slides away while scrolling down or typing in a form, and comes back on scroll up,
+      so it never covers what you are filling in.
+   2) Home page on phones: a bottom bar with the two main actions once the hero is out of view.
+   3) Join page on phones: a bottom bar with the selected plan and one checkout button. */
+(function(){
+  const mq=matchMedia('(max-width:1000px)'),B=document.body,top=document.getElementById('s-top');
+  const signedIn=()=>{try{return !!localStorage.getItem('lrc_session');}catch(e){return false;}};
+  let last=scrollY,typing=false;
+  addEventListener('scroll',()=>{const y=scrollY;if(!mq.matches||typing){last=y;return;}
+    if(y>last+8&&y>220)B.classList.add('hdr-hide');else if(y<last-8||y<120)B.classList.remove('hdr-hide');last=y;},{passive:true});
+  function hook(f){try{const d=f.contentDocument;if(!d||d.__lrcHook)return;d.__lrcHook=1;
+    d.addEventListener('focusin',e=>{const t=e.target;if(!mq.matches||!t||!/^(INPUT|SELECT|TEXTAREA)$/.test(t.tagName)||/^(checkbox|radio|button|submit)$/.test(t.type||''))return;
+      typing=true;B.classList.add('hdr-hide');
+      setTimeout(()=>{try{const r=t.getBoundingClientRect(),fr=f.getBoundingClientRect(),y=fr.top+r.top;if(y<16||y>innerHeight*.55)scrollBy({top:y-90,behavior:'smooth'});}catch(x){}},320);});
+    d.addEventListener('focusout',()=>{typing=false;});}catch(e){}}
+  document.querySelectorAll('.sec iframe').forEach(f=>{f.addEventListener('load',()=>hook(f));hook(f);});
+
+  function bar(html){const b=document.createElement('div');b.className='qbar';b.setAttribute('role','region');b.setAttribute('aria-label','Quick actions');b.innerHTML=html;B.appendChild(b);return b;}
+  const es=()=>(document.documentElement.lang||'').startsWith('es')||(()=>{try{return localStorage.getItem('lrc_lang')==='es';}catch(e){return false;}})();
+
+  /* home page */
+  const home=document.getElementById('s-home');
+  if(home){const b=bar('');const paint=()=>{const s=es(),inn=signedIn();
+      b.innerHTML=inn?`<a class="q2" href="account/">${s?'Mi perfil':'My profile'}</a><a class="q1" href="#s-events">${s?'Ver eventos':'See events'}</a>`
+        :`<a class="q2" href="account/?signup=1">${s?'Cuenta gratis':'Free account'}</a><a class="q1" href="join/">${s?'Únete al club':'Join the club'}</a>`;};
+    paint();addEventListener('lrc-lang',paint);addEventListener('storage',paint);
+    const foot=document.getElementById('s-contact');
+    const vis=()=>{const hb=home.getBoundingClientRect().bottom,ft=foot?foot.getBoundingClientRect().top:1e9;b.classList.toggle('on',mq.matches&&hb<60&&ft>innerHeight-40);};
+    addEventListener('scroll',vis,{passive:true});addEventListener('resize',vis);vis();}
+
+  /* join page */
+  const join=document.querySelector('#s-join iframe');
+  if(join){const b=bar('<div class="qsum"><b id="qName"></b><span id="qPrice"></span></div><button type="button" class="q1" id="qPay"></button>');
+    const doc=()=>{try{return join.contentDocument;}catch(e){return null;}};
+    const sync=()=>{const d=doc();if(!d)return null;const r=d.querySelector('input[name=tier]:checked');const card=r&&r.closest('.tier');if(!card)return null;
+      const nm=card.querySelector('h3'),pr=card.querySelector('.price'),pay=card.querySelector('.pay');
+      b.querySelector('#qName').textContent=nm?nm.textContent:'';b.querySelector('#qPrice').textContent=pr?pr.textContent.replace(/\s+/g,' ').trim():'';
+      b.querySelector('#qPay').textContent=pay?pay.textContent.replace(/\s+/g,' ').trim():(es()?'Continuar':'Continue');return {card,pay};};
+    b.querySelector('#qPay').addEventListener('click',()=>{const s=sync();if(s&&s.pay)s.pay.click();});
+    const vis=()=>{const s=sync(),d=doc();let show=false;
+      if(s&&d){const t=d.getElementById('tiers'),fr=join.getBoundingClientRect();if(t){const tr=t.getBoundingClientRect(),tt=fr.top+tr.top,tb=fr.top+tr.bottom;
+        const payR=s.pay.getBoundingClientRect(),py=fr.top+payR.top;show=mq.matches&&tt<innerHeight*.7&&tb>innerHeight*.55&&!(py>0&&py<innerHeight-70);}}
+      b.classList.toggle('on',show);};
+    addEventListener('scroll',vis,{passive:true});addEventListener('resize',vis);
+    join.addEventListener('load',()=>{try{doc().addEventListener('change',vis);doc().addEventListener('click',()=>setTimeout(vis,50));}catch(e){}});
+    setInterval(vis,1500);}
+})();

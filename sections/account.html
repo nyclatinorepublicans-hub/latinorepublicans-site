@@ -337,7 +337,7 @@ body.gated #contactCard{display:none!important}
 .spin{display:inline-block;width:18px;height:18px;border-radius:50%;border:3px solid rgba(5,42,75,.2);border-top-color:var(--navy);animation:sp 1s linear infinite;vertical-align:-3px}
 @keyframes sp{to{transform:rotate(360deg)}}
 </style>
-<script src="../assets/vendor/qrcode.js?v=d7af5b64"></script>
+<script src="../assets/vendor/qrcode.js?v=388a93c7"></script>
 </head>
 <body>
 <div class="wrap"><div class="inner">
@@ -1566,7 +1566,7 @@ $("alEmail").addEventListener("change",saveAlerts);
 const PUSH_FN="/functions/v1/push-alerts";
 function pushEnv(){const w=topWin,n=w.navigator;const ok=!!(n.serviceWorker&&w.PushManager&&w.Notification);const ios=/iPhone|iPad|iPod/.test(n.userAgent)||(n.platform==="MacIntel"&&n.maxTouchPoints>1);return {w,n,ok,ios,app:isStandalone()};}
 async function pushReg(){const {n}=pushEnv();return await Promise.race([n.serviceWorker.ready,new Promise((_,r)=>setTimeout(()=>r(new Error("sw")),8000))]);}
-const PUSH_READY=false; /* turn on once the push database tables are approved */
+const PUSH_READY=true;
 async function renderPush(){const box=$("pushBox");if(!box)return;box.hidden=!(PUSH_READY&&data.isFull);if(box.hidden)return;const e=pushEnv(),m=$("pushMsg");
   const on=$("bPushOn"),off=$("bPushOff"),test=$("bPushTest");on.hidden=false;off.hidden=test.hidden=true;m.hidden=true;
   if(e.ios&&!e.app){on.hidden=true;show(m,"","On iPhone, open the club app from your Home Screen (Get the app) and turn this on there.");return;}
@@ -1701,5 +1701,5 @@ addEventListener("lrc-lang",render);
   addEventListener('message',function(e){var d=e.data;if(!d||d.lrc!=='view')return;window.__LRCV=d;
     var p=document.getElementById('panel');if(p&&p.getAttribute('aria-hidden')==='false'&&window.placePanel)placePanel();});
 })();
-</script><script src="../assets/i18n-es.js?v=d7af5b64"></script><script src="../assets/i18n.js?v=d7af5b64"></script>
+</script><script src="../assets/i18n-es.js?v=388a93c7"></script><script src="../assets/i18n.js?v=388a93c7"></script>
 </body></html>

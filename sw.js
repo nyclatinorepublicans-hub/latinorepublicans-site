@@ -12,3 +12,18 @@ self.addEventListener('fetch', e => {
   if (r.method !== 'GET' || r.mode !== 'navigate') return; // only page loads; data calls go straight to the server
   e.respondWith(fetch(r).catch(() => new Response(PAGE, { headers: { 'Content-Type': 'text/html; charset=utf-8' } })));
 });
+/* Phone alerts for board admins (new accounts, members, events) */
+self.addEventListener('push', e => {
+  let d = {}; try { d = e.data ? e.data.json() : {}; } catch (x) { d = { title: 'NYC Latino Republican Club', body: e.data ? e.data.text() : '' }; }
+  e.waitUntil(self.registration.showNotification(d.title || 'NYC Latino Republican Club', {
+    body: d.body || '', tag: d.tag || undefined, icon: '/assets/apple-touch-icon.png', data: { url: d.url || '/account/' }
+  }));
+});
+self.addEventListener('notificationclick', e => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || '/account/';
+  e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(ws => {
+    for (const w of ws) { if ('focus' in w) { w.navigate ? w.navigate(url).catch(() => {}) : 0; return w.focus(); } }
+    return self.clients.openWindow(url);
+  }));
+});

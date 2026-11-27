@@ -943,6 +943,11 @@ window.LRC_ES={
 "Their email": "Su correo",
 "Covered through": "Cubierto hasta",
 "A gift for you": "Un regalo para ti",
-"See tickets": "Ver boletos"
+"See tickets": "Ver boletos",
+"Phone alerts": "Alertas en el teléfono",
+"Get a notification on this phone for every new account, new member and new event.": "Recibe una notificación en este teléfono por cada cuenta nueva, miembro nuevo y evento nuevo.",
+"Turn on phone alerts": "Activar alertas en el teléfono",
+"Send a test": "Enviar una prueba",
+"Turn off on this phone": "Desactivar en este teléfono"
 };
 window.LRC_ES_COUNTRIES={"Mexico": "México", "Guatemala": "Guatemala", "El Salvador": "El Salvador", "Honduras": "Honduras", "Nicaragua": "Nicaragua", "Costa Rica": "Costa Rica", "Panama": "Panamá", "Cuba": "Cuba", "Dominican Republic": "República Dominicana", "Dom. Rep.": "Rep. Dom.", "Puerto Rico": "Puerto Rico", "Haiti": "Haití", "Colombia": "Colombia", "Venezuela": "Venezuela", "Ecuador": "Ecuador", "Peru": "Perú", "Bolivia": "Bolivia", "Chile": "Chile", "Argentina": "Argentina", "Uruguay": "Uruguay", "Paraguay": "Paraguay", "Brazil": "Brasil", "Spain": "España", "United States": "Estados Unidos", "the United States": "Estados Unidos", "USA": "EE. UU."};
